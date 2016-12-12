@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+    laaws-demo:
+        build: 
+            context: .
+        image: lockss/laaws-demo
+        ports:
+            - "8080:80"
+
+    laaws-openwayback:
+        build:
+            context: ./laaws-openwayback
+        image: lockss/laaws-openwayback
+        ports:
+            - "8081:8080"
+
+    laaws-mdq:
+        build: 
+            context: ./laaws-mdq
+        image: lockss/laaws-mdq
+        ports:
+            - "8081:8080"

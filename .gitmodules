@@ -1,0 +1,6 @@
+[submodule "laaws-mdq"]
+	path = laaws-mdq
+	url = git@github.com:lockss/laaws-mdq.git
+[submodule "laaws-openwayback"]
+	path = laaws-openwayback
+	url = git@github.com:lockss/laaws-openwayback.git
