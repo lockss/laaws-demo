@@ -20,4 +20,4 @@ services:
             context: ./laaws-mdq
         image: lockss/laaws-mdq
         ports:
-            - "8081:8080"
+            - "8082:8888"
