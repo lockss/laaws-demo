@@ -1,0 +1,52 @@
+<html>
+<head>
+<title>LAAWS Demo</title>
+</head>
+<body>
+<h1 align=center>
+LAAWS Demo</h1>
+<h2>Search For</h2>
+<form method=POST action="/cgi-bin/doi-search.py">
+Success: 10.1080/15532739.2015.1081086<br />
+Failure: 10.1234/foobar<br />
+DOI: <input type=text name=DOI size=30 maxlength=90> <input type=submit value="Go"><br />
+</form>
+<br />
+<form method=POST action="/cgi-bin/openurl-search.py">
+Zero URLs: ISSN = 1234-5678, Volume = 77, Author = Arthur Dent<br />
+One URL: ISSN = 1434-4599, Volume = 16, Start page = 222<br />
+Three URLs: ISSN = 8765-4321, Volume = 99, Author = Tricia McMillan<br />
+ISSN: <input type=text name=ISSN size=30 maxlength=90><br />
+Volume: <input type=text name=Volume size=30 maxlength=90><br />
+Issue: <input type=text name=Issue size=30 maxlength=90><br />
+Author: <input type=text name=Author size=30 maxlength=90><br />
+Start page: <input type=text name=sPage size=30 maxlength=90><br />
+<br />
+<input type=submit value="Go"><br />
+</form>
+<br />
+<form method=POST action="cgi-bin/text-search.py">
+XXX not yet implemented<br />
+Text: <input type=text name=Search size=30 maxlength=90> <input type=submit value="Go"><br />
+<!--
+script will map to GET http://solr.lockss.org/XXX
+service will return JSON object XXX
+script will convert returned object to page with links -->
+</form>
+<br />
+<h2>Add AU To Search Index</h2>
+<form method=POST action="cgi-bin/index-auid.py">
+XXX not yet implemented<br />
+AUID: <select name=AUID size=1>
+	<option>AUID-1
+	<option>AUID-2
+	<option>AUID-3
+</select> <input type=submit value="Index"><br />
+<!-- GET cgi-bin/index-auid?AUID={auid} -->
+<!--
+script will map to GET http://fernando.lockss.org/XXX
+service will XXX
+script will XXX -->
+</form>
+</body>
+</html>
