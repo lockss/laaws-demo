@@ -32,4 +32,7 @@ RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN mkdir logs
 RUN touch logs/laawsmdx.log
 
+# XXX Overlay needed for demo
+ADD lockss.opt /laaws-mdx
+
 CMD ["/bin/sh", "/laaws-mdx/runLaawsMdx"]
