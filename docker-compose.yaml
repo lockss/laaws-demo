@@ -5,21 +5,30 @@ services:
         build: 
             context: ./laaws-demo
         image: lockss/laaws-demo
+        links:
+            - laaws-openwayback:openwayback
+            #- laaws-mdq:laaws-mdq
         ports:
-            - "8080:80"
+            - "80:80"
 
-    lockss-daemon:
+    laaws-lockss:
         build:
             context: ./laaws-lockss
-        image: lockss/lockss-daemon
+        image: lockss/laaws-lockss
         ports:
             - "8081:8081"
-
+            - "9729:9729"
+        volumes:
+            - laaws-lockss:/cache0
+            #- ./laaws-lockss/log/lockss:/var/log/lockss
+            #- ./laaws-lockss/lockss:/opt/lockss
 
     laaws-mdq:
         build: 
             context: ./laaws-mdq
         image: lockss/laaws-mdq
+        links:
+            - laaws-lockss:lockss-daemon
         ports:
             - "8082:8888"
 
@@ -27,12 +36,21 @@ services:
         build: 
             context: ./laaws-mdx
         image: lockss/laaws-mdx
+        links:
+            - laaws-lockss:lockss-daemon
         ports:
-            - "8082:8888"
+            - "8083:8888"
 
     laaws-openwayback:
         build:
             context: ./laaws-openwayback
         image: lockss/laaws-openwayback
         ports:
-            - "8081:8080"
+            - "8080:8080"
+        volumes:
+            - ./laaws-openwayback/openwayback:/srv/openwayback
+
+# Define named Docker volumes
+volumes:
+    laaws-lockss:
+        external: false
