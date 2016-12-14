@@ -3,17 +3,18 @@ version: '2'
 services:
     laaws-demo:
         build: 
-            context: .
+            context: ./laaws-demo
         image: lockss/laaws-demo
         ports:
             - "8080:80"
 
-    laaws-openwayback:
+    lockss-daemon:
         build:
-            context: ./laaws-openwayback
-        image: lockss/laaws-openwayback
+            context: ./laaws-lockss
+        image: lockss/lockss-daemon
         ports:
-            - "8081:8080"
+            - "8081:8081"
+
 
     laaws-mdq:
         build: 
@@ -21,3 +22,17 @@ services:
         image: lockss/laaws-mdq
         ports:
             - "8082:8888"
+
+    laaws-mdx:
+        build: 
+            context: ./laaws-mdx
+        image: lockss/laaws-mdx
+        ports:
+            - "8082:8888"
+
+    laaws-openwayback:
+        build:
+            context: ./laaws-openwayback
+        image: lockss/laaws-openwayback
+        ports:
+            - "8081:8080"
