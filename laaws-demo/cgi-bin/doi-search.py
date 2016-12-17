@@ -5,6 +5,7 @@ import requests
 import json
 import cgi
 import cgitb
+import urllib.parse
 cgitb.enable()
 
 # URL prefix for DOI query service
@@ -28,7 +29,7 @@ if "DOI" in input_data:
 	doi=input_data["DOI"].value
 	if validate(doi):
 		# query the service
-		serviceUrl = "{0}/{1}".format(service, doi)
+		serviceUrl = "{0}/{1}".format(service, urllib.parse.quote_plus(doi))
 		doiResponse = requests.get(serviceUrl)
 		status = doiResponse.status_code
 		if(status == 200):
