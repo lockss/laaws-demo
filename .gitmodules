@@ -1,0 +1,3 @@
+[submodule "lockss-solr"]
+	path = lockss-solr
+	url = https://github.com/edina/lockss-solr.git
