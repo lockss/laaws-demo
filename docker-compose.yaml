@@ -50,7 +50,33 @@ services:
         volumes:
             - ./laaws-openwayback/openwayback:/srv/openwayback
 
+    lockss-solr:
+        image: solr
+        container_name: lockss-solr
+        ports:
+            - "8983:8983"
+        volumes:
+            - test-core:/opt/solr/server/solr/test-core
+        entrypoint:
+            - docker-entrypoint.sh
+            - solr-precreate
+            - test-core
+
+    lockss-indexer:
+        build:
+            context: ./lockss-solr
+        image: lockss/lockss-indexer
+        environment:
+            - LOCKSS_SOLR_WATCHDIR=/var/data/warcs
+            - LOCKSS_SOLR_URL=http://solr:8983/solr/test-core
+        links:
+            - lockss-solr
+        volumes:
+            - ./lockss-solr/warcs:/var/data/warcs:ro
+        
 # Define named Docker volumes
 volumes:
     laaws-lockss:
+        external: false
+    test-core:
         external: false
