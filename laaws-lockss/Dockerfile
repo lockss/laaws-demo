@@ -16,7 +16,7 @@ ADD lockss/config.dat /etc/lockss/config.dat
 # Add files to the container
 ADD src/motd /etc/motd
 ADD src/start-lockss.sh /
-ADD src/local.txt /home/lockss/local.txt
+ADD src/local.opt /home/lockss/local.opt
 
 # Change the execute bit on the startup script
 RUN chmod 755 /start-lockss.sh
