@@ -1,0 +1,2 @@
+# Locally-set configuration paramaters
+org.lockss.export.enabled=true
