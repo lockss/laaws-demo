@@ -11,7 +11,7 @@ RUN apt-get update
 RUN apt-get -y install git subversion ant gettext openjdk-8-jdk-headless maven
 
 # Get laaws-mdq source 
-RUN git clone https://github.com/lockss/laaws-mdq.git --recursive
+RUN git clone https://gitlab.lockss.org/laaws/laaws-metadataservice.git --recursive
 
 # Build LOCKSS daemon JARs
 WORKDIR /laaws-mdq
