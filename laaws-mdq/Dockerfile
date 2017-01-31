@@ -10,18 +10,18 @@ RUN locale-gen ${LANG}
 RUN apt-get update
 RUN apt-get -y install git subversion ant gettext openjdk-8-jdk-headless maven
 
-# Get laaws-mdq source 
+# Get laaws-metadataservice source 
 RUN git clone https://gitlab.lockss.org/laaws/laaws-metadataservice.git --recursive
 
 # Build LOCKSS daemon JARs
-WORKDIR /laaws-mdq
+WORKDIR /laaws-metadataservice
 RUN ./initBuild
 
 # XXX Isolate only what's needed to run
-#RUN mkdir /laaws-mdq
-#RUN mv target /laaws-mdq
-#RUN mv runLaawsmdq /laaws-mdq
-#RUN mv src /laaws-mdq
+#RUN mkdir /laaws-metadataservice
+#RUN mv target /laaws-metadataservice
+#RUN mv runLaawsmetadataservice /laaws-metadataservice
+#RUN mv src /laaws-metadataservice
 
 # XXX Clean up 
 RUN apt-get clean
@@ -33,6 +33,6 @@ RUN mkdir logs
 RUN touch logs/laawsmdq.log
 
 # XXX Overlay needed for demo
-ADD lockss.opt /laaws-mdq
+ADD lockss.opt /laaws-metadataservice
 
-CMD ["/bin/sh", "/laaws-mdq/runLaawsMdq"]
+CMD ["/bin/sh", "/laaws-metadataservice/runLaawsMdq"]
