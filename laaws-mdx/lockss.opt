@@ -29,7 +29,7 @@
 ##org.lockss.metadataDbManager.derby.streamErrorFile=/tmp/derby.log
 #org.lockss.metadataDbManager.derby.streamErrorLogseveritylevel=0
 #org.lockss.metadataDbManager.datasource.className=org.apache.derby.jdbc.EmbeddedDataSource
-#org.lockss.metadataDbManager.datasource.className=org.apache.derby.jdbc.ClientDataSource
+org.lockss.metadataDbManager.datasource.className=org.apache.derby.jdbc.ClientDataSource
 #org.lockss.metadataDbManager.datasource.password=goodPassword
 ##org.lockss.metadataDbManager.datasource.createDatabase=create
 ##org.lockss.metadataDbManager.datasource.databaseName=db/MetadataDbManager
@@ -53,7 +53,7 @@
 ##org.lockss.jobDbManager.derby.streamErrorFile=/tmp/derby.log
 #org.lockss.jobDbManager.derby.streamErrorLogseveritylevel=0
 #org.lockss.jobDbManager.datasource.className=org.apache.derby.jdbc.EmbeddedDataSource
-#org.lockss.jobDbManager.datasource.className=org.apache.derby.jdbc.ClientDataSource
+org.lockss.jobDbManager.datasource.className=org.apache.derby.jdbc.ClientDataSource
 #org.lockss.jobDbManager.datasource.password=goodPassword
 ##org.lockss.jobDbManager.datasource.createDatabase=create
 ##org.lockss.jobDbManager.datasource.databaseName=db/JobDbManager
@@ -90,4 +90,4 @@ org.lockss.plugin.auContentFromWs.urlListWs.timeoutValue=600
 org.lockss.plugin.auContentFromWs.urlListWs.userName=lockss-u
 org.lockss.ui.port=8082
 
-org.lockss.plugin.auContentFromWs.urlListWs.restServiceLocation=http://localhost:8887
+#org.lockss.plugin.auContentFromWs.urlListWs.restServiceLocation=http://localhost:8887
