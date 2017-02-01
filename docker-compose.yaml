@@ -59,6 +59,8 @@ services:
             - laaws-lockss:lockss-daemon
         ports:
             - "8082:8888"
+        volumes:
+            - metadatadb:/laaws-metadataservice/cache/db
 
     laaws-mdx:
         build: 
@@ -68,6 +70,8 @@ services:
             - laaws-lockss:lockss-daemon
         ports:
             - "8083:8888"
+        volumes:
+            - metadatadb:/laaws-metadataextractor/cache/db
 
     laaws-openwayback:
         build:
@@ -107,4 +111,6 @@ volumes:
     laaws-lockss:
         external: false
     test-core:
+        external: false
+    metadatadb:
         external: false
