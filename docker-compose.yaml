@@ -101,12 +101,12 @@ services:
             context: ./lockss-solr
         image: lockss/lockss-indexer
         environment:
-            - LOCKSS_SOLR_WATCHDIR=/var/data/warcs
+            - LOCKSS_SOLR_WATCHDIR=/warcs
             - LOCKSS_SOLR_URL=http://solr:8983/solr/test-core
         links:
             - lockss-solr
         volumes:
-            - ./lockss-solr/warcs:/var/data/warcs:ro
+            - solr-warcs:/warcs
 
     metadata-pgsql:
         image: postgres
@@ -129,4 +129,6 @@ volumes:
 #    metadatadb:
 #        external: false
     postgresql-data:
+        external: false
+    solr-warcs:
         external: false
