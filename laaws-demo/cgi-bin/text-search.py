@@ -13,11 +13,10 @@ service = "http://laaws-indexer/XXX"
 wayback = "http://localhost:8080/wayback/*"
 err = "Error: "
 urlArray = []
-count = 0
 
 # return a Dictionary with the query params
 def queryParams(s):
-	if 'Search' in input-data:
+	if 'Search' in s:
 		ret = {}
 		ret['q'] = s["Search"].value
 		ret['indent'] = "on"
@@ -45,12 +44,11 @@ if params != None:
 			for doc in docs:
 				url = None
 				if "response_url" in doc:
-					urls = doc["response_url"]
-					url = urls[0]
+					url = doc["response_url"]
 				elif "url" in doc:
 					url = doc["url"]
-				if url != None
-					urlArray[count++] = url
+				if url != None:
+					urlArray.append(url)
 					err = ""
 		else:
 			err = err + "No docs found"
@@ -60,13 +58,13 @@ if params != None:
 else:
 	# No search data from form
 	err = err + "No search string from form"
-if count == 1:
+if len(urlArray) == 1:
 	# 1 url - redirect to it
 	url = urlArray[0]
 	redirectTo = "{0}/{1}".format(wayback,url)
 	print("Location: {}".format(redirectTo))
 	print()
-elif count > 1:
+elif len(urlArray) > 1:
 	# multiple urls, create page of links
 	print('Content-Type:text/html')
 	print()
