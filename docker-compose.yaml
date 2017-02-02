@@ -106,7 +106,7 @@ services:
         links:
             - lockss-solr
         volumes:
-            - solr-warcs:/warcs
+            - ./warcs:/warcs
 
     metadata-pgsql:
         image: postgres
@@ -129,6 +129,4 @@ volumes:
 #    metadatadb:
 #        external: false
     postgresql-data:
-        external: false
-    solr-warcs:
         external: false
