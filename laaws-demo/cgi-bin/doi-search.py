@@ -9,7 +9,7 @@ import urllib.parse
 cgitb.enable()
 
 # URL prefix for DOI query service
-service = "http://laaws-mdq:8888/urls/doi"
+service = "http://laaws-mdq:8889/urls/doi"
 # URL prefix for OpenWayback
 wayback = "http://localhost:8080/wayback/*"
 # Regex to match syntactically valid DOIs
