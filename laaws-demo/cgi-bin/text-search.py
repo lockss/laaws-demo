@@ -39,12 +39,12 @@ if params != None:
 		# parse the JSON we got back
 		solrData = solrResponse.json()
 		# XXX response is paginated
-		if "docs" in solrData:
-			docs = solrData["docs"]
+		if "response" in solrData and "docs" in solrData["response"]:
+			docs = solrData["response"]["docs"]
 			for doc in docs:
 				url = None
 				if "response_url" in doc:
-					url = doc["response_url"]
+					url = doc["response_url"][0]
 				elif "url" in doc:
 					url = doc["url"]
 				if url != None:
@@ -77,6 +77,6 @@ else:
 	print('Content-Type:text/html')
 	print()
 	print('<h1>OpenURL to URL</h1>')
-	print("{0}{1}".format(err,message))
+	print("{0}".format(err))
 	print()
 
