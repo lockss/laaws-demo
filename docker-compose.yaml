@@ -102,7 +102,7 @@ services:
         image: lockss/lockss-indexer
         environment:
             - LOCKSS_SOLR_WATCHDIR=/warcs
-            - LOCKSS_SOLR_URL=http://solr:8983/solr/test-core
+            - LOCKSS_SOLR_URL=http://lockss-solr:8983/solr/test-core
         links:
             - lockss-solr
         volumes:
