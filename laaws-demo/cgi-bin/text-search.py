@@ -33,7 +33,7 @@ params = queryParams(input_data)
 
 if params != None:
 	# query the service
-	solrResponse = requests.post(service, json=params)
+	solrResponse = requests.get(service, params=params)
 	status = solrResponse.status_code
 	if(status == 200):
 		# parse the JSON we got back
