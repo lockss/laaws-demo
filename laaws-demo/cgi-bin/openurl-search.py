@@ -7,7 +7,7 @@ import cgitb
 cgitb.enable()
 
 # URL prefix for OpenURL query service
-service = "http://laaws-mdq:8888/urls/openurl"
+service = "http://laaws-mdq:8889/urls/openurl"
 # URL prefix for OpenWayback
 wayback = "http://localhost:8080/wayback/*"
 err = "Error: "
