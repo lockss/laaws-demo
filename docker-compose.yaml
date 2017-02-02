@@ -58,7 +58,7 @@ services:
         links:
             - laaws-lockss:lockss-daemon
         ports:
-            - "8082:8888"
+            - "8082:8889"
         volumes:
             - metadatadb:/laaws-metadataservice/cache/db
 
