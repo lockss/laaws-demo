@@ -29,7 +29,7 @@
 ##org.lockss.metadataDbManager.derby.streamErrorFile=/tmp/derby.log
 #org.lockss.metadataDbManager.derby.streamErrorLogseveritylevel=0
 #org.lockss.metadataDbManager.datasource.className=org.apache.derby.jdbc.EmbeddedDataSource
-org.lockss.metadataDbManager.datasource.className=org.apache.derby.jdbc.ClientDataSource
+#org.lockss.metadataDbManager.datasource.className=org.apache.derby.jdbc.ClientDataSource
 #org.lockss.metadataDbManager.datasource.password=goodPassword
 ##org.lockss.metadataDbManager.datasource.createDatabase=create
 #org.lockss.metadataDbManager.datasource.databaseName=db/MetadataDbManager
@@ -37,12 +37,12 @@ org.lockss.metadataDbManager.datasource.className=org.apache.derby.jdbc.ClientDa
 ##org.lockss.metadataDbManager.datasource.serverName=localhost
 ##org.lockss.metadataDbManager.datasource.user=LOCKSS
 # Using PostgreSQL.
-#org.lockss.metadataDbManager.datasource.className=org.postgresql.ds.PGSimpleDataSource
-##org.lockss.metadataDbManager.datasource.databaseName=MetadataDbManager
-##org.lockss.metadataDbManager.datasource.password=goodPassword
-#org.lockss.metadataDbManager.datasource.portNumber=5432
-##org.lockss.metadataDbManager.datasource.serverName=localhost
-##org.lockss.metadataDbManager.datasource.user=LOCKSS
+org.lockss.metadataDbManager.datasource.className=org.postgresql.ds.PGSimpleDataSource
+org.lockss.metadataDbManager.datasource.databaseName=MetadataDbManager
+org.lockss.metadataDbManager.datasource.password=dontCareItsADemo
+org.lockss.metadataDbManager.datasource.portNumber=5432
+org.lockss.metadataDbManager.datasource.serverName=postgres
+org.lockss.metadataDbManager.datasource.user=LOCKSS
 # Using MySQL
 #org.lockss.metadataDbManager.datasource.className=com.mysql.jdbc.jdbc2.optional.MysqlDataSource
 

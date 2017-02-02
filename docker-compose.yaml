@@ -57,10 +57,11 @@ services:
         image: lockss/laaws-mdq
         links:
             - laaws-lockss:lockss-daemon
+            - metadata-pgsql:postgres
         ports:
             - "8082:8889"
-        volumes:
-            - metadatadb:/laaws-metadataservice/cache/db
+#        volumes:
+#            - metadatadb:/laaws-metadataservice/cache/db
 
     laaws-mdx:
         build: 
@@ -68,10 +69,11 @@ services:
         image: lockss/laaws-mdx
         links:
             - laaws-lockss:lockss-daemon
+            - metadata-pgsql:postgres
         ports:
             - "8083:8888"
-        volumes:
-            - metadatadb:/laaws-metadataextractor/cache/db
+#        volumes:
+#            - metadatadb:/laaws-metadataextractor/cache/db
 
     laaws-openwayback:
         build:
@@ -105,6 +107,18 @@ services:
             - lockss-solr
         volumes:
             - ./lockss-solr/warcs:/var/data/warcs:ro
+
+    metadata-pgsql:
+        image: postgres
+        container_name: metadata-pgsql
+        ports:
+            - "5432:5432"
+        environment:
+            - POSTGRES_PASSWORD=dontCareItsADemo
+            - POSTGRES_USER=LOCKSS
+            - POSTGRES_DB=MetadataDbManager
+        volumes:
+            - postgresql-data:/var/lib/postgresql/data
         
 # Define named Docker volumes
 volumes:
@@ -112,5 +126,7 @@ volumes:
         external: false
     test-core:
         external: false
-    metadatadb:
+#    metadatadb:
+#        external: false
+    postgresql-data:
         external: false
