@@ -2,13 +2,13 @@ FROM ubuntu:latest
 
 MAINTAINER "Daniel Vargas" <dlvargas@stanford.edu>
 
+# Install build tools
+RUN apt-get update
+RUN apt-get -y install git subversion ant gettext openjdk-8-jdk-headless maven locales
+
 # Set LANG (needed for msginit -- called by lockss-daemon build.xml)
 ENV LANG en_US.UTF-8
 RUN locale-gen ${LANG}
-
-# Install build tools
-RUN apt-get update
-RUN apt-get -y install git subversion ant gettext openjdk-8-jdk-headless maven
 
 # Get laaws-metadataextractor source 
 RUN git clone https://gitlab.lockss.org/laaws/laaws-metadataextractor.git --recursive
