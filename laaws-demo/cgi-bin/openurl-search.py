@@ -9,7 +9,7 @@ cgitb.enable()
 # URL prefix for OpenURL query service
 service = "http://laaws-mdq:8889/urls/openurl"
 # URL prefix for OpenWayback
-wayback = "http://localhost:8080/wayback/*"
+wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
 err = "Error: "
 
 # Return a Dictionary with the params for the OpenURL query

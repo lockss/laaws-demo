@@ -11,7 +11,7 @@ cgitb.enable()
 # URL prefix for DOI query service
 service = "http://laaws-mdq:8889/urls/doi"
 # URL prefix for OpenWayback
-wayback = "http://localhost:8080/wayback/*"
+wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
 # Regex to match syntactically valid DOIs
 doiRegex = '10\.[0-9]+\/'
 err = "Error: "

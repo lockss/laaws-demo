@@ -8,9 +8,9 @@ cgitb.enable()
 
 # URL prefix for SOLR query service
 # XXX should work with both EDINA and BL
-service = "http://laaws-indexer/XXX"
+service = "http://lockss-solr:8983/solr/test-core/select"
 # URL prefix for OpenWayback
-wayback = "http://localhost:8080/wayback/*"
+wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
 err = "Error: "
 urlArray = []
 

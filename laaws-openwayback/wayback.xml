@@ -20,7 +20,7 @@
         wayback.archivedir.2=${wayback.basedir}/arc/
         
         wayback.url.scheme=http
-        wayback.url.host=localhost
+        wayback.url.host=demo.laaws.lockss.org
         wayback.url.port=8080
         wayback.url.prefix=${wayback.url.scheme}://${wayback.url.host}:${wayback.url.port}
       </value>
