@@ -35,4 +35,4 @@ RUN touch logs/laawsmdx.log
 # XXX Overlay needed for demo
 ADD lockss.opt /laaws-metadataextractor
 
-CMD ["/bin/sh", "/laaws-metadataextractor/runLaawsMdx"]
+CMD ["/bin/sh", "/laaws-metadataextractor/buildAndRunLaawsMdx"]

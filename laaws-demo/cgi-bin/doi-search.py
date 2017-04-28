@@ -11,10 +11,14 @@ cgitb.enable()
 # URL prefix for DOI query service
 service = "http://laaws-mdq:8889/urls/doi"
 # URL prefix for OpenWayback
-wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
+wayback = "http://localhost:8080/wayback/*"
 # Regex to match syntactically valid DOIs
 doiRegex = '10\.[0-9]+\/'
 err = "Error: "
+
+print('Content-Type:text/html')
+print()
+print('<h1>DOI to URL</h1>')
 
 # Return true if d is a syntactically valid DOI
 def validate(d):
@@ -62,8 +66,5 @@ if "DOI" in input_data:
 else:
 	# Missing DOI input
 	message = "No DOI to search for"
-print('Content-Type:text/html')
-print()
-print('<h1>DOI to URL</h1>')
 print("{0}{1}".format(err,message))
 print()

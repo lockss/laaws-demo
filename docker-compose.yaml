@@ -35,7 +35,7 @@ services:
         image: lockss/laaws-demo
         links:
             - laaws-openwayback:openwayback
-            #- laaws-mdq:laaws-mdq
+            - laaws-mdq:laaws-mdq
         ports:
             - "80:80"
 

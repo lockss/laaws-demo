@@ -9,8 +9,12 @@ cgitb.enable()
 # URL prefix for OpenURL query service
 service = "http://laaws-mdq:8889/urls/openurl"
 # URL prefix for OpenWayback
-wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
+wayback = "http://localhost:8080/wayback/*"
 err = "Error: "
+
+print('Content-Type:text/html')
+print()
+print('<h1>OpenURL to URL</h1>')
 
 # Return a Dictionary with the params for the OpenURL query
 def parseOpenURL(s):
@@ -57,8 +61,5 @@ if params != None:
 else:
 	# Got OpenURL but invalid
 	message = "Invalid OpenURL: {}".format(openurl)
-print('Content-Type:text/html')
-print()
-print('<h1>OpenURL to URL</h1>')
 print("{0}{1}".format(err,message))
 print()
