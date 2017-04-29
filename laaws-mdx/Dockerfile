@@ -35,4 +35,4 @@ RUN touch logs/laawsmdx.log
 # XXX Overlay needed for demo
 ADD lockss.opt /laaws-metadataextractor
 
-CMD ["/bin/sh", "/laaws-metadataextractor/buildAndRunLaawsMdx"]
+CMD ["/bin/sh", "/laaws-metadataextractor/buildAndRunLaawsMdx", "-Dswarm.http.port=8888", "-Djava.net.preferIPv4Stack=true"]

@@ -35,4 +35,4 @@ RUN touch logs/laawsmdq.log
 # XXX Overlay needed for demo
 ADD lockss.opt /laaws-metadataservice
 
-CMD ["/bin/sh", "/laaws-metadataservice/buildAndRunLaawsMdq", "8889"]
+CMD ["/bin/sh", "/laaws-metadataservice/buildAndRunLaawsMdq", "-Dswarm.http.port=8889", "-Djava.net.preferIPv4Stack=true"]
