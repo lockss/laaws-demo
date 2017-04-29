@@ -66,5 +66,13 @@ if "DOI" in input_data:
 else:
 	# Missing DOI input
 	message = "No DOI to search for"
-print("{0}{1}".format(err,message))
-print()
+
+try:
+    message
+except:
+    # message variable undefined
+    None 
+else:
+    # message variable is defined -- print it
+    print("{0}{1}".format(err,message))
+    print()
