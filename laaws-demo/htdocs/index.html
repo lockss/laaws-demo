@@ -4,7 +4,15 @@
 </head>
 <body>
 <h1 align="center">
-LAAWS Demo DSHR test</h1>
+LAAWS Demo</h1>
+This page provides a minimal interface to the current implementation of LAAWS
+(LOCKSS Architected As Web Services) as a demonstration of its state. The
+implementation contains 3 Archival Units (AUs) of journal content carrying
+Creative Commons licenses.<br />
+<nr />
+The functions currently available are to search for articles via DOI, OpenURL,
+or text string.<br />
+<br />
 <h2>Search For</h2>
 <form method="POST" action="/cgi-bin/doi-search.py">
 Success: 10.3897/biorisk.9.6105<br />
@@ -14,15 +22,14 @@ Success: 10.5339/nmejre.2014.3<br />
 Success: 10.5339/nmejre.2014.4<br />
 Success: 10.5339/nmejre.2014.5 <br />
 Failure: 10.1234/foobar<br />
-DOI: <input name="DOI" size="30" maxlength="90" type="text"> <input value="Go" type="submit"><br>
+DOI: <input name="DOI" size="30" maxlength="90" type="text"> <input value="Go" type="submit"><br />
 </form>
-<br>
+<br />
 <form method="POST" action="/cgi-bin/openurl-search.py">
-Zero articles: ISSN = 1234-5678, Volume = 77, Author = Arthur Dent<br>
-One article: ISSN: 1313-2652, Volume: 9, Start Page: 1<br />
-One article: ISSN: 1313-2652, Volume: 9, Author: Spangenberg<br />
-One article: ISSN: 1703-1958, Volume: 2014, Issue: 1 Start Page: 5<br />
-Multiple articles: ISSN: 1703-1958, Volume: 2014<br>
+Success: ISSN: 1313-2652, Volume: 9, Start Page: 1<br />
+Success: ISSN: 1313-2652, Volume: 9, Author: Spangenberg<br />
+Success: ISSN: 1703-1958, Volume: 2014, Issue: 1 Start Page: 5<br />
+Failure: ISSN = 1234-5678, Volume = 77, Author = Arthur Dent<br />
 ISSN: <input name="ISSN" size="30" maxlength="90" type="text"><br>
 Volume: <input name="Volume" size="30" maxlength="90" type="text"><br>
 Issue: <input name="Issue" size="30" maxlength="90" type="text"><br>
@@ -35,24 +42,33 @@ Start page: <input name="sPage" size="30" maxlength="90" type="text"><br>
 <form method="POST" action="/cgi-bin/text-search.py">
 Suggested search terms: Emirati
 Morocco
-Qatar <br>
-Text: <input name="Search" size="30" maxlength="90" type="text"> <input value="Go" type="submit"><br>
+Qatar <br />
+<br />
+Text: <input name="Search" size="30" maxlength="90" type="text">
+<input value="Go" type="submit"><br>
 </form>
-<br>
-<h2>Add AU To Search Index</h2>
-<form method="POST" action="/cgi-bin/index-auid.py">
-XXX not yet implemented<br>
-AUID: <select name="AUID" size="1">
-	<option selected="selected">AUID-1
-	</option><option>AUID-2
-	</option><option>AUID-3
-</option></select> <input value="Index" type="submit"><br>
-<!-- GET cgi-bin/index-auid?AUID={auid} -->
-<!--
-script will map to GET http://fernando.lockss.org/XXX
-service will XXX
-script will XXX -->
+<br />
+<h2>Export AU as WARC</h2>
+Not yet implemented.<br />
+<form method="POST" action="/cgi-bin/export-au.py">
+Suggested input:<br />
+AUID-1<br />
+AUID-2<br />
+AUID-3<br />
+<br />
+AUID: <input name="AUID" size="30" maxlength="90" type="text">
+<input value="Go" type="submit"><br>
 </form>
-
-
-</body></html>
+<br />
+<h2>Import WARC as AU</h2>
+Not yet implemented.<br />
+<form method="POST" action="/cgi-bin/import-au.py" enctype="multipart/form-data">
+Suggested input:<br />
+AUID-1<br />
+AUID-2<br />
+AUID-3<br />
+<br />
+AUID: <input name="AUID" size="30" maxlength="90" type="text">
+WARC: <input type="file" name="import.warc" size="40">
+<input value="Go" type="submit"><br>
+</form>
