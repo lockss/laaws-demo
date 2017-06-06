@@ -11,7 +11,7 @@ ENV LANG en_US.UTF-8
 RUN locale-gen ${LANG}
 
 # Get laaws-metadataextractor source 
-RUN git clone https://gitlab.lockss.org/laaws/laaws-metadataextractor.git --recursive
+RUN git clone -b demo-2 https://gitlab.lockss.org/laaws/laaws-metadataextractor.git --recursive
 
 # Build LOCKSS daemon JARs
 WORKDIR /laaws-metadataextractor
