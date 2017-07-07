@@ -119,6 +119,37 @@ services:
             - POSTGRES_DB=MetadataDbManager
         volumes:
             - postgresql-data:/var/lib/postgresql/data
+
+    repo-solr:
+        image: solr
+        ports:
+            - "8984:8983"
+        entrypoint:
+            - docker-entrypoint.sh
+            - solr-precreate
+            - xyzzy
+    
+    repo-hdfs:
+        build:
+            context: laaws-dev-hdfs
+        image: laaws/laaws-dev-hdfs
+        hostname: repo-hdfs
+        ports:
+            - "9000:9000"
+            - "50010:50010"
+            - "50020:50020"
+            - "50070:50070"
+            - "50075:50075"
+
+    repo:
+        build:
+            context: laaws-repository
+        image: laaws/laaws-repository
+        links:
+            - repo-hdfs
+            - repo-solr
+        ports:
+            - "8700:8080"
         
 # Define named Docker volumes
 volumes:

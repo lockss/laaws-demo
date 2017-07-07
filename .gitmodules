@@ -1,3 +1,9 @@
 [submodule "lockss-solr"]
 	path = lockss-solr
 	url = https://github.com/edina/lockss-solr.git
+[submodule "laaws-repository"]
+	path = laaws-repository
+	url = https://gitlab.lockss.org/laaws/laaws-repository.git
+[submodule "laaws-dev-hdfs"]
+	path = laaws-dev-hdfs
+	url = https://gitlab.lockss.org/laaws/laaws-dev-hdfs.git
