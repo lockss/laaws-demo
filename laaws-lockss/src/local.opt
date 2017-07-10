@@ -1,3 +1,0 @@
-# Locally-set configuration parameters
-org.lockss.metadataManager.indexing_enabled=true
-org.lockss.export.enabled=true

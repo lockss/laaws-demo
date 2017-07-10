@@ -1,4 +1,0 @@
-[lockss] 
-name = LOCKSS Daemon Repository 
-baseurl=http://www.lockss.org/repo/ 
-gpgcheck=1
