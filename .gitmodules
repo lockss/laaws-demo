@@ -1,0 +1,3 @@
+[submodule "laaws-cluster"]
+	path = laaws-cluster
+	url = https://gitlab.lockss.org/laaws/laaws-cluster.git
