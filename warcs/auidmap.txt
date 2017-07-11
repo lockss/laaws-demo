@@ -1,0 +1,3 @@
+org|lockss|plugin|pensoft|oai|PensoftOaiPlugin&au_oai_date~2014&au_oai_set~biorisk&base_url~http%3A%2F%2Fbiorisk%2Epensoft%2Enet%2F	biorisk2014-20170202064641427-00000.warc
+org|lockss|plugin|hindawi|HindawiPublishingCorporationPlugin&base_url~http%3A%2F%2Fwww%2Ehindawi%2Ecom%2F&download_url~http%3A%2F%2Fdownloads%2Ehindawi%2Ecom%2F&journal_id~ijpg&volume_name~2014	ijpg2014-20170202064659461-00000.warc
+org|lockss|plugin|atypon|bloomsburyqatar|BloomsburyQatarPlugin&base_url~http%3A%2F%2Fwww%2Eqscience%2Ecom%2F&journal_id~nmejre&volume_name~2014	nmejre2014-20170202064712817-00000.warc
