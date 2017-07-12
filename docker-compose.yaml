@@ -29,135 +29,68 @@
 version: '2'
 
 services:
+
     laaws-demo:
         build: 
             context: ./laaws-demo
-        image: lockss/laaws-demo
+        image: laaws/laaws-demo
         links:
             - laaws-openwayback:openwayback
-            - laaws-mdq:laaws-mdq
+            - laaws-metadataservice:laaws-metadataservice
         ports:
             - "80:80"
 
-    laaws-lockss:
-        build:
-            context: ./laaws-lockss
-        image: lockss/laaws-lockss
-        ports:
-            - "8081:8081"
-            - "9729:9729"
-        volumes:
-            - laaws-lockss:/cache0
-            #- ./laaws-lockss/log/lockss:/var/log/lockss
-            #- ./laaws-lockss/lockss:/opt/lockss
-
-    laaws-mdq:
-        build: 
-            context: ./laaws-mdq
-        image: lockss/laaws-mdq
+    laaws-metadataservice:
+        extends:
+            file: laaws-cluster/laaws-components.yaml
+            service: laaws-metadataservice
         links:
-            - laaws-lockss:lockss-daemon
-            - metadata-pgsql:postgres
-        ports:
-            - "8082:8889"
-#        volumes:
-#            - metadatadb:/laaws-metadataservice/cache/db
+            - laaws-repo-hdfs
+            - laaws-repo-solr
 
-    laaws-mdx:
-        build: 
-            context: ./laaws-mdx
-        image: lockss/laaws-mdx
+    laaws-metadataextractor:
+        extends:
+            file: laaws-cluster/laaws-components.yaml
+            service: laaws-metadataextractor
         links:
-            - laaws-lockss:lockss-daemon
-            - metadata-pgsql:postgres
-        ports:
-            - "8083:8888"
-#        volumes:
-#            - metadatadb:/laaws-metadataextractor/cache/db
+            - laaws-metadata-pgsql:postgres
 
     laaws-openwayback:
-        build:
-            context: ./laaws-openwayback
-        image: lockss/laaws-openwayback
-        ports:
-            - "8080:8080"
-        volumes:
-            - ./laaws-openwayback/openwayback:/srv/openwayback
+        extends:
+            file: laaws-cluster/laaws-components.yaml
+            service: laaws-openwayback
 
-    lockss-solr:
-        image: solr
-        container_name: lockss-solr
-        ports:
-            - "8983:8983"
-        volumes:
-            - test-core:/opt/solr/server/solr/test-core
-        entrypoint:
-            - docker-entrypoint.sh
-            - solr-precreate
-            - test-core
+    laaws-metadata-solr:
+        extends:
+            file: laaws-cluster/laaws-components.yaml
+            service: laaws-metadata-solr
 
-    lockss-indexer:
-        build:
-            context: ./lockss-solr
-        image: lockss/lockss-indexer
-        environment:
-            - LOCKSS_SOLR_WATCHDIR=/warcs
-            - LOCKSS_SOLR_URL=http://lockss-solr:8983/solr/test-core
+    lockss-solr-indexer:
+        extends:
+            file: laaws-cluster/laaws-components.yaml
+            service: laaws-solr-indexer
         links:
-            - lockss-solr
-        volumes:
-            - ./warcs:/warcs
+            - laaws-metadata-solr
 
-    metadata-pgsql:
-        image: postgres
-        container_name: metadata-pgsql
-        ports:
-            - "5432:5432"
-        environment:
-            - POSTGRES_PASSWORD=dontCareItsADemo
-            - POSTGRES_USER=LOCKSS
-            - POSTGRES_DB=MetadataDbManager
-        volumes:
-            - postgresql-data:/var/lib/postgresql/data
+    laaws-metadata-pgsql:
+        extends:
+            file: laaws-cluster/laaws-components.yaml
+            service: laaws-metadata-pgsql
 
-    repo-solr:
-        image: solr
-        ports:
-            - "8984:8983"
-        entrypoint:
-            - docker-entrypoint.sh
-            - solr-precreate
-            - xyzzy
+    laaws-repo-solr:
+        extends:
+            file: laaws-cluster/laaws-components.yaml
+            service: laaws-repo-solr
     
-    repo-hdfs:
-        build:
-            context: laaws-dev-hdfs
-        image: laaws/laaws-dev-hdfs
-        hostname: repo-hdfs
-        ports:
-            - "9000:9000"
-            - "50010:50010"
-            - "50020:50020"
-            - "50070:50070"
-            - "50075:50075"
+    laaws-repo-hdfs:
+        extends:
+            file: laaws-cluster/laaws-components.yaml
+            service: laaws-repo-hdfs
 
-    repo:
-        build:
-            context: laaws-repository
-        image: laaws/laaws-repository
+    laaws-repo:
+        extends:
+            file: laaws-cluster/laaws-components.yaml
+            service: laaws-repo
         links:
-            - repo-hdfs
-            - repo-solr
-        ports:
-            - "8700:8080"
-        
-# Define named Docker volumes
-volumes:
-    laaws-lockss:
-        external: false
-    test-core:
-        external: false
-#    metadatadb:
-#        external: false
-    postgresql-data:
-        external: false
+            - laaws-repo-hdfs
+            - laaws-repo-solr
