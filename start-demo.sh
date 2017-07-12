@@ -28,20 +28,17 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# put WARC files in the right place for indexer and OpenWayback
-# docker-compose up <-- of the cluster
-# Wait for cluster to be up:
-# ...solr
-# ...hdfs
-# ...repo
-# ...postgres
-# ...mdx
-# ...mdq
-# touch WARC files for Solr
-# add WARC files to repository
-# add WARC files for OpenWayback to find?
-# Kick off metadata extraction
-# Wait for OpenWayback
-# Wait for metadata extraction
-# Start demo Web server
+# TODO: Stage WARC files in the right place for EDINA's WARC-to-Solr indexer and OpenWayback
 
+# Bring up an instance of the LAAWS cluster
+docker-compose up -d
+
+# TODO: Wait for cluster to be up: (solr, hdfs, repo, pgsql, mdx, mdq)
+
+# TODO: Induce indexing of WARC files by EDINA's WARC-to-Solr indexer by touching files
+#docker exec --name 
+
+# Import WARC files to repository
+sh demo.d/2.import-warcs.sh
+
+# TODO: Kick off LAAWS Metadata extraction
