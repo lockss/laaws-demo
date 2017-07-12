@@ -60,17 +60,17 @@ services:
             file: laaws-cluster/laaws-components.yaml
             service: laaws-openwayback
 
-    laaws-metadata-solr:
+    laaws-indexer-solr:
         extends:
             file: laaws-cluster/laaws-components.yaml
-            service: laaws-metadata-solr
+            service: laaws-indexer-solr
 
-    lockss-solr-indexer:
+    laaws-indexer:
         extends:
             file: laaws-cluster/laaws-components.yaml
-            service: laaws-solr-indexer
+            service: laaws-indexer
         links:
-            - laaws-metadata-solr
+            - laaws-indexer
 
     laaws-metadata-pgsql:
         extends:
