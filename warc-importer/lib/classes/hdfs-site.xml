@@ -1,0 +1,23 @@
+<configuration>
+
+    <property>
+        <name>dfs.datanode.address</name>
+        <value>repo-hdfs:50010</value>
+    </property>
+
+    <property>
+        <name>dfs.client.use.datanode.hostname</name>
+        <value>false</value>
+    </property>
+
+    <property>
+        <name>dfs.client.block.write.replace-datanode-on-failure.best-effort</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>dfs.client.block.write.replace-datanode-on-failure.policy</name>
+        <value>NEVER</value>
+    </property>
+
+</configuration>
