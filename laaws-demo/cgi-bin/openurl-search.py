@@ -57,7 +57,7 @@ try:
 		message = message + "<br />\n"
 		# query the service
                 queryurl = service
-                if len(params) > 0: queryurl = '{0}?{1}'.format(queryurl, '&'.join(['{0}={1}'.format(p, params[p]) for p in sorted(params)]))
+                if len(params) > 0: queryurl = '{0}?{1}'.format(queryurl, '&'.join(['params={0}={1}'.format(p, params[p]) for p in sorted(params)]))
 		openurlResponse = requests.get(queryurl)
 		status = openurlResponse.status_code
 		if(status == 200):
