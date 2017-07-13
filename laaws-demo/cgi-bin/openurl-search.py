@@ -9,7 +9,7 @@ import re
 cgitb.enable()
 
 # URL prefix for OpenURL query service
-service = "http://laaws-mdq:8889/urls/openurl"
+service = "http://laaws-metadataservice:8889/urls/openurl"
 # URL prefix for OpenWayback
 wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
 message = 'Content-Type:text/html' + '\n\n' + '<h1>DOI to URL</h1>\n'
