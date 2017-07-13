@@ -76,6 +76,10 @@ services:
         extends:
             file: laaws-cluster/laaws-components.yaml
             service: laaws-metadata-pgsql
+        environment:
+            - POSTGRES_PASSWORD=goodPassword
+            - POSTGRES_USER=LOCKSS
+            - POSTGRES_DB=MetadataDbManager
 
     laaws-repo-solr:
         extends:
