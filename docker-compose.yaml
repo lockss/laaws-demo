@@ -59,6 +59,8 @@ services:
         extends:
             file: laaws-cluster/laaws-components.yaml
             service: laaws-openwayback
+        volumes:
+            - ./warcs:/warcs
 
     laaws-indexer-solr:
         extends:
@@ -71,6 +73,11 @@ services:
             service: laaws-indexer
         links:
             - laaws-indexer-solr
+        volumes:
+            - ./warcs:/warcs
+        environment:
+            - LOCKSS_SOLR_WATCHDIR=/warcs
+            - LOCKSS_SOLR_URL=http://laaws-indexer-solr:8983/solr/test-core
 
     laaws-metadata-pgsql:
         extends:
