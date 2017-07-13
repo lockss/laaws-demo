@@ -10,7 +10,7 @@ import sys
 cgitb.enable()
 
 # URL prefix for DOI query service
-service = "http://laaws-mdq:8889/urls/doi"
+service = "http://laaws-metadataservice:8889/urls/doi"
 # URL prefix for OpenWayback
 wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
 # Regex to match syntactically valid DOIs
