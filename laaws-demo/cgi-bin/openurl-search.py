@@ -56,10 +56,10 @@ try:
 		for p in sorted(params.keys()):
 			message = message + p + ": " + params[p] + "<br />\n"
 		message = message + "<br />\n"
-        # query the service
-        queryurl = service
-        if len(params) > 0: queryurl = '{0}?{1}'.format(queryurl, '&'.join(['params={0}={1}'.format(p, urllib.parse.quote_plus(params[p])) for p in sorted(params)]))
-        openurlResponse = requests.get(queryurl)
+	# query the service
+	queryurl = service
+	if len(params) > 0: queryurl = '{0}?{1}'.format(queryurl, '&'.join(['params={0}={1}'.format(p, urllib.parse.quote_plus(params[p])) for p in sorted(params)]))
+	openurlResponse = requests.get(queryurl)
 		status = openurlResponse.status_code
 		if(status == 200):
 			# parse the JSON we got back

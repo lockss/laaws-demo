@@ -1,5 +1,11 @@
 #!/bin/sh
 
+if [ `whoami` != root ]
+then
+	echo "Usage: must be run as root"
+	exit 1
+fi
+
 # Stop Docker Compose in case its running
 docker-compose stop
 
