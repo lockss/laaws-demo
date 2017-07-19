@@ -28,4 +28,38 @@ This page allows you to search these issues via DOI, OpenURL and full-text searc
 each of which is implemented as a REST-ful Web API.<br />
 <p>
 Partial funding for LAAWS was generously provided by the Andrew W. Mellon Foundation.<br />
-<h2>The Demo Is Starting: Please Wait</h2>
+<h2>Search For</h2>
+<form method="POST" action="/cgi-bin/doi-search.py">
+Success: 10.3897/biorisk.9.6105<br />
+Success: 10.5339/nmejre.2014.1<br />
+Success: 10.5339/nmejre.2014.2<br />
+Success: 10.5339/nmejre.2014.3<br />
+Success: 10.5339/nmejre.2014.4<br />
+Success: 10.5339/nmejre.2014.5 <br />
+Failure: 10.1234/foobar<br />
+DOI: <input name="DOI" size="30" maxlength="90" type="text"> <input value="Go" type="submit"><br />
+</form>
+<br />
+<form method="POST" action="/cgi-bin/openurl-search.py">
+Success: ISSN: 1313-2652, Volume: 9, Start Page: 1<br />
+Success: ISSN: 1313-2652, Volume: 9, Author: Spangenberg<br />
+Success: ISSN: 1703-1958, Volume: 2014, Issue: 1 Start Page: 5<br />
+Failure: ISSN = 1234-5678, Volume = 77, Author = Arthur Dent<br />
+ISSN: <input name="ISSN" size="30" maxlength="90" type="text"><br>
+Volume: <input name="Volume" size="30" maxlength="90" type="text"><br>
+Issue: <input name="Issue" size="30" maxlength="90" type="text"><br>
+Author: <input name="Author" size="30" maxlength="90" type="text"><br>
+Start page: <input name="sPage" size="30" maxlength="90" type="text"><br>
+<br>
+<input value="Go" type="submit"><br>
+</form>
+<br>
+<form method="POST" action="/cgi-bin/text-search.py">
+Suggested search terms: Emirati
+Morocco
+Qatar <br />
+<br />
+Text: <input name="Search" size="30" maxlength="90" type="text">
+<input value="Go" type="submit"><br>
+</form>
+<br />

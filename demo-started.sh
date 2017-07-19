@@ -155,3 +155,4 @@ do
 	echo "${COUNT} WARCs extracted"
 	sleep 30
 done
+docker exec laawsdemo_laaws-demo_1 mv /usr/local/apache2/htdocs/up.html /usr/local/apache2/htdocs/index.html
