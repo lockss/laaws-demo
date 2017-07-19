@@ -37,7 +37,9 @@ SLR1_UP=0
 SLR1_RE='laaws-indexer-solr.*Registered new searcher'
 SLR2_UP=0
 SLR2_RE='laaws-repo-solr_.*Registered new searcher' 
+INDEX_DONE='Finished reindexing task'
 SERVICES=9
+WARC_COUNT=3
 while [ ${COUNT} -lt ${SERVICES} ]
 do
 	if [ ${MDQ_UP} -eq 0 ]
@@ -144,4 +146,12 @@ do
 		./${A}
 		echo Done
 	fi
+done
+# Wait for re-indexing to finish
+COUNT=0
+while [ ${COUNT} -lt ${WARC_COUNT} ]
+do
+        COUNT=`grep "${INDEX_DONE}" ${LOG} | wc -l`
+	echo "${COUNT} WARCs extracted"
+	sleep 30
 done
