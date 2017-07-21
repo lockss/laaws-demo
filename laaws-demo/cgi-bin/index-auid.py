@@ -10,7 +10,7 @@ print('Content-Type:text/html') #HTML is following
 print()                         #Leave a blank line
 print('<h1>Index AUID</h1>')
 try:
-	auid=input_data["AUID"].value
-	print("Index AUID: {}".format(auid))
+    auid=input_data["AUID"].value
+    print("Index AUID: {}".format(auid))
 except:
-	print('<p>No AUID?</p>')
+    print('<p>No AUID?</p>')
