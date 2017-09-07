@@ -58,6 +58,34 @@ Text: <input name="Search" size="30" maxlength="90" type="text">
 <input value="Go" type="submit"><br>
 </form>
 <br />
+<h6 style="text-align: justify;"><strong>Export as WARC:</strong></h6>
+<p>LAAWS implements the WASAPI Web service API for exporting content as WARC files. The content to be exported can be specified in the following ways:</p>
+<ul>
+<li>By Archival Unit ID (LOCKSS internal name for content units). Some examples using publisher-specific AUIDs:<br />
+<form method="POST" action="/cgi-bin/auid-to-warc.py">
+<select name=auid>
+  <option value="org|lockss|plugin|pensoft|oai|PensoftOaiPlugin&au_oai_date~2014&au_oai_set~biorisk&base_url~http%3A%2F%2Fbiorisk%2Epensoft%2Enet%2F">BioRisk 2014
+  <option value="org|lockss|plugin|hindawi|HindawiPublishingCorporationPlugin&base_url~http%3A%2F%2Fwww%2Ehindawi%2Ecom%2F&download_url~http%3A%2F%2Fdownloads%2Ehindawi%2Ecom%2F&journal_id~ijpg&volume_name~2014">IJPG 2014
+  <option value="org|lockss|plugin|atypon|bloomsburyqatar|BloomsburyQatarPlugin&base_url~http%3A%2F%2Fwww%2Eqscience%2Ecom%2F&journal_id~nmejre&volume_name~2014">NMEJRE 2014
+</select><input value="Go" type="submit">
+</form>
+</li>
+<li>By a text search on the content:<br />
+<form method="POST" action="/cgi-bin/text-to-warc.py">
+Suggested search terms: Emirati
+Morocco
+Qatar <br />
+<br />
+Text: <input name="Search" size="30" maxlength="90" type="text">
+<input value="Go" type="submit"><br>
+</form>
+</li>
+<li>By filtering the URLs using a regular expression:<br />
+<ul>
+<li>XXX</li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 </div>

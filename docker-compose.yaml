@@ -37,6 +37,7 @@ services:
         links:
             - laaws-openwayback:openwayback
             - laaws-metadataservice:laaws-metadataservice
+            - laaws-repo:laaws-repo
         ports:
             - "80:80"
 
