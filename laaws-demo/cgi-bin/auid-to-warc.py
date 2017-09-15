@@ -19,8 +19,12 @@ message = 'Content-Type:text/html' + '\n\n' + '<h1>WARC from AUID</h1>\n'
 # URL prefix for WSAPI service
 service = "http://laaws-repo:8080/repos/"
 
-warcName = "/usr/local/apache2/htdocs/warcs/test.warc.gz"
+warcPath1 = "/usr/local/apache2/htdocs/"
+warcPath2 = "warcs/test.warc.gz"
+warcName = warcPath1 + warcPath2
 repoName = None
+# URL prefix for OpenWayback XXX must not be pushed
+# wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
 wayback = "http://laaws-openwayback:8080/wayback/"
 ingestdate = "20170201"
 uris = []
@@ -89,6 +93,7 @@ def writeWarc(uris, warcName):
         writer = WARCWriter(output, gzip=True)
 
         stem = wayback + ingestdate + '/'
+        owuri = 'foo'
         try:
             for uri in uris:
                 owuri = stem + uri
@@ -112,11 +117,15 @@ def writeWarc(uris, warcName):
                     ret += uri + ': ' + resp.status_code
                 ret += '<br />\n'
         except requests.exceptions.ConnectTimeout:
-            ret += 'Timeout connecting to service {}\n'.format(stem)
+            ret += 'Timeout connecting to service {}\n'.format(owuri)
             ret += '<br />\n'
+            e = sys.exc_info()
+            ret += cgitb.text(e)
         except requests.exceptions.ConnectionError:
-            ret += 'Cannot connect to service {}\n'.format(stem)
+            ret += 'Cannot connect to service {}\n'.format(owuri)
             ret += '<br />\n'
+            e = sys.exc_info()
+            ret += cgitb.text(e)
         except:
             e = sys.exc_info()
             try:
@@ -161,6 +170,9 @@ try:
             else:
                 message += "<h2>URIs to write to WARC</h2>\n"
                 message += writeWarc(uris, warcName)
+                message += "<br />"
+                message += '<a href="http://localhost/' + warcPath2 + '">Download WARC</a>'
+                message += "<br />"
         else:
             # LAAWS repo request unsuccessful
             message += "repo request error: {0}\n{1}".format(status,repoResponse)
