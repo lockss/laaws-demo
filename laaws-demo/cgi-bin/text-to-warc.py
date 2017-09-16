@@ -2,11 +2,13 @@
 from warcio.warcwriter import WARCWriter
 from warcio.statusandheaders import StatusAndHeaders
 
+import tempfile
 import requests
 import json
 import cgi
 import cgitb
 import sys
+import os.path
 cgitb.enable()
 
 # URL prefix for SOLR query service
@@ -18,14 +20,18 @@ wayback = "http://laaws-openwayback:8080/wayback/"
 message = 'Content-Type:text/html' + '\n\n' + '<h1>Text Search</h1>\n'
 urlArray = []
 warcPath1 = "/usr/local/apache2/htdocs/"
-warcPath2 = "warcs/test.warc.gz"
-warcName = warcPath1 + warcPath2
+warcDir = "warcs/"
+warcDirPath = warcPath1 + warcDir
+warcFile = tempfile.NamedTemporaryFile(dir=warcDirPath, suffix=".warc.gz", delete=False)
+warcName = os.path.basename(warcFile.name)
+warcPath = warcDirPath + warcName
+
 repoName = None
 ingestdate = "20170201"
 
-def writeWarc(uris, warcName):
+def writeWarc(uris, warcFile):
     ret = ""
-    with open(warcName, 'wb') as output:
+    with warcFile as output:
         writer = WARCWriter(output, gzip=True)
 
         stem = wayback + ingestdate + '/'
@@ -117,9 +123,9 @@ try:
                             url = doc["url"]
                         if url != None:
                             urlArray.append(url)
-                message += writeWarc(sorted(urlArray), warcName)
+                message += writeWarc(sorted(urlArray), warcFile)
                 message += "<br />"
-                message += '<a href="http://localhost/' + warcPath2 + '">Download WARC</a>'
+                message += '<a href="http://localhost/' + warcDir + warcName + '">Download WARC</a>'
                 message += "<br />"
 
             else:

@@ -7,11 +7,13 @@ from argparse import ArgumentParser
 import requests
 import json
 
+import tempfile
 import re
 import cgi
 import cgitb
 import urllib.parse
 import sys
+import os.path
 cgitb.enable()
 
 message = 'Content-Type:text/html' + '\n\n' + '<h1>WARC from AUID</h1>\n'
@@ -20,8 +22,11 @@ message = 'Content-Type:text/html' + '\n\n' + '<h1>WARC from AUID</h1>\n'
 service = "http://laaws-repo:8080/repos/"
 
 warcPath1 = "/usr/local/apache2/htdocs/"
-warcPath2 = "warcs/test.warc.gz"
-warcName = warcPath1 + warcPath2
+warcDir = "warcs/"
+warcDirPath = warcPath1 + warcDir
+warcFile = tempfile.NamedTemporaryFile(dir=warcDirPath, suffix=".warc.gz", delete=False)
+warcName = os.path.basename(warcFile.name)
+warcPath = warcDirPath + warcName
 repoName = None
 # URL prefix for OpenWayback XXX must not be pushed
 # wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
@@ -87,9 +92,9 @@ def processRepoData(data):
         for art in items:
             uris.append(art['uri'])
 
-def writeWarc(uris, warcName):
+def writeWarc(uris, warcFile):
     ret = ""
-    with open(warcName, 'wb') as output:
+    with warcFile as output:
         writer = WARCWriter(output, gzip=True)
 
         stem = wayback + ingestdate + '/'
@@ -169,9 +174,9 @@ try:
                 message += "No URIs to write to WARC.<br />\n"
             else:
                 message += "<h2>URIs to write to WARC</h2>\n"
-                message += writeWarc(uris, warcName)
+                message += writeWarc(uris, warcFile)
                 message += "<br />"
-                message += '<a href="http://localhost/' + warcPath2 + '">Download WARC</a>'
+                message += '<a href="http://localhost/' + warcDir + warcName + '">Download WARC</a>'
                 message += "<br />"
         else:
             # LAAWS repo request unsuccessful
