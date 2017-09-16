@@ -14,6 +14,8 @@ import cgitb
 import urllib.parse
 import sys
 import os.path
+import hashlib
+from functools import partial
 cgitb.enable()
 
 message = 'Content-Type:text/html' + '\n\n' + '<h1>WARC from AUID</h1>\n'
@@ -115,7 +117,6 @@ def writeWarc(uris, warcFile):
                     record = writer.create_warc_record(uri, 'response',
                                                         payload=resp.raw,
                                                         http_headers=http_headers)
-            
                     writer.write_record(record)
                     ret += '<a href="' + wayback + ingestdate + '/' + uri + '">' + uri + '</a>:'
                 else:
@@ -138,6 +139,11 @@ def writeWarc(uris, warcFile):
             except AttributeError:
                 ret += "Got AttributeError: {}\n".format(e[0])
             ret += '<br />\n'
+    with open(warcFile.name, mode='rb') as f:
+        m = hashlib.sha1()
+        for buf in iter(partial(f.read, 4096), b''):
+            m.update(buf)
+    ret += "<br />WARC SHA1: " + m.hexdigest() + '<br />\n'
     return ret
 
 params1 = {}

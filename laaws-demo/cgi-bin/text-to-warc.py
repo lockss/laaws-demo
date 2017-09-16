@@ -9,6 +9,8 @@ import cgi
 import cgitb
 import sys
 import os.path
+import hashlib
+from functools import partial
 cgitb.enable()
 
 # URL prefix for SOLR query service
@@ -75,6 +77,11 @@ def writeWarc(uris, warcFile):
             except AttributeError:
                 ret += "Got AttributeError: {}\n".format(e[0])
             ret += '<br />\n'
+    with open(warcFile.name, mode='rb') as f:
+        m = hashlib.sha1()
+        for buf in iter(partial(f.read, 4096), b''):
+            m.update(buf)
+    ret += "<br />WARC SHA1: " + m.hexdigest() + '<br />\n'
     return ret
 
 # return a Dictionary with the query params
