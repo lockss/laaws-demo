@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# CGI script to extract content of AU as WARC and report result
+# in JSON as specified in WASAPI
+
 from warcio.warcwriter import WARCWriter
 from warcio.statusandheaders import StatusAndHeaders
 
@@ -16,9 +19,10 @@ import sys
 import os.path
 import hashlib
 from functools import partial
-cgitb.enable()
+# Disable traceback to requester as output must be JSON
+cgitb.enable(display=0, logdir="/usr/local/apache2/logs")
 
-message = 'Content-Type:text/html' + '\n\n' + '<h1>WARC from AUID</h1>\n'
+message = 'Content-Type:application/json' + '\n\n'
 
 # URL prefix for WSAPI service
 service = "http://laaws-repo:8080/repos/"
@@ -34,7 +38,6 @@ repoName = None
 # wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
 wayback = "http://laaws-openwayback:8080/wayback/"
 ingestdate = "20170201"
-uris = []
 
 # Return a Dictionary with the params for the LAAWS repo request
 def makeRepoParamsFromArgs():
@@ -85,6 +88,7 @@ def makeRepoParamsFromArgs():
     return ret
 
 def processRepoData(data):
+    uris = []
     items = data['items']
     if ( 'auid' in params1 ):
         for art in items:
@@ -93,15 +97,28 @@ def processRepoData(data):
     else:
         for art in items:
             uris.append(art['uri'])
+    return uris
+
+def reportError(report):
+    descriptor = {
+        "includes-extras":False,
+        "files":[
+        ],
+        "error":report
+    }
+    ret = json.dumps(descriptor)
 
 def writeWarc(uris, warcFile):
     ret = ""
-    with warcFile as output:
-        writer = WARCWriter(output, gzip=True)
-
-        stem = wayback + ingestdate + '/'
-        owuri = 'foo'
-        try:
+    sha1 = ""
+    if len(uris) < 1:
+        ret = reporError("No URIs to export")
+    else:
+        with warcFile as output:
+            writer = WARCWriter(output, gzip=True)
+    
+            stem = wayback + ingestdate + '/'
+            owuri = 'foo'
             for uri in uris:
                 owuri = stem + uri
                 resp = requests.get(owuri, headers={'Accept-Encoding': 'identity'},
@@ -118,32 +135,28 @@ def writeWarc(uris, warcFile):
                                                         payload=resp.raw,
                                                         http_headers=http_headers)
                     writer.write_record(record)
-                    ret += '<a href="' + wayback + ingestdate + '/' + uri + '">' + uri + '</a>:'
-                else:
-                    ret += uri + ': ' + resp.status_code
-                ret += '<br />\n'
-        except requests.exceptions.ConnectTimeout:
-            ret += 'Timeout connecting to service {}\n'.format(owuri)
-            ret += '<br />\n'
-            e = sys.exc_info()
-            ret += cgitb.text(e)
-        except requests.exceptions.ConnectionError:
-            ret += 'Cannot connect to service {}\n'.format(owuri)
-            ret += '<br />\n'
-            e = sys.exc_info()
-            ret += cgitb.text(e)
-        except:
-            e = sys.exc_info()
-            try:
-                ret += cgitb.text(e)
-            except AttributeError:
-                ret += "Got AttributeError: {}\n".format(e[0])
-            ret += '<br />\n'
-    with open(warcFile.name, mode='rb') as f:
-        m = hashlib.sha1()
-        for buf in iter(partial(f.read, 4096), b''):
-            m.update(buf)
-    ret += "<br />WARC SHA1: " + m.hexdigest() + '<br />\n'
+        with open(warcFile.name, mode='rb') as f:
+            m = hashlib.sha1()
+            bytes = 0
+            for buf in iter(partial(f.read, 4096), b''):
+                m.update(buf)
+                bytes += len(buf)
+        sha1 = m.hexdigest()
+        descriptor = {
+            "includes-extras":False,
+            "files":[
+                {
+                    "checksum":"sha1:" + sha1,
+                    "content-type":"application/warc",
+                    "filename":warcName,
+                    "locations":[
+                        "http://localhost/" + warcDir + warcName
+                    ],
+                    "size":"{}".format(bytes)
+                }
+            ]
+        }
+        ret = json.dumps(descriptor)
     return ret
 
 params1 = {}
@@ -164,8 +177,7 @@ try:
         repoData = repoResponse.json()
         repoName = repoData[0]
     else:
-        message += "Repo request error: {0}\n{1}".format(status,repoResponse)
-        message += '<br />\n'
+        message += reportError("Repo request error: {0}\n{1}".format(status,repoResponse))
     if (repoName != None):
         # List the artifacts
         repoResponse = requests.get(service + repoName + "/artifacts/", params=params1)
@@ -175,31 +187,12 @@ try:
             # LAAWS repo request successful
             # parse the JSON we got back
             repoData = repoResponse.json()
-            processRepoData(repoData)
-            if len(uris) < 1:
-                message += "No URIs to write to WARC.<br />\n"
-            else:
-                message += "<h2>URIs to write to WARC</h2>\n"
-                message += writeWarc(uris, warcFile)
-                message += "<br />"
-                message += '<a href="http://localhost/' + warcDir + warcName + '">Download WARC</a>'
-                message += "<br />"
+            uris = processRepoData(repoData)
+            message += writeWarc(uris, warcFile)
         else:
             # LAAWS repo request unsuccessful
-            message += "repo request error: {0}\n{1}".format(status,repoResponse)
-            message += '<br />\n'
-
-except requests.exceptions.ConnectTimeout:
-    message += 'Timeout connecting to service {}\n'.format(service)
-    message += '<br />\n'
-except requests.exceptions.ConnectionError:
-    message += 'Cannot connect to service {}\n'.format(service)
-    message += '<br />\n'
+            message += reportError("repo request error: {0}\n{1}".format(status,repoResponse))
 except:
     e = sys.exc_info()
-    try:
-        message += cgitb.text(e)
-    except AttributeError:
-        message += "Got AttributeError: {}\n".format(e[0])
-    message += '<br />\n'
+    message += reportError(cgitb.text(e))
 print(message)

@@ -62,7 +62,7 @@ Text: <input name="Search" size="30" maxlength="90" type="text">
 <p>LAAWS implements the WASAPI Web service API for exporting content as WARC files. The content to be exported can be specified in the following ways:</p>
 <ul>
 <li>By Archival Unit ID (LOCKSS internal name for content units). Some examples using publisher-specific AUIDs:<br />
-<form method="POST" action="/cgi-bin/auid-to-warc.py">
+<form method="POST" action="/cgi-bin/web-wasapi.py">
 <select name=auid>
   <option value="org|lockss|plugin|pensoft|oai|PensoftOaiPlugin&au_oai_date~2014&au_oai_set~biorisk&base_url~http%3A%2F%2Fbiorisk%2Epensoft%2Enet%2F">BioRisk 2014
   <option value="org|lockss|plugin|hindawi|HindawiPublishingCorporationPlugin&base_url~http%3A%2F%2Fwww%2Ehindawi%2Ecom%2F&download_url~http%3A%2F%2Fdownloads%2Ehindawi%2Ecom%2F&journal_id~ijpg&volume_name~2014">IJPG 2014
@@ -71,7 +71,7 @@ Text: <input name="Search" size="30" maxlength="90" type="text">
 </form>
 </li>
 <li>By a text search on the content:<br />
-<form method="POST" action="/cgi-bin/text-to-warc.py">
+<form method="POST" action="/cgi-bin/web-wasapi.py">
 Suggested search terms: Emirati
 Morocco
 Qatar <br />

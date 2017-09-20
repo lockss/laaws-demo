@@ -33,12 +33,12 @@ ingestdate = "20170201"
 
 def writeWarc(uris, warcFile):
     ret = ""
-    try:
-        with warcFile as output:
-            writer = WARCWriter(output, gzip=True)
-    
-            stem = wayback + ingestdate + '/'
-            owuri = 'foo'
+    with warcFile as output:
+        writer = WARCWriter(output, gzip=True)
+
+        stem = wayback + ingestdate + '/'
+        owuri = 'foo'
+        try:
             for uri in uris:
                 owuri = stem + uri
                 resp = requests.get(owuri, headers={'Accept-Encoding': 'identity'},
@@ -60,28 +60,28 @@ def writeWarc(uris, warcFile):
                 else:
                     ret += owuri + ': ' + format(resp.status_code)
                 ret += '<br />\n'
-        with open(warcFile.name, mode='rb') as f:
-            m = hashlib.sha1()
-            for buf in iter(partial(f.read, 4096), b''):
-                m.update(buf)
-        ret += "<br />WARC SHA1: " + m.hexdigest() + '<br />\n'
-    except requests.exceptions.ConnectTimeout:
-        ret += 'Timeout connecting to service {}\n'.format(owuri)
-        ret += '<br />\n'
-        e = sys.exc_info()
-        ret += cgitb.text(e)
-    except requests.exceptions.ConnectionError:
-        ret += 'Cannot connect to service {}\n'.format(owuri)
-        ret += '<br />\n'
-        e = sys.exc_info()
-        ret += cgitb.text(e)
-    except:
-        e = sys.exc_info()
-        try:
+        except requests.exceptions.ConnectTimeout:
+            ret += 'Timeout connecting to service {}\n'.format(owuri)
+            ret += '<br />\n'
+            e = sys.exc_info()
             ret += cgitb.text(e)
-        except AttributeError:
-            ret += "Got AttributeError: {}\n".format(e[0])
-        ret += '<br />\n'
+        except requests.exceptions.ConnectionError:
+            ret += 'Cannot connect to service {}\n'.format(owuri)
+            ret += '<br />\n'
+            e = sys.exc_info()
+            ret += cgitb.text(e)
+        except:
+            e = sys.exc_info()
+            try:
+                ret += cgitb.text(e)
+            except AttributeError:
+                ret += "Got AttributeError: {}\n".format(e[0])
+            ret += '<br />\n'
+    with open(warcFile.name, mode='rb') as f:
+        m = hashlib.sha1()
+        for buf in iter(partial(f.read, 4096), b''):
+            m.update(buf)
+    ret += "<br />WARC SHA1: " + m.hexdigest() + '<br />\n'
     return ret
 
 # return a Dictionary with the query params
