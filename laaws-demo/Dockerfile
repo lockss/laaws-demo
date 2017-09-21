@@ -4,7 +4,7 @@ MAINTAINER "Daniel Vargas" <dlvargas@stanford.edu>
 
 # Install Python 3.x and modules
 RUN apt update && apt -y install python3 python3-requests python3-pip wget
-RUN pip3 install warcio
+RUN pip3 install warcio connexion
 
 # Clean up
 RUN apt-get clean
@@ -18,6 +18,11 @@ RUN chown daemon:daemon htdocs/warcs
 # Add CGI scripts
 RUN rm -rf cgi-bin
 ADD cgi-bin cgi-bin
+
+# Add WASAPI server
+ADD wasapi wasapi
+# XXX is this the right dir ownership?
+RUN chown daemon:daemon wasapi/controllers/__pycache__
 
 # Add Apache configuration files
 ADD conf/httpd.local.conf conf
