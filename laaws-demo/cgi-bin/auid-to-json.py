@@ -35,9 +35,8 @@ warcName = os.path.basename(warcFile.name)
 warcPath = warcDirPath + warcName
 warcHost = 'demo.laaws.lockss.org'
 repoName = None
-# URL prefix for OpenWayback XXX must not be pushed
-# wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
-wayback = "http://laaws-openwayback:8080/wayback/"
+# URL prefix for OpenWayback
+wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
 ingestdate = "20170201"
 
 # Return a Dictionary with the params for the LAAWS repo request

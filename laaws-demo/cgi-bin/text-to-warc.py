@@ -16,9 +16,8 @@ cgitb.enable(display=0, logdir="/usr/local/apache2/logs/cgitb")
 # URL prefix for SOLR query service
 # XXX should work with both EDINA and BL
 service = "http://laaws-indexer-solr:8983/solr/test-core/select"
-# URL prefix for OpenWayback XXX must not be pushed
-# wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
-wayback = "http://laaws-openwayback:8080/wayback/"
+# URL prefix for OpenWayback
+wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
 message = 'Content-Type:text/html' + '\n\n' + '<h1>Text Search</h1>\n'
 urlArray = []
 warcPath1 = "/usr/local/apache2/htdocs/"
