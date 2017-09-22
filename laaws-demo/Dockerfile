@@ -19,10 +19,12 @@ RUN chown daemon:daemon htdocs/warcs
 RUN rm -rf cgi-bin
 ADD cgi-bin cgi-bin
 
+# Add directory for CGI script errors
+RUN mkdir logs/cgitb
+RUN chown daemon:daemon logs/cgitb
+
 # Add WASAPI server
 ADD wasapi wasapi
-# XXX is this the right dir ownership?
-RUN chown daemon:daemon wasapi/controllers/__pycache__
 
 # Add Apache configuration files
 ADD conf/httpd.local.conf conf

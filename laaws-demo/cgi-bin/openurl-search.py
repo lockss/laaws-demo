@@ -7,7 +7,7 @@ import cgitb
 import sys
 import re
 import urllib.parse
-cgitb.enable()
+cgitb.enable(display=0, logdir="/usr/local/apache2/logs/cgitb")
 
 # URL prefix for OpenURL query service
 service = "http://laaws-metadataservice:8889/urls/openurl"

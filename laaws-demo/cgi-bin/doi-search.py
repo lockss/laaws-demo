@@ -7,7 +7,7 @@ import cgi
 import cgitb
 import urllib.parse
 import sys
-cgitb.enable()
+cgitb.enable(display=0, logdir="/usr/local/apache2/logs/cgitb")
 
 # URL prefix for DOI query service
 service = "http://laaws-metadataservice:8889/urls/doi"

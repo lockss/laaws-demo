@@ -16,7 +16,7 @@ import sys
 import os.path
 import hashlib
 from functools import partial
-cgitb.enable()
+cgitb.enable(display=0, logdir="/usr/local/apache2/logs/cgitb")
 
 message = 'Content-Type:text/html' + '\n\n' + '<h1>WARC from AUID</h1>\n'
 
@@ -29,6 +29,7 @@ warcDirPath = warcPath1 + warcDir
 warcFile = tempfile.NamedTemporaryFile(dir=warcDirPath, suffix=".warc.gz", delete=False)
 warcName = os.path.basename(warcFile.name)
 warcPath = warcDirPath + warcName
+warcHost = 'demo.laaws.lockss.org'
 repoName = None
 # URL prefix for OpenWayback XXX must not be pushed
 # wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
@@ -182,7 +183,7 @@ try:
                 message += "<h2>URIs to write to WARC</h2>\n"
                 message += writeWarc(uris, warcFile)
                 message += "<br />"
-                message += '<a href="http://localhost/' + warcDir + warcName + '">Download WARC</a>'
+                message += '<a href="http://' + warcHost + '/' + warcDir + warcName + '">Download WARC</a>'
                 message += "<br />"
         else:
             # LAAWS repo request unsuccessful

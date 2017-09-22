@@ -5,7 +5,7 @@ import json
 import cgi
 import cgitb
 import sys
-cgitb.enable()
+cgitb.enable(display=0, logdir="/usr/local/apache2/logs/cgitb")
 
 # URL prefix for SOLR query service
 # XXX should work with both EDINA and BL

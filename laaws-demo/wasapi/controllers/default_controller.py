@@ -6,8 +6,9 @@ from datetime import datetime, timezone
 from base64 import b64decode
 import hashlib
 
-auid_to_json = "http://localhost/cgi-bin/auid-to-json.py"
-text_to_json = "http://localhost/cgi-bin/text-to-json.py"
+localHost = 'demo.laaws.lockss.org'
+auid_to_json = 'http://' + localHost + '/cgi-bin/auid-to-json.py'
+text_to_json = 'http://' + localHost + '/cgi-bin/text-to-json.py'
 cgi_script = None
 persistentFile = '/tmp/wsapiJobs'
 

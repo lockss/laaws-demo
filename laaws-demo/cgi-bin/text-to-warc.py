@@ -11,7 +11,7 @@ import sys
 import os.path
 import hashlib
 from functools import partial
-cgitb.enable()
+cgitb.enable(display=0, logdir="/usr/local/apache2/logs/cgitb")
 
 # URL prefix for SOLR query service
 # XXX should work with both EDINA and BL
@@ -27,6 +27,7 @@ warcDirPath = warcPath1 + warcDir
 warcFile = tempfile.NamedTemporaryFile(dir=warcDirPath, suffix=".warc.gz", delete=False)
 warcName = os.path.basename(warcFile.name)
 warcPath = warcDirPath + warcName
+warcHost = 'demo.laaws.lockss.org'
 
 repoName = None
 ingestdate = "20170201"
@@ -132,7 +133,7 @@ try:
                             urlArray.append(url)
                 message += writeWarc(sorted(urlArray), warcFile)
                 message += "<br />"
-                message += '<a href="http://localhost/' + warcDir + warcName + '">Download WARC</a>'
+                message += '<a href="http://' + warcHost + '/' + warcDir + warcName + '">Download WARC</a>'
                 message += "<br />"
 
             else:

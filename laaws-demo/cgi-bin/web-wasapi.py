@@ -10,19 +10,20 @@ import requests
 import json
 import cgi 
 import cgitb
-cgitb.enable(display=0, logdir="/usr/local/apache2/logs")
+cgitb.enable(display=0, logdir="/usr/local/apache2/logs/cgitb")
+localHost = "demo.laaws.lockss.org"
 
 message = 'Content-Type:text/html' + '\n\n' + '<html>\n'
 message += '<head>\n'
 message += '<meta http-equiv="content-type" content="text/html; charset=windows-1252">\n'
 message += '<title>Response from WASAPI Service</title>\n'
-message += '<link rel="stylesheet" type="text/css" media="all" href="http://localhost/style.css" />\n'
+message += '<link rel="stylesheet" type="text/css" media="all" href="http://' + localHost + '/style.css" />\n'
 message += '</head>\n'
 message += '<body>\n'
 message += '<br style="clear:both;"/>\n'
 message += '<div id="primary">\n'
 message += '<div id="content" role="main">\n'
-message += '<img src="http://localhost/438x150lockss3.jpg">\n'
+message += '<img src="http://' + localHost + '/438x150lockss3.jpg">\n'
 message += '<article>\n'
 message += '<header class="entry-header"><h1 class="entry-title">Response from WASAPI Service</h1></header>\n'
 message += '<div class="entry-content">\n'
@@ -30,8 +31,8 @@ message += '<h3 style="text-align: justify;"><strong>Request</strong></h3>\n'
 message += '<div>\n'
 message += '<p>\n'
 
-# URL prefix for WSAPI service
-service = "http://localhost:8880/v0"
+# URL prefix for WASAPI service
+service = 'http://' + localHost + ':8880/v0'
 testAUID = 'org|lockss|plugin|simulated|SimulatedPlugin&root~%2Ftmp%2F'
 
 # Return a Dictionary with the params for the WSAPI request

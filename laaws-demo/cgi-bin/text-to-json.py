@@ -20,7 +20,7 @@ import os.path
 import hashlib
 from functools import partial
 # Disable traceback to requester as output must be JSON
-cgitb.enable(display=0, logdir="/usr/local/apache2/logs")
+cgitb.enable(display=0, logdir="/usr/local/apache2/logs/cgitb")
 
 message = 'Content-Type:application/json' + '\n\n'
 # URL prefix for SOLR query service
@@ -33,6 +33,7 @@ warcDirPath = warcPath1 + warcDir
 warcFile = tempfile.NamedTemporaryFile(dir=warcDirPath, suffix=".warc.gz", delete=False)
 warcName = os.path.basename(warcFile.name)
 warcPath = warcDirPath + warcName
+warcHost = "demo.laaws.lockss.org"
 repoName = None
 # URL prefix for OpenWayback XXX must not be pushed
 # wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
@@ -99,7 +100,7 @@ def processRepoData(data):
             uris.append(art['uri'])
     return uris
 
-def reportError(report):
+def reportError(report) -> str:
     descriptor = {
         "includes-extras":False,
         "files":[
@@ -107,6 +108,7 @@ def reportError(report):
         "error":report
     }
     ret = json.dumps(descriptor)
+    return ret
 
 def writeWarc(uris, warcFile):
     ret = ""
@@ -150,7 +152,7 @@ def writeWarc(uris, warcFile):
                     "content-type":"application/warc",
                     "filename":warcName,
                     "locations":[
-                        "http://localhost/" + warcDir + warcName
+                        "http://" + warcHost + "/" + warcDir + warcName
                     ],
                     "size":"{}".format(bytes)
                 }
@@ -194,7 +196,7 @@ try:
             if "response" in solrData and "docs" in solrData["response"]:
                 docs = solrData["response"]["docs"]
                 if(len(docs) < 1 or docs[0] == None):
-                    message += reportError("No URLs matching {}".format(params['q']))
+                    message += reportError("No URLs matched: " + params['q'])
                 else:
                     urlArray = []
                     for doc in docs:
@@ -207,7 +209,7 @@ try:
                             urlArray.append(url)
                     message += writeWarc(sorted(urlArray), warcFile)
             else:
-                message +=  reportError("No response from SOLR for query {}".format(params['q']))
+                message +=  reportError("No response from SOLR for query: " + params['q'])
         else:
             # SOLR search query unsuccessful
             message +=  reportError("SOLR service response: {}\n".format(status))
@@ -216,5 +218,8 @@ try:
         message +=  "No search string from form\n"
 except:
     e = sys.exc_info()
-    message += reportError(cgitb.text(e))
+    if e[0] == None:
+        message += reportError("In except but no exception")
+    else:
+        message += reportError(format(e[0]))
 print(message)
