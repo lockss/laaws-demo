@@ -12,6 +12,7 @@ import cgi
 import cgitb
 cgitb.enable(display=0, logdir="/usr/local/apache2/logs/cgitb")
 localHost = "demo.laaws.lockss.org"
+serviceHost = 'localhost'
 
 message = 'Content-Type:text/html' + '\n\n' + '<html>\n'
 message += '<head>\n'
@@ -32,8 +33,7 @@ message += '<div>\n'
 message += '<p>\n'
 
 # URL prefix for WASAPI service
-service = 'http://' + localHost + ':8880/v0'
-testAUID = 'org|lockss|plugin|simulated|SimulatedPlugin&root~%2Ftmp%2F'
+service = 'http://' + serviceHost + ':8880/v0'
 
 # Return a Dictionary with the params for the WSAPI request
 def formMakeWasapiParams():

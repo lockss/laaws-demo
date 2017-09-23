@@ -36,7 +36,7 @@ warcPath = warcDirPath + warcName
 warcHost = "demo.laaws.lockss.org"
 repoName = None
 # URL prefix for OpenWayback
-wayback = "http://demo.laaws.lockss.org:8080/wayback/*"
+wayback = "http://laaws-openwayback:8080/wayback/"
 ingestdate = "20170201"
 
 # Return a Dictionary with the params for the LAAWS repo request
@@ -124,7 +124,7 @@ def writeWarc(uris, warcFile):
                 owuri = stem + uri
                 resp = requests.get(owuri, headers={'Accept-Encoding': 'identity'},
                                     stream=True)
-        
+
                 if (resp.status_code == 200):
                     # get raw headers from urllib3
                     headers_list = resp.raw.headers.items()
