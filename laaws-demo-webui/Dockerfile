@@ -3,7 +3,7 @@ FROM httpd:latest
 MAINTAINER "Daniel Vargas" <dlvargas@stanford.edu>
 
 # Install Python 3.x and modules
-RUN apt update && apt -y install python3 python3-requests python3-pip wget
+RUN apt-get update && apt-get -y install python3 python3-requests python3-pip wget
 RUN pip3 install warcio connexion
 
 # Clean up
