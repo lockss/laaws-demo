@@ -1,4 +1,1 @@
-[submodule "laaws-cluster"]
-	path = laaws-cluster
-	url = git@gitlab.lockss.org:laaws/laaws-cluster
-        branch = demo-2017-07
+
