@@ -26,83 +26,96 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-version: '2'
+version: '3'
 
 services:
+  lockss-demo-webui:
+    build:
+      context: laaws-demo-webui
+    image: laaws/laaws-demo
+    ports:
+      - "80:80"
+    links:
+      - lockss-metadata-service
+#      - laaws-openwayback:openwayback
+#      - laaws-repo:laaws-repo
 
-    laaws-demo:
-        build: 
-            context: ./laaws-demo
-        image: laaws/laaws-demo
-        links:
-            - laaws-openwayback:openwayback
-            - laaws-metadataservice:laaws-metadataservice
-            - laaws-repo:laaws-repo
-        ports:
-            - "80:80"
+  lockss-configuration-service:
+    image: lockss/laaws-configuration-service:1.1.0-SNAPSHOT
+    ports:
+      - 54420:54420
+    command: -p config/lockss-demo.txt -p config/configuration-service/common.xml -p config/configuration-service/lockss.txt -p config/configuration-service/cluster.xml
+    volumes:
+      - ./config:/opt/lockss/config
 
-    laaws-metadataservice:
-        extends:
-            file: laaws-cluster/laaws-components.yaml
-            service: laaws-metadataservice
-        links:
-            - laaws-repo-hdfs
-            - laaws-repo-solr
+  lockss-metadata-service:
+    image: lockss/laaws-metadata-service:1.0.0-SNAPSHOT
+    ports:
+      - 49520:49520
+    command: -c http://lockss-u:lockss-p@lockss-configuration-service:54420 -p http://lockss-configuration-service:54420/config/file/cluster -p config/metadata-service/common.xml -p config/lockss-demo.txt -p config/metadata-service/lockss.txt
+    links:
+      - lockss-configuration-service
+      - lockss-metadata-pgsql
+    volumes:
+      - ./config:/opt/lockss/config
 
-    laaws-metadataextractor:
-        extends:
-            file: laaws-cluster/laaws-components.yaml
-            service: laaws-metadataextractor
-        links:
-            - laaws-metadata-pgsql:postgres
+  laaws-metadataextractor:
+    image: lockss/laaws-metadata-extraction-service:1.1.0-SNAPSHOT
+    ports:
+      - 28120:28120
+    command: -p config/lockss-demo.txt -p config/metadata-extraction-service/common.xml -p config/metadata-extraction-service/lockss.txt
+    links:
+        - lockss-metadata-pgsql
+    volumes:
+      - ./config:/opt/lockss/config
 
-    laaws-openwayback:
-        extends:
-            file: laaws-cluster/laaws-components.yaml
-            service: laaws-openwayback
-        volumes:
-            - ./warcs:/warcs
+  lockss-metadata-pgsql:
+    image: postgres:9.6
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=goodPassword
+      - POSTGRES_USER=LOCKSS
+      - POSTGRES_DB=MetadataDbManager
 
-    laaws-indexer-solr:
-        extends:
-            file: laaws-cluster/laaws-components.yaml
-            service: laaws-indexer-solr
-
-    laaws-indexer:
-        extends:
-            file: laaws-cluster/laaws-components.yaml
-            service: laaws-indexer
-        links:
-            - laaws-indexer-solr
-        volumes:
-            - ./warcs:/warcs
-        environment:
-            - LOCKSS_SOLR_WATCHDIR=/warcs
-            - LOCKSS_SOLR_URL=http://laaws-indexer-solr:8983/solr/test-core
-
-    laaws-metadata-pgsql:
-        extends:
-            file: laaws-cluster/laaws-components.yaml
-            service: laaws-metadata-pgsql
-        environment:
-            - POSTGRES_PASSWORD=goodPassword
-            - POSTGRES_USER=LOCKSS
-            - POSTGRES_DB=MetadataDbManager
-
-    laaws-repo-solr:
-        extends:
-            file: laaws-cluster/laaws-components.yaml
-            service: laaws-repo-solr
-    
-    laaws-repo-hdfs:
-        extends:
-            file: laaws-cluster/laaws-components.yaml
-            service: laaws-repo-hdfs
-
-    laaws-repo:
-        extends:
-            file: laaws-cluster/laaws-components.yaml
-            service: laaws-repo
-        links:
-            - laaws-repo-hdfs
-            - laaws-repo-solr
+#          laaws-openwayback:
+#              extends:
+#                  file: laaws-cluster/laaws-components.yaml
+#                  service: laaws-openwayback
+#              volumes:
+#                  - ./warcs:/warcs
+#
+#          laaws-indexer-solr:
+#              extends:
+#                  file: laaws-cluster/laaws-components.yaml
+#                  service: laaws-indexer-solr
+#
+#          laaws-indexer:
+#              extends:
+#                  file: laaws-cluster/laaws-components.yaml
+#                  service: laaws-indexer
+#              links:
+#                  - laaws-indexer-solr
+#              volumes:
+#                  - ./warcs:/warcs
+#              environment:
+#                  - LOCKSS_SOLR_WATCHDIR=/warcs
+#                  - LOCKSS_SOLR_URL=http://laaws-indexer-solr:8983/solr/test-core
+#
+#          laaws-repo-solr:
+#              extends:
+#                  file: laaws-cluster/laaws-components.yaml
+#                  service: laaws-repo-solr
+#
+#          laaws-repo-hdfs:
+#              extends:
+#                  file: laaws-cluster/laaws-components.yaml
+#                  service: laaws-repo-hdfs
+#
+#          laaws-repo:
+#              extends:
+#                  file: laaws-cluster/laaws-components.yaml
+#                  service: laaws-repo
+#              links:
+#                  - laaws-repo-hdfs
+#                  - laaws-repo-solr
