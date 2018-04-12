@@ -65,7 +65,7 @@ services:
       - 28120:28120
     command: -p config/lockss-demo.txt -p config/metadata-extraction-service/common.xml -p config/metadata-extraction-service/lockss.txt
     links:
-        - lockss-metadata-pgsql
+      - lockss-metadata-pgsql
     volumes:
       - ./config:/opt/lockss/config
 
@@ -77,6 +77,19 @@ services:
       - POSTGRES_PASSWORD=goodPassword
       - POSTGRES_USER=LOCKSS
       - POSTGRES_DB=MetadataDbManager
+
+  lockss-poller:
+    image: lockss/laaws-poller:1.0.0-SNAPSHOT
+    ports:
+      - 25250:25250
+    command: -p config/lockss-demo.txt -p config/poller/common.xml -p config/poller/lockss.txt
+    volumes:
+      - ./config:/opt/lockss/config
+
+  lockss-repository:
+    image: lockss/laaws-repository-service:1.8.0-SNAPSHOT
+    ports:
+      - 32640:32640
 
 #          laaws-openwayback:
 #              extends:
