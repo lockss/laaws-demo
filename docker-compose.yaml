@@ -86,7 +86,7 @@ services:
     volumes:
       - ./config:/opt/lockss/config
 
-  lockss-repository:
+  lockss-repository-service:
     image: lockss/laaws-repository-service:1.8.0-SNAPSHOT
     ports:
       - 32640:32640
