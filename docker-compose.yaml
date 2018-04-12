@@ -37,8 +37,8 @@ services:
       - "80:80"
     links:
       - lockss-metadata-service
+      - lockss-repository-service:laaws-repo
 #      - laaws-openwayback:openwayback
-#      - laaws-repo:laaws-repo
 
   lockss-configuration-service:
     image: lockss/laaws-configuration-service:1.1.0-SNAPSHOT
