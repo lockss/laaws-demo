@@ -1,21 +1,37 @@
-# Prerequistes
+# Introduction
+The LAAWS Demo project aims to demonstrate the state of development of various LAAWS components, and their integration 
+into a unified LOCKSS system. The demo is configured (through its `docker-compose.yaml` file) to instantiate versioned 
+Docker images that the LOCKSS team has built and released to the Docker Hub image repository. 
 
-You must have Docker and Docker Compose installed. Docker has excellent [installation guides](https://docs.docker.com/engine/installation/) for various platforms.
+You may view the available images here: https://hub.docker.com/u/lockss/
 
-# Building The Demo
+## Prerequistes
 
-Running the following command to build the demo:
-
-    docker-compose build
+You must have Docker and Docker Compose installed. An installation guide is outside the scope of this document, but 
+Docker has excellent [installation guides](https://docs.docker.com/engine/installation/) for various platforms.
 
 # Running The Demo
 
-Running the following command will build (if you did not run the command above) and run the set of Docker containers that are necessary for a working demo of LAAWS components:
+## With Docker Compose
+
+1. Clone this project, if you have not already done so:
+
+    git clone https://github.com/lockss/laaws-demo.git
+
+1. In the root of the `laaws-demo` project, run the following command:
 
     docker-compose up
+    
+# Technical Documentation
 
-# Port numbers
+## Hostname and ports
+Docue
 
+| Name | Port |
+|------|------|
+| laaws-demo | 80 |
+
+## Docker Compose Components
 * laaws-demo: 80
 * laaws-mdq: 8082
 * laaws-mdx: 8083
