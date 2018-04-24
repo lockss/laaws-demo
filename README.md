@@ -3,28 +3,32 @@
 ## Introduction
 The LAAWS Demo project aims to demonstrate the state of development of 
 [various LAAWS components](#containers-started-by-docker-compose), and their integration into a unified LOCKSS system. 
-The demo is configured (through its `docker-compose.yaml` file) to instantiate versioned Docker images that the LOCKSS 
-team has built and released to the Docker Hub image repository, instead of relying on images built and available 
-locally.
+The demo is configured (through its Docker Compsose file -- `docker-compose.yaml`) to instantiate versioned Docker
+images that the LOCKSS team has built and released to the Docker Hub repository, instead of relying on images built and 
+available only locally.
 
-You may view the available images at [the LOCKSS Program's Docker Hub page](https://hub.docker.com/u/lockss/).
+You may view the available Docker images on the [LOCKSS team's Docker Hub page](https://hub.docker.com/u/lockss/).
 
 ## Prerequistes
 
 You must have Docker and Docker Compose installed. An installation guide is outside the scope of this document, but 
 Docker has excellent [installation guides](https://docs.docker.com/engine/installation/) for various platforms.
 
+To bring up the LAAWS Demo in a virtual machine, you must have Vagrant and VirtualBox installed. Please see 
+[Vagrant's documentation](https://www.vagrantup.com/docs/installation/) for installation instructions.
+
 # Running The Demo
 The quickest way to bring up the demo is to invoke Docker Compose and run the containers specified in the provided 
-Docker Compose file directly on the host system. Docker Compose is configured to map service ports to the host system, 
-so that the services running in containers are accessible for debugging, etc. *If a port is already in use, Docker will
-fail to start the respective container!*
+Docker Compose file directly on the host system, however this will modify the state of the Docker engine. Further, 
+Docker Compose is configured to map service ports to the host system, so that the services running in its containers are
+accessible for debugging, but if a port is already in use, Docker will fail to start the container.
 
 A list of the default ports used by each container is documented below in the 
 [Container hostnames and ports](#container-hostnames-and-ports) section. 
 
-If port collisions are an issue, the Docker Compose environment can be started within a virtual machine managed by 
-Vagrant. This is significantly slower, since Vagrant has to spin up and configure a new virtual machine per invocation.
+The Docker Compose environment can alternatively be started within a virtual machine managed by Vagrant. This is 
+significantly slower, since Vagrant has to spin up, configure a new virtual machine, and download Docker images per each
+invocation, but avoids possible port collisions, and will not modify the state of Docker on the host system.
 
 ## With Docker Compose
 
@@ -66,32 +70,36 @@ Vagrant. This is significantly slower, since Vagrant has to spin up and configur
 
 ### Docker Compose Environment
 The Docker Compose environment is configured by the `docker-compose.yaml` file in the root of the `laaws-demo` project.
-It controls which Docker containers are started, the command line arguments, the network links between containers, and
+It controls which Docker images are instantiated, the command line arguments, the network links between containers, and
 container to host networking and port mapping.
 
-### LAAWS Demo Environment
-The LAAWS Demo is not configured to use a LOCKSS Props server. Instead PLN and cluster -wide configuration is kept in 
+### LAAWS Demo Configuration
+The LAAWS Demo is not configured to use a LOCKSS Props server. Instead, PLN and cluster -wide configuration is kept in 
 the `config/laaws-demo.txt`. This file is shared among all LOCKSS services by passing it as a common configuration 
 parameter to respective Docker containers in the Docker Compose environment.
 
-Additionally, the LAAWS Demo starts up a LOCKSS Configuration Service. The location of which is also passed to all LOCKSS services which 
-can be configured to use it. The Configuration Service configuration and the configuration it serves is kept under 
-`config/configuration-service`.
+Additionally, the LAAWS Demo starts up a LOCKSS Configuration Service. The location of the configuration service is also
+provided to all LOCKSS services which can be configured to use one. The Configuration Service configuration and the 
+configurations it serves is kept under `config/configuration-service`, and passed to the service by the `command` 
+directive in the `lockss-configuration-service` block of the Docker Compose file.
 
-### Service Environments 
-Each service can be individually configured
+### Service Configuration
+Each service can be individually configured by modifying its configuration under the `config/` directory. Any new 
+configuration files must be passed to the service by modifying the `command` directive in container definition block in 
+the Docker Compose file.
 
-## Containers started by Docker Compose
-The following containers are started by the LAAWS Demo's Docker Compose environment. The list of containers started by 
-the environment are controlled by the `docker-compose.yaml` file. The list of containers and a short description of each
-follows:
+## Containers Started By Docker Compose
+The following containers are started by the LAAWS Demo's Docker Compose environment (which is configured via the 
+provided `docker-compose.yaml` file). The list of containers and a short description of each follows:
 
-|Service|Description|
-|-------|------|
-|**laaws-demo-webui:** |Contains an Nginx web server hosting the LAAWS Demo web user interface, which allows users to 
-exercise |
+|Service Name|Description|
+|:-------|:------|
+|**laaws-demo-webui** |Contains an Nginx web server hosting the LAAWS Demo web user interface.|
+|**lockss-configuration-service**|Contains an instance of the LOCKSS Configuration Service for use by other services.|
+|**lockss-metadata-service**|Contains an instance of |
 
-## Container hostnames and ports
+
+## Container Hostnames And Ports
 | Name                        | Port  |
 |-----------------------------|-------|
 | laaws-demo-webui            | 80    |
@@ -101,3 +109,15 @@ exercise |
 | lockss-metadata-pgsql       | 5432  | 
 | lockss-poller               | 25250 | 
 | lockss-repository-service   | 32640 |
+
+**Note:** Hostnames are only available within the Docker or Docker Compose contexts, and are not available to the host
+system. To connect to a specific service from the host system, you must use `localhost` and the respective service port.
+
+## FAQ
+
+### 
+
+# Support
+
+Please contact LOCKSS Support by writing to [support@lockss.org](mailto:support@lockss.org).
+
