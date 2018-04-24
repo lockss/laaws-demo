@@ -44,7 +44,7 @@ services:
     image: lockss/laaws-configuration-service:1.1.0-SNAPSHOT
     ports:
       - 54420:54420
-    command: -p config/laaws-demo.txt -p config/configuration-service/common.xml -p config/configuration-service/lockss.txt -p config/configuration-service/cluster.xml
+    command: -p config/laaws-demo.txt -p config/configuration-service/common.xml -p config/configuration-service/lockss.txt
     volumes:
       - ./config:/opt/lockss/config
 
@@ -52,7 +52,7 @@ services:
     image: lockss/laaws-metadata-service:1.0.0-SNAPSHOT
     ports:
       - 49520:49520
-    command: -c http://lockss-u:lockss-p@lockss-configuration-service:54420 -p http://lockss-configuration-service:54420/config/file/cluster -p config/metadata-service/common.xml -p config/laaws-demo.txt -p config/metadata-service/lockss.txt
+    command: -c http://lockss-u:lockss-p@lockss-configuration-service:54420 -p config/laaws-demo.txt -p http://lockss-configuration-service:54420/config/file/cluster -p config/metadata-service/lockss.txt
     links:
       - lockss-configuration-service
       - lockss-metadata-pgsql
@@ -63,7 +63,7 @@ services:
     image: lockss/laaws-metadata-extraction-service:1.1.0-SNAPSHOT
     ports:
       - 28120:28120
-    command: -p config/laaws-demo.txt -p config/metadata-extraction-service/common.xml -p config/metadata-extraction-service/lockss.txt
+    command: -p config/laaws-demo.txt -p config/metadata-extraction-service/lockss.txt
     links:
       - lockss-metadata-pgsql
     volumes:
@@ -82,7 +82,7 @@ services:
     image: lockss/laaws-poller:1.0.0-SNAPSHOT
     ports:
       - 25250:25250
-    command: -p config/laaws-demo.txt -p config/poller/common.xml -p config/poller/lockss.txt
+    command: -p config/laaws-demo.txt -p config/poller/lockss.txt
     volumes:
       - ./config:/opt/lockss/config
 
