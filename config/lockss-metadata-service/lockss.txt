@@ -29,8 +29,5 @@ org.lockss.ui.port=49521
 # The database manager used to store the Archival Unit metadata.
 # Using PostgreSQL.
 org.lockss.metadataDbManager.datasource.className=org.postgresql.ds.PGSimpleDataSource
+org.lockss.metadataDbManager.datasource.password=goodPassword
 org.lockss.metadataDbManager.datasource.serverName=lockss-metadata-pgsql
-
-# Repository
-# Local repo.
-org.lockss.repository.v2Repository=local:demorepo:/tmp/locksslocalrepo

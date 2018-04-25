@@ -26,39 +26,18 @@
 
 org.lockss.ui.port=28121
 
-#
 # The database manager used to store the Archival Unit metadata.
-#
-
 # Using PostgreSQL.
 org.lockss.metadataDbManager.datasource.className=org.postgresql.ds.PGSimpleDataSource
-org.lockss.metadataDbManager.datasource.databaseName=MetadataDbManager
 org.lockss.metadataDbManager.datasource.password=goodPassword
-org.lockss.metadataDbManager.datasource.portNumber=5432
 org.lockss.metadataDbManager.datasource.serverName=lockss-metadata-pgsql
-org.lockss.metadataDbManager.datasource.user=LOCKSS
 
-#
 # The database manager used to store the job queue.
-#
-
-# Using Derby.
-#org.lockss.jobDbManager.derby.infologAppend=true
-##org.lockss.jobDbManager.derby.languageLogqueryplan=true
-#org.lockss.jobDbManager.derby.languageLogstatementtext=true
-##org.lockss.jobDbManager.derby.streamErrorFile=/tmp/derby.log
-#org.lockss.jobDbManager.derby.streamErrorLogseveritylevel=0
-#org.lockss.jobDbManager.datasource.className=org.apache.derby.jdbc.EmbeddedDataSource
-org.lockss.jobDbManager.datasource.className=org.apache.derby.jdbc.ClientDataSource
+# Using PostgreSQL.
+org.lockss.jobDbManager.datasource.className=org.postgresql.ds.PGSimpleDataSource
 org.lockss.jobDbManager.datasource.password=goodPassword
-##org.lockss.jobDbManager.datasource.createDatabase=create
-#org.lockss.jobDbManager.datasource.databaseName=db/JobDbManager
-##org.lockss.jobDbManager.datasource.portNumber=1527
-##org.lockss.jobDbManager.datasource.serverName=localhost
-##org.lockss.jobDbManager.datasource.user=LOCKSS
+org.lockss.jobDbManager.datasource.serverName=lockss-metadata-pgsql
 
 org.lockss.jobManager.enabled=true
-#org.lockss.jobManager.taskListSize=1
-#org.lockss.jobManager.sleepDelaySeconds=60
 org.lockss.metadataManager.mandatoryFields=publisher;provider
 org.lockss.metadataManager.onDemandMetadataExtractionOnly=true
