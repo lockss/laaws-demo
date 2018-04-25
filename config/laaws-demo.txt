@@ -1,1 +1,70 @@
+#
+# Most important
+#
+
+# Local storage ("." is "/opt/lockss" in the containers)
+org.lockss.platform.diskSpacePaths=./storage
+
+# Use a REST repository
 org.lockss.repository.v2Repository=rest:demo:http://lockss-repository-service:32640
+
+# No repository manager
+org.lockss.plugin.auContentFromWs=true
+
+# Identity
+org.lockss.platform.v3.identity=TCP:[127.0.0.1]:9720
+
+# Start the UI
+org.lockss.ui.start=yes
+# UI username/password = lockss-u/lockss-p
+org.lockss.platform.ui.username=lockss-u
+org.lockss.platform.ui.password=SHA1:ac4fc8fa9930a24c8d002d541c37ca993e1bc40f
+
+# Disable crawler, poller, voter, proxy, ICP, SOAP Web Services
+org.lockss.crawler.enabled=false
+org.lockss.poll.v3.enableV3Poller=false
+org.lockss.poll.v3.enableV3Voter=false
+org.lockss.proxy.start=false
+org.lockss.proxy.icp.enabled=false
+org.lockss.ws.enabled=false
+
+#
+# Somewhat important
+#
+
+# Default log level
+org.lockss.log.default.level=debug
+
+# Comm settings
+org.lockss.scomm.maxMessageSize=33554430
+
+# Poller settings
+org.lockss.poll.v3.quorum=2
+org.lockss.poll.v3.pollStarterInitialDelay=5m
+org.lockss.poll.v3.pollStarterInterval=5m
+
+# Crawler settings
+org.lockss.crawler.startCrawlsInterval=5m
+org.lockss.crawlStatus.keepUrls=all
+
+# Try to get a thread dump if a thread hangs
+org.lockss.thread.hungThreadDump=true
+
+#
+# Less important
+#
+
+# Turn off V1
+org.lockss.comm.enabled=false
+
+# Allow backup files up to 1MB to be uploaded
+org.lockss.ui.maxUploadFileSize=1048576
+
+org.lockss.ui.access.ip.logForbidden=true
+org.lockss.proxy.access.ip.logForbidden=true
+
+# So that we don't hash on no-longer-relevant URLs
+org.lockss.blockHasher.ignoreFilesOutsideCrawlSpec=true
+
+org.lockss.baseau.minFetchDelay=3000
+org.lockss.plugin.restartAusWithNewPlugin=true
