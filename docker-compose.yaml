@@ -59,7 +59,7 @@ services:
     volumes:
       - ./config:/opt/lockss/config
 
-  laaws-metadataextractor:
+  lockss-metadataextractor:
     image: lockss/laaws-metadata-extraction-service:1.1.0-SNAPSHOT
     ports:
       - 28120:28120
