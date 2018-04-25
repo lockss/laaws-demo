@@ -1,4 +1,4 @@
-# Copyright (c) 2016-2017 Board of Trustees of Leland Stanford Jr. University,
+# Copyright (c) 2016-2018 Board of Trustees of Leland Stanford Jr. University,
 # all rights reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,14 +26,11 @@
 
 org.lockss.ui.port=49521
 
-#
 # The database manager used to store the Archival Unit metadata.
-#
-
 # Using PostgreSQL.
 org.lockss.metadataDbManager.datasource.className=org.postgresql.ds.PGSimpleDataSource
-org.lockss.metadataDbManager.datasource.databaseName=MetadataDbManager
-org.lockss.metadataDbManager.datasource.password=goodPassword
-org.lockss.metadataDbManager.datasource.portNumber=5432
 org.lockss.metadataDbManager.datasource.serverName=lockss-metadata-pgsql
-0rg.lockss.metadataDbManager.datasource.user=LOCKSS
+
+# Repository
+# Local repo.
+org.lockss.repository.v2Repository=local:demorepo:/tmp/locksslocalrepo
