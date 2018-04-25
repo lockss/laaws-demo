@@ -32,20 +32,17 @@ org.lockss.scomm.maxMessageSize=33554430
 org.lockss.scomm.timeout.connect=15s
 
 # Poller settings
-org.lockss.poll.pollStarterInitialDelay=1m
+org.lockss.poll.defaultPollProtocol=3
+org.lockss.poll.v3.pollStarterInitialDelay=2m
+org.lockss.poll.v3.pollStarterInterval=2m
 org.lockss.poll.queueEmptySleep=30s
 org.lockss.poll.queueRecalcInterval=30s
 org.lockss.poll.v3.maxSimultaneousV3Pollers=1
 org.lockss.poll.v3.maxSimultaneousV3Voters=100
 org.lockss.poll.v3.deleteExtraFiles=true
-org.lockss.poll.v3.quorum=4
-arg.lockss.poll.v3.minNominationSize=0
-org.lockss.poll.v3.maxNominationSize=0
-org.lockss.poll.v3.voteDurationPadding=30s
-org.lockss.poll.v3.tallyDurationPadding=30s
-org.lockss.poll.v3.voteDurationMultiplier=3
-org.lockss.poll.v3.tallyDurationMultiplier=3
-org.lockss.poll.v3.receiptPadding=30s
+org.lockss.poll.v3.quorum=2
+org.lockss.poll.v3.minNominationSize=1
+org.lockss.poll.v3.maxNominationSize=1
 
 # Set the v3 poll state dir to /tmp
 org.lockss.poll.v3.messageDir=/tmp
