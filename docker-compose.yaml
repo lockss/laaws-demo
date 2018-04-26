@@ -80,7 +80,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=goodPassword
       - POSTGRES_USER=LOCKSS
-      - POSTGRES_DB=MetadataDbManager
+      - POSTGRES_DB=postgres
 
   lockss-poller:
     image: lockss/laaws-poller:1.0.0-SNAPSHOT
