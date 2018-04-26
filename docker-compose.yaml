@@ -44,7 +44,8 @@ services:
     image: lockss/laaws-configuration-service:1.1.0-SNAPSHOT
     ports:
       - 54420:54420
-    command: -p config/laaws-demo.txt -p config/lockss-configuration-service/common.xml -p config/lockss-configuration-service/lockss.txt
+      - 54421:54421
+    command: -l config/lockss-configuration-service/common.xml -l config/laaws-demo.txt -l config/laaws-demo.opt -p config/lockss-configuration-service/lockss.txt -p config/lockss-configuration-service/lockss.opt
     volumes:
       - ./config:/opt/lockss/config
 
@@ -52,7 +53,8 @@ services:
     image: lockss/laaws-metadata-service:1.0.0-SNAPSHOT
     ports:
       - 49520:49520
-    command: -c http://lockss-u:lockss-p@lockss-configuration-service:54420 -p config/laaws-demo.txt -p http://lockss-configuration-service:54420/config/file/cluster -p config/lockss-metadata-service/lockss.txt
+      - 49521:49521
+    command: -c http://lockss-u:lockss-p@lockss-configuration-service:54420 -p http://lockss-configuration-service:54420/config/file/cluster -p config/lockss-metadata-service/lockss.txt -p config/lockss-metadata-service/lockss.opt
     links:
       - lockss-configuration-service
       - lockss-metadata-pgsql
@@ -63,7 +65,8 @@ services:
     image: lockss/laaws-metadata-extraction-service:1.1.0-SNAPSHOT
     ports:
       - 28120:28120
-    command: -c http://lockss-u:lockss-p@lockss-configuration-service:54420 -p config/laaws-demo.txt -p http://lockss-configuration-service:54420/config/file/cluster -p config/lockss-metadata-extraction-service/lockss.txt
+      - 28121:28121
+    command: -c http://lockss-u:lockss-p@lockss-configuration-service:54420 -p http://lockss-configuration-service:54420/config/file/cluster -p config/lockss-metadata-extraction-service/lockss.txt -p config/lockss-metadata-extraction-service/lockss.opt
     links:
       - lockss-configuration-service
       - lockss-metadata-pgsql
@@ -83,7 +86,8 @@ services:
     image: lockss/laaws-poller:1.0.0-SNAPSHOT
     ports:
       - 25250:25250
-    command: -c http://lockss-u:lockss-p@lockss-configuration-service:54420 -p config/laaws-demo.txt -p http://lockss-configuration-service:54420/config/file/cluster -p config/lockss-poller/lockss.txt
+      - 25251:25251
+    command: -c http://lockss-u:lockss-p@lockss-configuration-service:54420 -p http://lockss-configuration-service:54420/config/file/cluster -p config/lockss-poller/lockss.txt -p config/lockss-poller/lockss.opt
     links:
       - lockss-configuration-service
     volumes:
