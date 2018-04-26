@@ -6,3 +6,4 @@
 /.buildconfig
 /config/*.opt
 /config/*/*.opt
+/download/

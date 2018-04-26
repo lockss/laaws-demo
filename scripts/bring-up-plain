@@ -1,0 +1,89 @@
+#!/bin/sh
+
+# Copyright (c) 2000-2018, Board of Trustees of Leland Stanford Jr. University
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without modification,
+# are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice, this
+# list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation and/or
+# other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its contributors
+# may be used to endorse or promote products derived from this software without
+# specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+# ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+SNAPSHOTS='https://oss.sonatype.org/content/repositories/snapshots'
+RELEASES='https://repo.maven.apache.org/maven2'
+
+JARDIR='download'
+
+function Check_Installed()
+{
+  EXE="${1}"
+  if ! which "${EXE}" &> /dev/null ; then
+    echo "$(basename "${0}"): ${EXE} not on the PATH (${PATH})"
+    exit 1
+  fi
+}
+
+function Download_If_Modified_Since()
+{
+  local URL="${1}"
+  local FILE="${2}"
+  curl --output "${FILE}" --time-cond "${FILE}" "${URL}"
+}
+
+function Download_Release()
+{
+  local GROUP="${1}"
+  local ARTIFACT="${2}"
+  local VERSION="${3}"
+  local BASEURL="${RELEASES}/$(echo "${GROUP}" | sed -e 's@\.@/@g')/${ARTIFACT}/${VERSION}"
+  local JAR="${ARTIFACT}-${VERSION}.jar"
+  local URL="${BASEURL}/${JAR}"
+  local FILE="${JARDIR}/${JAR}"
+  Download_If_Modified_Since "${URL}" "${FILE}"
+}
+
+function Download_Snapshot()
+{
+  local GROUP="${1}"
+  local ARTIFACT="${2}"
+  local VERSION="${3}"
+  local BASEURL="${SNAPSHOTS}/$(echo "${GROUP}" | sed -e 's@\.@/@g')/${ARTIFACT}/${VERSION}"
+
+  local METAURL="${BASEURL}/maven-metadata.xml"
+  local REALVERSION=$(curl --silent "${METAURL}" | xmllint --xpath '/metadata/versioning/snapshotVersions/snapshotVersion[extension = "jar" and not(classifier)]/value/text()' -)
+
+  local URL="${BASEURL}/${ARTIFACT}-${REALVERSION}.jar"
+  local FILE="${JARDIR}/${ARTIFACT}-${VERSION}.jar"
+  Download_If_Modified_Since "${URL}" "${FILE}"
+}
+
+if [ ! -d "${JARDIR}" ]; then
+  mkdir "${JARDIR}"
+fi
+
+Check_Installed 'python2'
+Check_Installed 'xmllint'
+
+Download_Snapshot "org.lockss.laaws" "laaws-configuration-service" "1.1.0-SNAPSHOT"
+Download_Snapshot "org.lockss.laaws" "laaws-metadata-service" "1.0.0-SNAPSHOT"
+Download_Snapshot "org.lockss.laaws" "laaws-metadata-extraction-service" "1.1.0-SNAPSHOT"
+Download_Snapshot "org.lockss.laaws" "laaws-poller" "1.0.0-SNAPSHOT"
