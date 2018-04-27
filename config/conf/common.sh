@@ -47,6 +47,7 @@ MDQ_VERSION='1.0.0-SNAPSHOT'
 MDQ_PORT='49520'
 MDQ_UI='49521'
 MDQ_CMD="-c http://lockss-u:lockss-p@${CFG_HOST}:${CFG_PORT}
+         -x config/tdbxml
          -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster
          -p config/lockss-metadata-service/lockss.txt
          -p config/lockss-metadata-service/lockss.opt
@@ -59,6 +60,7 @@ MDX_VERSION='1.1.0-SNAPSHOT'
 MDX_PORT='28120'
 MDX_UI='28121'
 MDX_CMD="-c http://lockss-u:lockss-p@${CFG_HOST}:${CFG_PORT}
+         -x config/tdbxml
          -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster
          -p config/lockss-metadata-extraction-service/lockss.txt
          -p config/lockss-metadata-extraction-service/lockss.opt
