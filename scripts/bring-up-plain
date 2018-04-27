@@ -44,7 +44,7 @@ set +a
 SNAPSHOTS='https://oss.sonatype.org/content/repositories/snapshots'
 RELEASES='https://repo.maven.apache.org/maven2'
 JARDIR='download'
-SLEEP=60
+SLEEP=30
 
 #
 # function Check_Installed
@@ -145,6 +145,7 @@ echo "$!" > "${CFG_ART}.pid"
 sleep $SLEEP
 java -jar "${JARDIR}/${MDQ_ART}-${MDQ_VERSION}.jar" ${MDQ_CMD} &
 echo "$!" > "${MDQ_ART}.pid"
+sleep $SLEEP
 java -jar "${JARDIR}/${MDX_ART}-${MDX_VERSION}.jar" ${MDX_CMD} &
 echo "$!" > "${MDX_ART}.pid"
 java -jar "${JARDIR}/${POL_ART}-${POL_VERSION}.jar" ${POL_CMD} &

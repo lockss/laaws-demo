@@ -76,11 +76,11 @@ services:
   lockss-metadata-pgsql:
     image: postgres:9.6
     ports:
-      - 5432:5432
+      - "${PGSQL_PORT}:${PGSQL_PORT}"
     environment:
-      - POSTGRES_PASSWORD=goodPassword
-      - POSTGRES_USER=LOCKSS
-      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD
+      - POSTGRES_USER
+      - POSTGRES_DB
 
   lockss-poller:
     image: lockss/laaws-poller:${POL_VERSION}
