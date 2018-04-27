@@ -26,41 +26,65 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-MVN_GRP=org.lockss.laaws
+MVN_GRP='org.lockss.laaws'
 
 CFG_GRP="${MVN_GRP}"
 CFG_ART='laaws-configuration-service'
 CFG_VERSION='1.1.0-SNAPSHOT'
 CFG_PORT='54420'
 CFG_UI='54421'
-CFG_CMD="-l config/lockss-configuration-service/common.xml -l config/laaws-demo.txt -l config/laaws-demo.opt -l config/laaws-demo.${VARIANT}.txt -l config/laaws-demo.${VARIANT}.opt -p config/lockss-configuration-service/lockss.txt -p config/lockss-configuration-service/lockss.opt"
+CFG_CMD="-l config/cluster/cluster.xml
+         -l config/cluster/cluster.txt
+         -l config/cluster/cluster.opt
+         -l config/cluster/cluster.${VARIANT}.txt
+         -l config/cluster/cluster.${VARIANT}.opt
+         -p config/lockss-configuration-service/lockss.txt
+         -p config/lockss-configuration-service/lockss.opt"
 
 MDQ_GRP="${MVN_GRP}"
 MDQ_ART='laaws-metadata-service'
 MDQ_VERSION='1.0.0-SNAPSHOT'
 MDQ_PORT='49520'
 MDQ_UI='49521'
-MDQ_CMD="-c http://lockss-u:lockss-p@${CFG_HOST}:${CFG_PORT} -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster -p config/lockss-metadata-service/lockss.txt -p config/lockss-metadata-service/lockss.opt -p config/lockss-metadata-service/lockss.${VARIANT}.txt -p config/lockss-metadata-service/lockss.${VARIANT}.opt"
+MDQ_CMD="-c http://lockss-u:lockss-p@${CFG_HOST}:${CFG_PORT}
+         -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster
+         -p config/lockss-metadata-service/lockss.txt
+         -p config/lockss-metadata-service/lockss.opt
+         -p config/lockss-metadata-service/lockss.${VARIANT}.txt
+         -p config/lockss-metadata-service/lockss.${VARIANT}.opt"
 
 MDX_GRP="${MVN_GRP}"
 MDX_ART='laaws-metadata-extraction-service'
 MDX_VERSION='1.1.0-SNAPSHOT'
 MDX_PORT='28120'
 MDX_UI='28121'
-MDX_CMD="-c http://lockss-u:lockss-p@${CFG_HOST}:${CFG_PORT} -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster -p config/lockss-metadata-extraction-service/lockss.txt -p config/lockss-metadata-extraction-service/lockss.opt -p config/lockss-metadata-extraction-service/lockss.${VARIANT}.txt -p config/lockss-metadata-extraction-service/lockss.${VARIANT}.opt"
+MDX_CMD="-c http://lockss-u:lockss-p@${CFG_HOST}:${CFG_PORT}
+         -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster
+         -p config/lockss-metadata-extraction-service/lockss.txt
+         -p config/lockss-metadata-extraction-service/lockss.opt
+         -p config/lockss-metadata-extraction-service/lockss.${VARIANT}.txt
+         -p config/lockss-metadata-extraction-service/lockss.${VARIANT}.opt"
 
 POL_GRP="${MVN_GRP}"
 POL_ART='laaws-poller'
 POL_VERSION='1.0.0-SNAPSHOT'
 POL_PORT='25250'
 POL_UI='25251'
-POL_CMD="-c http://lockss-u:lockss-p@${CFG_HOST}:${CFG_PORT} -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster -p config/lockss-poller/lockss.txt -p config/lockss-poller/lockss.opt"
+POL_CMD="-c http://lockss-u:lockss-p@${CFG_HOST}:${CFG_PORT}
+         -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster
+         -p config/lockss-poller/lockss.txt
+         -p config/lockss-poller/lockss.opt"
 
 REPO_GRP="${MVN_GRP}"
 REPO_ART='laaws-repository-service'
 REPO_VERSION='1.8.0-SNAPSHOT'
 REPO_PORT='32640'
-REPO_CMD="-Drepo.spec=custom -Drepo.index.spec=solr -Drepo.index.solr.solrUrl=XXX -Drepo.datastore.spec=hdfs -Drepo.datastore.hdfs.basedir=/lockss -Drepo.datastore.hdfs.server=YYY"
+REPO_CMD="-Drepo.spec=custom
+          -Drepo.index.spec=solr
+          -Drepo.index.solr.solrUrl=XXX
+          -Drepo.datastore.spec=hdfs
+          -Drepo.datastore.hdfs.basedir=/lockss
+          -Drepo.datastore.hdfs.server=YYY"
 
 PGSQL_VERSION='9.6'
 PGSQL_PORT='5432'

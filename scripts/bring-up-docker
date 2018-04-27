@@ -34,7 +34,7 @@ CONFIGDIR="$(dirname "${0}")/../config"
 # Source docker-conf.sh and common-conf.sh 
 #
 set -a
-. "${CONFIGDIR}/docker-conf.sh"
-. "${CONFIGDIR}/common-conf.sh"
+. "${CONFIGDIR}/conf/docker.sh"
+. "${CONFIGDIR}/conf/common.sh"
 set +a
 docker-compose up

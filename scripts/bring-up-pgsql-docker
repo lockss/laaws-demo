@@ -34,6 +34,6 @@ CONFIGDIR="$(dirname "${0}")/../config"
 # Source common-conf.sh 
 #
 set -a
-. "${CONFIGDIR}/common-conf.sh"
+. "${CONFIGDIR}/conf/common.sh"
 set +a
-docker run -d -p "${PGSQL_PORT}:${PGSQL_PORT}" -e POSTGRES_PASSWORD -e POSTGRES_USER -e POSTGRES_DB postgres:9.6
+docker run -d -p "${PGSQL_PORT}:${PGSQL_PORT}" -e POSTGRES_PASSWORD -e POSTGRES_USER -e POSTGRES_DB postgres:${PGSQL_VERSION}

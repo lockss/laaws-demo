@@ -47,7 +47,9 @@ services:
       - "${CFG_UI}:${CFG_UI}"
     command: "${CFG_CMD}"
     volumes:
-      - ./config:/opt/lockss/config
+      - ./config/cluster:/opt/lockss/config/cluster
+      - ./config/host:/opt/lockss/config/host
+      - ./config/lockss-configuration-service:/opt/lockss/config/lockss-configuration-service
 
   lockss-metadata-service:
     image: lockss/laaws-metadata-service:${MDQ_VERSION}
@@ -59,7 +61,9 @@ services:
       - lockss-configuration-service
       - lockss-metadata-pgsql
     volumes:
-      - ./config:/opt/lockss/config
+      - ./config/cluster:/opt/lockss/config/cluster
+      - ./config/host:/opt/lockss/config/host
+      - ./config/lockss-metadata-service:/opt/lockss/config/lockss-metadata-service
 
   lockss-metadata-extraction-service:
     image: lockss/laaws-metadata-extraction-service:${MDX_VERSION}
@@ -71,7 +75,9 @@ services:
       - lockss-configuration-service
       - lockss-metadata-pgsql
     volumes:
-      - ./config:/opt/lockss/config
+      - ./config/cluster:/opt/lockss/config/cluster
+      - ./config/host:/opt/lockss/config/host
+      - ./config/lockss-metadata-extraction-service:/opt/lockss/config/lockss-metadata-extraction-service
 
   lockss-metadata-pgsql:
     image: postgres:9.6
@@ -91,7 +97,9 @@ services:
     links:
       - lockss-configuration-service
     volumes:
-      - ./config:/opt/lockss/config
+      - ./config/cluster:/opt/lockss/config/cluster
+      - ./config/host:/opt/lockss/config/host
+      - ./config/lockss-poller:/opt/lockss/config/lockss-poller
 
   lockss-repository-service:
     image: lockss/laaws-repository-service:${REPO_VERSION}

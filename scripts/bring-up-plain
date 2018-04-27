@@ -34,8 +34,8 @@ CONFIGDIR="$(dirname "${0}")/../config"
 # Source plain-conf.sh and common-conf.sh 
 #
 set -a
-source "${CONFIGDIR}/plain-conf.sh"
-source "${CONFIGDIR}/common-conf.sh"
+source "${CONFIGDIR}/conf/plain.sh"
+source "${CONFIGDIR}/conf/common.sh"
 set +a
 
 #
