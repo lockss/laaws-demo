@@ -28,11 +28,26 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+CONFIGDIR="$(dirname "${0}")/../config"
+
+#
+# Source plain-conf.sh and common-conf.sh 
+#
+set -a
+source "${CONFIGDIR}/plain-conf.sh"
+source "${CONFIGDIR}/common-conf.sh"
+set +a
+
+#
+# Definitions
+#
 SNAPSHOTS='https://oss.sonatype.org/content/repositories/snapshots'
 RELEASES='https://repo.maven.apache.org/maven2'
-
 JARDIR='download'
 
+#
+# function Check_Installed
+#
 function Check_Installed()
 {
   EXE="${1}"
@@ -42,6 +57,9 @@ function Check_Installed()
   fi
 }
 
+#
+# function Download_If_Modified_Since
+#
 function Download_If_Modified_Since()
 {
   local URL="${1}"
@@ -49,6 +67,9 @@ function Download_If_Modified_Since()
   curl --output "${FILE}" --time-cond "${FILE}" "${URL}"
 }
 
+#
+# function Download_Release
+#
 function Download_Release()
 {
   local GROUP="${1}"
@@ -61,29 +82,56 @@ function Download_Release()
   Download_If_Modified_Since "${URL}" "${FILE}"
 }
 
+#
+# function Download_Snapshot
+#
 function Download_Snapshot()
 {
   local GROUP="${1}"
   local ARTIFACT="${2}"
   local VERSION="${3}"
   local BASEURL="${SNAPSHOTS}/$(echo "${GROUP}" | sed -e 's@\.@/@g')/${ARTIFACT}/${VERSION}"
-
   local METAURL="${BASEURL}/maven-metadata.xml"
   local REALVERSION=$(curl --silent "${METAURL}" | xmllint --xpath '/metadata/versioning/snapshotVersions/snapshotVersion[extension = "jar" and not(classifier)]/value/text()' -)
-
   local URL="${BASEURL}/${ARTIFACT}-${REALVERSION}.jar"
   local FILE="${JARDIR}/${ARTIFACT}-${VERSION}.jar"
   Download_If_Modified_Since "${URL}" "${FILE}"
 }
 
+#
+# function Download_Artifact
+#
+function Download_Artifact()
+{
+  local GROUP="${1}"
+  local ARTIFACT="${2}"
+  local VERSION="${3}"
+  case "${VERSION}" in
+    *-SNAPSHOT)
+      Download_Snapshot "${GROUP}" "${ARTIFACT}" "${VERSION}";;
+    *)
+      Download_Release "${GROUP}" "${ARTIFACT}" "${VERSION}";;
+  esac
+}
+
+#
+# Check that necessary executables are found
+#
+Check_Installed 'curl'
+Check_Installed 'xmllint'
+
+#
+# Make $JARDIR if necessary
+#
 if [ ! -d "${JARDIR}" ]; then
   mkdir "${JARDIR}"
 fi
 
-Check_Installed 'python2'
-Check_Installed 'xmllint'
-
-Download_Snapshot "org.lockss.laaws" "laaws-configuration-service" "1.1.0-SNAPSHOT"
-Download_Snapshot "org.lockss.laaws" "laaws-metadata-service" "1.0.0-SNAPSHOT"
-Download_Snapshot "org.lockss.laaws" "laaws-metadata-extraction-service" "1.1.0-SNAPSHOT"
-Download_Snapshot "org.lockss.laaws" "laaws-poller" "1.0.0-SNAPSHOT"
+#
+# Download Maven artifacts if necessary
+#
+Download_Artifact "org.lockss.laaws" "laaws-configuration-service" "${CFG_VERSION}"
+Download_Artifact "org.lockss.laaws" "laaws-metadata-service" "${MDQ_VERSION}"
+Download_Artifact "org.lockss.laaws" "laaws-metadata-extraction-service" "${MDX_VERSION}"
+Download_Artifact "org.lockss.laaws" "laaws-poller" "${POL_VERSION}"
+Download_Artifact "org.lockss.laaws" "laaws-repository-service" "${REPO_VERSION}"

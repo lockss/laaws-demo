@@ -1,4 +1,4 @@
-# Copyright (c) 2000-2017, Board of Trustees of Leland Stanford Jr. University
+# Copyright (c) 2000-2018, Board of Trustees of Leland Stanford Jr. University
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification,
@@ -41,20 +41,20 @@ services:
 #      - laaws-openwayback
 
   lockss-configuration-service:
-    image: lockss/laaws-configuration-service:1.1.0-SNAPSHOT
+    image: lockss/laaws-configuration-service:${CFG_VERSION}
     ports:
-      - 54420:54420
-      - 54421:54421
-    command: -l config/lockss-configuration-service/common.xml -l config/laaws-demo.txt -l config/laaws-demo.opt -p config/lockss-configuration-service/lockss.txt -p config/lockss-configuration-service/lockss.opt
+      - "${CFG_PORT}:${CFG_PORT}"
+      - "${CFG_UI}:${CFG_UI}"
+    command: "${CFG_CMD}"
     volumes:
       - ./config:/opt/lockss/config
 
   lockss-metadata-service:
-    image: lockss/laaws-metadata-service:1.0.0-SNAPSHOT
+    image: lockss/laaws-metadata-service:${MDQ_VERSION}
     ports:
-      - 49520:49520
-      - 49521:49521
-    command: -c http://lockss-u:lockss-p@lockss-configuration-service:54420 -p http://lockss-configuration-service:54420/config/file/cluster -p config/lockss-metadata-service/lockss.txt -p config/lockss-metadata-service/lockss.opt
+      - "${MDQ_PORT}:${MDQ_PORT}"
+      - "${MDQ_UI}:${MDQ_UI}"
+    command: "${MDQ_CMD}"
     links:
       - lockss-configuration-service
       - lockss-metadata-pgsql
@@ -62,11 +62,11 @@ services:
       - ./config:/opt/lockss/config
 
   lockss-metadata-extraction-service:
-    image: lockss/laaws-metadata-extraction-service:1.1.0-SNAPSHOT
+    image: lockss/laaws-metadata-extraction-service:${MDX_VERSION}
     ports:
-      - 28120:28120
-      - 28121:28121
-    command: -c http://lockss-u:lockss-p@lockss-configuration-service:54420 -p http://lockss-configuration-service:54420/config/file/cluster -p config/lockss-metadata-extraction-service/lockss.txt -p config/lockss-metadata-extraction-service/lockss.opt
+      - ${MDX_PORT}:${MDX_PORT}
+      - ${MDX_UI}:${MDX_UI}
+    command: "${MDX_CMD}"
     links:
       - lockss-configuration-service
       - lockss-metadata-pgsql
@@ -83,20 +83,20 @@ services:
       - POSTGRES_DB=postgres
 
   lockss-poller:
-    image: lockss/laaws-poller:1.0.0-SNAPSHOT
+    image: lockss/laaws-poller:${POL_VERSION}
     ports:
-      - 25250:25250
-      - 25251:25251
-    command: -c http://lockss-u:lockss-p@lockss-configuration-service:54420 -p http://lockss-configuration-service:54420/config/file/cluster -p config/lockss-poller/lockss.txt -p config/lockss-poller/lockss.opt
+      - ${POL_PORT}:${POL_PORT}
+      - ${POL_UI}:${POL_UI}
+    command: "${POL_CMD}"
     links:
       - lockss-configuration-service
     volumes:
       - ./config:/opt/lockss/config
 
   lockss-repository-service:
-    image: lockss/laaws-repository-service:1.8.0-SNAPSHOT
+    image: lockss/laaws-repository-service:${REPO_VERSION}
     ports:
-      - 32640:32640
+      - ${REPO_PORT}:${REPO_PORT}
 
 #          laaws-openwayback:
 #              extends:
