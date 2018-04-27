@@ -28,4 +28,6 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-CFG_HOST=lockss-configuration-service
+VARIANT='docker'
+CFG_HOST='lockss-configuration-service'
+PGSQL_HOST='lockss-metadata-pgsql'
