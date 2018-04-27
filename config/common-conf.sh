@@ -33,7 +33,7 @@ CFG_ART='laaws-configuration-service'
 CFG_VERSION='1.1.0-SNAPSHOT'
 CFG_PORT='54420'
 CFG_UI='54421'
-CFG_CMD='-l config/lockss-configuration-service/common.xml -l config/laaws-demo.txt -l config/laaws-demo.opt -p config/lockss-configuration-service/lockss.txt -p config/lockss-configuration-service/lockss.opt'
+CFG_CMD="-l config/lockss-configuration-service/common.xml -l config/laaws-demo.txt -l config/laaws-demo.opt -l config/laaws-demo.${VARIANT}.txt -l config/laaws-demo.${VARIANT}.opt -p config/lockss-configuration-service/lockss.txt -p config/lockss-configuration-service/lockss.opt"
 
 MDQ_GRP="${MVN_GRP}"
 MDQ_ART='laaws-metadata-service'
@@ -60,6 +60,7 @@ REPO_GRP="${MVN_GRP}"
 REPO_ART='laaws-repository-service'
 REPO_VERSION='1.8.0-SNAPSHOT'
 REPO_PORT='32640'
+REPO_CMD="-Drepo.spec=custom -Drepo.index.spec=solr -Drepo.index.solr.solrUrl=XXX -Drepo.datastore.spec=hdfs -Drepo.datastore.hdfs.basedir=/lockss -Drepo.datastore.hdfs.server=YYY"
 
 PGSQL_VERSION='9.6'
 PGSQL_PORT='5432'

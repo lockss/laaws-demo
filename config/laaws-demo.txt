@@ -6,7 +6,7 @@
 org.lockss.platform.diskSpacePaths=./storage
 
 # Use a REST repository
-org.lockss.repository.v2Repository=rest:demo:http://lockss-repository-service:32640
+# set org.lockss.repository.v2Repository in variant file
 
 # No repository manager
 org.lockss.plugin.auContentFromWs=true

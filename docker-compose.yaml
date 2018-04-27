@@ -97,6 +97,7 @@ services:
     image: lockss/laaws-repository-service:${REPO_VERSION}
     ports:
       - ${REPO_PORT}:${REPO_PORT}
+    command: "${REPO_CMD}"
 
 #          laaws-openwayback:
 #              extends:
