@@ -81,12 +81,7 @@ REPO_GRP="${MVN_GRP}"
 REPO_ART='laaws-repository-service'
 REPO_VERSION='1.8.0-SNAPSHOT'
 REPO_PORT='32640'
-REPO_CMD="-Drepo.spec=custom
-          -Drepo.index.spec=solr
-          -Drepo.index.solr.solrUrl=XXX
-          -Drepo.datastore.spec=hdfs
-          -Drepo.datastore.hdfs.basedir=/lockss
-          -Drepo.datastore.hdfs.server=YYY"
+REPO_CMD="--spring.config.location=file:./config/lockss-repository-service/demo.properties"
 
 PGSQL_VERSION='9.6'
 PGSQL_PORT='5432'
