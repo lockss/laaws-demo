@@ -106,6 +106,27 @@ services:
     ports:
       - ${REPO_PORT}:${REPO_PORT}
     command: "${REPO_CMD}"
+    links:
+      - laaws-demo-solr
+    volumes:
+      - ./config/lockss-repository-service:/opt/lockss/config/lockss-repository-service
+
+  laaws-demo-solr:
+    image: solr
+    ports:
+      - "8983:8983"
+    command: solr-precreate demo
+
+  laaws-demo-hdfs:
+    image:  lockss/laaws-dev-hdfs
+    ports:
+      - 9000:9000
+      - 50010:50010
+      - 50020:50020
+      - 50070:50070
+      - 50075:50075
+    volumes:
+      - ./config/laaws-demo-hdfs/etc/hadoop:/hadoop/etc/hadoop.custom
 
 #          laaws-openwayback:
 #              extends:
@@ -130,21 +151,3 @@ services:
 #              environment:
 #                  - LOCKSS_SOLR_WATCHDIR=/warcs
 #                  - LOCKSS_SOLR_URL=http://laaws-indexer-solr:8983/solr/test-core
-#
-#          laaws-repo-solr:
-#              extends:
-#                  file: laaws-cluster/laaws-components.yaml
-#                  service: laaws-repo-solr
-#
-#          laaws-repo-hdfs:
-#              extends:
-#                  file: laaws-cluster/laaws-components.yaml
-#                  service: laaws-repo-hdfs
-#
-#          laaws-repo:
-#              extends:
-#                  file: laaws-cluster/laaws-components.yaml
-#                  service: laaws-repo
-#              links:
-#                  - laaws-repo-hdfs
-#                  - laaws-repo-solr
