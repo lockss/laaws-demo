@@ -81,7 +81,7 @@ REPO_GRP="${MVN_GRP}"
 REPO_ART='laaws-repository-service'
 REPO_VERSION='1.8.0-SNAPSHOT'
 REPO_PORT='32640'
-REPO_CMD="--spring.config.location=file:./config/lockss-repository-service/demo.properties"
+REPO_CMD="--spring.config.location=file:./config/lockss-repository-service/demo.properties,file:./config/lockss-repository-service/demo.properties.opt,file:./config/lockss-repository-service/demo.${VARIANT}.properties,file:./config/lockss-repository-service/demo.${VARIANT}.properties.opt"
 
 PGSQL_VERSION='9.6'
 PGSQL_PORT='5432'
