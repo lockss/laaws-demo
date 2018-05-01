@@ -31,3 +31,4 @@
 VARIANT='plain'
 CFG_HOST='localhost'
 PGSQL_HOST='localhost'
+HDFS_HOST='localhost'

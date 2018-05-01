@@ -31,6 +31,7 @@ MVN_GRP='org.lockss.laaws'
 CFG_GRP="${MVN_GRP}"
 CFG_ART='laaws-configuration-service'
 CFG_VERSION='1.1.0-SNAPSHOT'
+# set CFG_HOST in variant file
 CFG_PORT='54420'
 CFG_UI='54421'
 CFG_CMD="-l config/cluster/cluster.xml
@@ -84,7 +85,18 @@ REPO_PORT='32640'
 REPO_CMD="--spring.config.location=file:./config/lockss-repository-service/demo.properties,file:./config/lockss-repository-service/demo.properties.opt,file:./config/lockss-repository-service/demo.${VARIANT}.properties,file:./config/lockss-repository-service/demo.${VARIANT}.properties.opt"
 
 PGSQL_VERSION='9.6'
+# set PGSQL_HOST in variant file
 PGSQL_PORT='5432'
-POSTGRES_PASSWORD=goodPassword
 POSTGRES_USER=LOCKSS
+POSTGRES_PASSWORD=goodPassword
 POSTGRES_DB=postgres
+
+SOLR_PORT='8983'
+SOLR_CMD='solr-precreate demo'
+
+# set HDFS_HOST in variant file
+HDFS_FSMD='9000'
+HDFS_DATA='50010'
+HDFS_MD='50020'
+HDFS_STATUI='50070'
+HDFS_DNUI='50075'

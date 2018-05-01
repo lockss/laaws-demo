@@ -84,8 +84,8 @@ services:
     ports:
       - "${PGSQL_PORT}:${PGSQL_PORT}"
     environment:
-      - POSTGRES_PASSWORD
       - POSTGRES_USER
+      - POSTGRES_PASSWORD
       - POSTGRES_DB
 
   lockss-poller:
@@ -114,17 +114,24 @@ services:
   laaws-demo-solr:
     image: solr
     ports:
-      - "8983:8983"
-    command: solr-precreate demo
+      - "${SOLR_PORT}:${SOLR_PORT}"
+    command: "${SOLR_CMD}"
 
   laaws-demo-hdfs:
     image:  lockss/laaws-dev-hdfs
     ports:
-      - 9000:9000
-      - 50010:50010
-      - 50020:50020
-      - 50070:50070
-      - 50075:50075
+      - "${HDFS_FSMD}:${HDFS_FSMD}"
+      - "${HDFS_DATA}:${HDFS_DATA}"
+      - "${HDFS_MD}:${HDFS_MD}"
+      - "${HDFS_STATUI}:${HDFS_STATUI}"
+      - "${HDFS_DNUI}:${HDFS_DNUI}"
+    environment:
+      - HDFS_HOST
+      - HDFS_FSMD
+      - HDFS_DATA
+      - HDFS_MD
+      - HDFS_STATUI
+      - HDFS_DNUI
     volumes:
       - ./config/laaws-demo-hdfs/etc/hadoop:/hadoop/etc/hadoop.custom
 

@@ -36,4 +36,4 @@ CONFIGDIR="$(dirname "${0}")/../config"
 set -a
 . "${CONFIGDIR}/conf/common.sh"
 set +a
-docker run -d -p "${PGSQL_PORT}:${PGSQL_PORT}" -e POSTGRES_PASSWORD -e POSTGRES_USER -e POSTGRES_DB postgres:${PGSQL_VERSION}
+docker-compose up --detach laaws-demo-solr
