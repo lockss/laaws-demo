@@ -108,6 +108,7 @@ services:
     command: "${REPO_CMD}"
     links:
       - laaws-demo-solr
+      - laaws-demo-hdfs
     volumes:
       - ./config/lockss-repository-service:/opt/lockss/config/lockss-repository-service
 
