@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (c) 2000-2018, Board of Trustees of Leland Stanford Jr. University
 # All rights reserved.
@@ -28,12 +28,18 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-CONFIGDIR="$(dirname "${0}")/../config"
+set -e
 
-#
-# Source common.sh 
-#
-set -a
-. "${CONFIGDIR}/conf/common.sh"
-set +a
-docker-compose up --detach laaws-demo-solr
+echo "Executing $0" "$@"
+
+if [[ "${VERBOSE:-}" = "yes" ]]; then
+  set -x
+fi
+
+. /opt/docker-solr/scripts/run-initdb
+
+for c in "$@" ; do
+  /opt/docker-solr/scripts/precreate-core "${c}"
+done
+
+exec solr -f

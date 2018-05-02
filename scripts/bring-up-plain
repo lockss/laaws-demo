@@ -157,6 +157,7 @@ Download_Artifact "${REPO_GRP}" "${REPO_ART}" "${REPO_VERSION}"
 ## Start components
 ##
 docker-compose up --detach lockss-metadata-pgsql laaws-demo-solr laaws-demo-hdfs
+sleep $SLEEP
 java -jar "${JARDIR}/${CFG_ART}-${CFG_VERSION}.jar" ${CFG_CMD} &
 echo "$!" > "${CFG_ART}.pid"
 java -jar "${JARDIR}/${REPO_ART}-${REPO_VERSION}.jar" ${REPO_CMD} &

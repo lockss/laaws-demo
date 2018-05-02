@@ -112,7 +112,9 @@ services:
       - ./config/lockss-repository-service:/opt/lockss/config/lockss-repository-service
 
   laaws-demo-solr:
-    image: solr
+    build:
+      context: laaws-demo-solr
+    image: lockss/laaws-demo-solr
     ports:
       - "${SOLR_PORT}:${SOLR_PORT}"
     command: "${SOLR_CMD}"

@@ -92,7 +92,7 @@ POSTGRES_PASSWORD=goodPassword
 POSTGRES_DB=postgres
 
 SOLR_PORT='8983'
-SOLR_CMD='solr-precreate demo'
+SOLR_CMD='solr-precreate-several.sh demo test-core'
 
 # set HDFS_HOST in variant file
 HDFS_FSMD='9000'
