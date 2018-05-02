@@ -36,4 +36,4 @@ CONFIGDIR="$(dirname "${0}")/../config"
 set -a
 . "${CONFIGDIR}/conf/common.sh"
 set +a
-docker-compose up --detach laaws-demo-hdfs
+docker-compose up -V --detach laaws-demo-hdfs

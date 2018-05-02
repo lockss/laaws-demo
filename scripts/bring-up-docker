@@ -37,4 +37,4 @@ set -a
 . "${CONFIGDIR}/conf/docker.sh"
 . "${CONFIGDIR}/conf/common.sh"
 set +a
-docker-compose up "$@"
+docker-compose up -V "$@"
