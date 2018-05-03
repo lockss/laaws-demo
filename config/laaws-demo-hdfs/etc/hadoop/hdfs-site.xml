@@ -9,4 +9,9 @@
        <value>false</value>
     </property>
 
+  <property>
+    <name>nfs.dump.dir</name>
+    <value>/tmp/.hdfs-nfs</value>
+  </property>
+
 </configuration>
