@@ -137,6 +137,12 @@ services:
       - HDFS_DNUI
     volumes:
       - ./config/laaws-demo-hdfs/etc/hadoop:/hadoop/etc/hadoop.custom
+      - /lib/modules:/lib/modules
+      - ./storage:/mnt
+    devices:
+      - /dev/fuse:/dev/fuse
+    cap_add:
+      - SYS_ADMIN
 
 #          laaws-openwayback:
 #              extends:
