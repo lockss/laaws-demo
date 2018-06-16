@@ -138,6 +138,19 @@ services:
     volumes:
       - ./config/laaws-demo-hdfs/etc/hadoop:/hadoop/etc/hadoop.custom
 
+  laaws-openwayback:
+    image: lockss/laaws-openwayback
+    ports:
+      - "${WAYBACK_URL_PORT}:${WAYBACK_URL_PORT}"
+    links:
+      - laaws-demo-hdfs
+    environment:
+      - WAYBACK_URL_PORT
+      - WAYBACK_URL_HOST
+      - WAYBACK_BASEDIR
+    devices:
+      - /dev/fuse
+
 #          laaws-openwayback:
 #              extends:
 #                  file: laaws-cluster/laaws-components.yaml
