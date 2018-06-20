@@ -145,32 +145,26 @@ services:
     links:
       - laaws-demo-hdfs
     environment:
+      - HDFS_HOST
+      - HDFS_FSMD
+      - REPO_BASEDIR
       - WAYBACK_URL_PORT
       - WAYBACK_URL_HOST
       - WAYBACK_BASEDIR
     devices:
       - /dev/fuse
+    cap_add:
+      - SYS_ADMIN
 
-#          laaws-openwayback:
-#              extends:
-#                  file: laaws-cluster/laaws-components.yaml
-#                  service: laaws-openwayback
-#              volumes:
-#                  - ./warcs:/warcs
-#
-#          laaws-indexer-solr:
-#              extends:
-#                  file: laaws-cluster/laaws-components.yaml
-#                  service: laaws-indexer-solr
-#
-#          laaws-indexer:
-#              extends:
-#                  file: laaws-cluster/laaws-components.yaml
-#                  service: laaws-indexer
-#              links:
-#                  - laaws-indexer-solr
-#              volumes:
-#                  - ./warcs:/warcs
-#              environment:
-#                  - LOCKSS_SOLR_WATCHDIR=/warcs
-#                  - LOCKSS_SOLR_URL=http://laaws-indexer-solr:8983/solr/test-core
+#  laaws-edina-indexer:
+#    image: lockss/laaws-edina-indexer
+#    links:
+#      - laaws-demo-solr
+#      - laaws-demo-hdfs
+#    environment:
+#      - LOCKSS_SOLR_WATCHDIR=/warcs
+#      - LOCKSS_SOLR_URL=http://laaws-demo-solr:8983/solr/test-core
+#    devices:
+#      - /dev/fuse
+#    cap_add:
+#      - SYS_ADMIN
