@@ -78,6 +78,7 @@ POL_CMD="-c http://lockss-u:lockss-p@${CFG_HOST}:${CFG_PORT}
          -p config/lockss-poller/lockss.txt
          -p config/lockss-poller/lockss.opt"
 
+# LAAWS repository service configuration
 REPO_GRP="${MVN_GRP}"
 REPO_ART='laaws-repository-service'
 REPO_VERSION='1.8.0-SNAPSHOT'
@@ -85,6 +86,7 @@ REPO_PORT='32640'
 REPO_CMD="--spring.config.location=file:./config/lockss-repository-service/demo.properties,file:./config/lockss-repository-service/demo.properties.opt,file:./config/lockss-repository-service/demo.${VARIANT}.properties,file:./config/lockss-repository-service/demo.${VARIANT}.properties.opt"
 REPO_BASEDIR=/lockss # TODO: Propagate this to projects
 
+# PostgreSQL database configuration
 PGSQL_VERSION='9.6'
 # set PGSQL_HOST in variant file
 PGSQL_PORT='5432'
@@ -92,16 +94,25 @@ POSTGRES_USER=LOCKSS
 POSTGRES_PASSWORD=goodPassword
 POSTGRES_DB=postgres
 
+# Solr container configuration
+SOLR_HOST=laaws-demo-solr
 SOLR_PORT='8983'
 SOLR_CMD='solr-precreate-several.sh demo test-core'
 
-# set HDFS_HOST in variant file
+# HDFS container configuration
+# HDFS_HOST is set by a variant file
 HDFS_FSMD='9000'
 HDFS_DATA='50010'
 HDFS_MD='50020'
 HDFS_STATUI='50070'
 HDFS_DNUI='50075'
 
+# OpenWayback container settings
 WAYBACK_URL_HOST='localhost'
 WAYBACK_URL_PORT=8000
 WAYBACK_BASEDIR=/srv/openwayback
+
+# EDINA indexer settings
+LOCKSS_SOLR_HDFSMNT=/laaws-demo-hdfs
+LOCKSS_SOLR_WATCHDIR=${LOCKSS_SOLR_HDFSMNT}/${REPO_BASEDIR}/sealed
+LOCKSS_SOLR_URL=http://${SOLR_HOST}:${SOLR_PORT}/solr/test-core
