@@ -151,6 +151,8 @@ services:
       - WAYBACK_URL_PORT
       - WAYBACK_URL_HOST
       - WAYBACK_BASEDIR
+      - WAYBACK_HDFSMNT
+      - WAYBACK_WATCHDIR
     devices:
       - /dev/fuse
     cap_add:
