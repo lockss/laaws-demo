@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (c) 2000-2018, Board of Trustees of Leland Stanford Jr. University
 # All rights reserved.
@@ -28,24 +28,6 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-CONFIGDIR="$(dirname "${0}")/../config"
-
-##
-## Source plain.sh and common.sh 
-##
-set -a
-source "${CONFIGDIR}/conf/plain.sh"
-source "${CONFIGDIR}/conf/common.sh"
-set +a
-
-##
-## Definitions
-##
-SNAPSHOTS='https://oss.sonatype.org/content/repositories/snapshots'
-RELEASES='https://repo.maven.apache.org/maven2'
-JARDIR='download'
-SLEEP=30
-
 ##
 ## function Check_Docker
 ##
@@ -70,102 +52,125 @@ Check_Installed()
 }
 
 ##
-## function Download_If_Modified_Since
+## function Get_Artifact
 ##
-Download_If_Modified_Since()
-{
-  local URL="${1}"
-  local FILE="${2}"
-  curl --output "${FILE}" --time-cond "${FILE}" "${URL}"
-}
-
-##
-## function Download_Release
-##
-Download_Release()
+Get_Artifact()
 {
   local GROUP="${1}"
   local ARTIFACT="${2}"
   local VERSION="${3}"
-  local BASEURL="${RELEASES}/$(echo "${GROUP}" | sed -e 's@\.@/@g')/${ARTIFACT}/${VERSION}"
-  local JAR="${ARTIFACT}-${VERSION}.jar"
-  local URL="${BASEURL}/${JAR}"
-  local FILE="${JARDIR}/${JAR}"
-  Download_If_Modified_Since "${URL}" "${FILE}"
-}
-
-##
-## function Download_Snapshot
-##
-Download_Snapshot()
-{
-  local GROUP="${1}"
-  local ARTIFACT="${2}"
-  local VERSION="${3}"
-  local BASEURL="${SNAPSHOTS}/$(echo "${GROUP}" | sed -e 's@\.@/@g')/${ARTIFACT}/${VERSION}"
-  local METAURL="${BASEURL}/maven-metadata.xml"
-  local REALVERSION=$(curl --silent "${METAURL}" | xmllint --xpath '/metadata/versioning/snapshotVersions/snapshotVersion[extension = "jar" and not(classifier)]/value/text()' -)
-  local URL="${BASEURL}/${ARTIFACT}-${REALVERSION}.jar"
-  local FILE="${JARDIR}/${ARTIFACT}-${VERSION}.jar"
-  Download_If_Modified_Since "${URL}" "${FILE}"
-}
-
-##
-## function Download_Artifact
-##
-Download_Artifact()
-{
-  local GROUP="${1}"
-  local ARTIFACT="${2}"
-  local VERSION="${3}"
+  local ARTSTR="${GROUP}:${ARTIFACT}:${VERSION}"
+  local REPO=''
   case "${VERSION}" in
     *-SNAPSHOT)
-      Download_Snapshot "${GROUP}" "${ARTIFACT}" "${VERSION}";;
+      REPO="${SNAPSHOTS}"
+      ;;
     *)
-      Download_Release "${GROUP}" "${ARTIFACT}" "${VERSION}";;
+      REPO="${RELEASES}"
+      ;;
   esac
+  if [ "X${MVN_OFFLINE}" != "Xtrue" ]; then
+    mvn dependency:get "-Dartifact=${ARTSTR}" "-DremoteRepositories=${REPO}" -Dtransitive=false
+  fi
+  mvn dependency:copy "-Dartifact=${ARTSTR}" "-DoutputDirectory=${JARDIR}" -Dmdep.useBaseVersion=true
 }
 
 ##
-## Check that necessary executables are found
+## function Print_Usage
 ##
-Check_Installed 'curl'
-Check_Installed 'xmllint'
+Print_Usage()
+{
+  echo "Usage: $(basename "${0}") [-offline|-o] [-sleep|-s N] [-help|-h]"
+  cat <<'END_OF_STRING'
+
+    -help, -h     Print this message and exit
+    -offline, -o  Skip Maven operations that would go online
+    -sleep, -s N  Set sleep interval to N seconds (default 30)
+END_OF_STRING
+}
 
 ##
-## Check that Docker is running
+## Definitions
 ##
+
+CONFIGDIR="$(dirname "${0}")/../config"
+SNAPSHOTS='https://oss.sonatype.org/content/repositories/snapshots'
+RELEASES='https://repo.maven.apache.org/maven2'
+JARDIR='download'
+SLEEP='30'
+MVN_OFFLINE='false'
+
+##
+## Source plain.sh and common.sh 
+##
+set -a
+source "${CONFIGDIR}/conf/plain.sh"
+source "${CONFIGDIR}/conf/common.sh"
+set +a
+
+##
+## Option parsing loop
+##
+while true ; do
+  case "${1}" in
+    -h|-help|--help)
+      Print_Usage
+      exit 0
+      ;;
+    -o|-offline|--offline)
+      MVN_OFFLINE=true
+      shift; continue
+      ;;
+    -s|-sleep|--sleep)
+      SLEEP="${2}"
+      shift; shift; continue
+      ;;
+    -*)
+      echo "$(basename "${0}"): unknown option: ${1}"
+      exit 1
+      ;;
+  esac
+  break
+done
+
+##
+## Preliminary checks and actions 
+##
+
+# Check that dependent programs are installed
+Check_Installed 'docker'
+Check_Installed 'mvn'
+
+# Check that Docker is running
 Check_Docker
 
-##
-## Make $JARDIR if necessary
-##
+# Make $JARDIR if necessary
 if [ ! -d "${JARDIR}" ]; then
   mkdir "${JARDIR}"
 fi
 
-##
-## Download Maven artifacts if necessary
-##
-Download_Artifact "${CFG_GRP}" "${CFG_ART}" "${CFG_VERSION}"
-Download_Artifact "${MDQ_GRP}" "${MDQ_ART}" "${MDQ_VERSION}"
-Download_Artifact "${MDX_GRP}" "${MDX_ART}" "${MDX_VERSION}"
-Download_Artifact "${POL_GRP}" "${POL_ART}" "${POL_VERSION}"
-Download_Artifact "${REPO_GRP}" "${REPO_ART}" "${REPO_VERSION}"
+# Update Maven artifacts
+
+Get_Artifact "${CFG_GRP}" "${CFG_ART}" "${CFG_VERSION}"
+Get_Artifact "${MDQ_GRP}" "${MDQ_ART}" "${MDQ_VERSION}"
+Get_Artifact "${MDX_GRP}" "${MDX_ART}" "${MDX_VERSION}"
+Get_Artifact "${POL_GRP}" "${POL_ART}" "${POL_VERSION}"
+Get_Artifact "${REPO_GRP}" "${REPO_ART}" "${REPO_VERSION}"
 
 ##
 ## Start components
 ##
-docker-compose up --detach lockss-metadata-pgsql laaws-demo-solr laaws-demo-hdfs
-sleep $SLEEP
+
 java -jar "${JARDIR}/${CFG_ART}-${CFG_VERSION}.jar" ${CFG_CMD} &
 echo "$!" > "${CFG_ART}.pid"
+sleep $SLEEP
+docker-compose up --detach lockss-metadata-pgsql laaws-demo-solr laaws-demo-hdfs laaws-openwayback laaws-edina-indexer
+sleep $SLEEP
 java -jar "${JARDIR}/${REPO_ART}-${REPO_VERSION}.jar" ${REPO_CMD} &
 echo "$!" > "${REPO_ART}.pid"
 sleep $SLEEP
 java -jar "${JARDIR}/${MDQ_ART}-${MDQ_VERSION}.jar" ${MDQ_CMD} &
 echo "$!" > "${MDQ_ART}.pid"
-sleep $SLEEP
 java -jar "${JARDIR}/${MDX_ART}-${MDX_VERSION}.jar" ${MDX_CMD} &
 echo "$!" > "${MDX_ART}.pid"
 java -jar "${JARDIR}/${POL_ART}-${POL_VERSION}.jar" ${POL_CMD} &

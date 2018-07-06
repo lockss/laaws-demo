@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Copyright (c) 2000-2018, Board of Trustees of Leland Stanford Jr. University
 # All rights reserved.
 #
@@ -76,7 +78,9 @@ POL_UI='25251'
 POL_CMD="-c http://lockss-u:lockss-p@${CFG_HOST}:${CFG_PORT}
          -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster
          -p config/lockss-poller/lockss.txt
-         -p config/lockss-poller/lockss.opt"
+         -p config/lockss-poller/lockss.opt
+         -p config/lockss-poller/lockss.${VARIANT}.opt
+         -p config/lockss-poller/lockss.${VARIANT}.txt"
 
 # LAAWS repository service configuration
 REPO_GRP="${MVN_GRP}"
