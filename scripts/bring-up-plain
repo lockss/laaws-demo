@@ -90,6 +90,20 @@ END_OF_STRING
 }
 
 ##
+## function Wait_For_200
+##
+Wait_For_200()
+{
+  local HOST="${1}"
+  local PORT="${2}"
+  local URL="http://${HOST}:${PORT}/status"
+  while true ; do
+    echo -n "Waiting for ${URL} ... " && curl --silent --fail --output /dev/null "${URL}" && echo "succeeded" && break
+    echo "failed" && sleep $SLEEP
+  done
+}
+
+##
 ## Definitions
 ##
 
@@ -138,6 +152,7 @@ done
 ##
 
 # Check that dependent programs are installed
+Check_Installed 'curl'
 Check_Installed 'docker'
 Check_Installed 'mvn'
 
@@ -163,14 +178,17 @@ Get_Artifact "${REPO_GRP}" "${REPO_ART}" "${REPO_VERSION}"
 
 java -jar "${JARDIR}/${CFG_ART}-${CFG_VERSION}.jar" ${CFG_CMD} &
 echo "$!" > "${CFG_ART}.pid"
-sleep $SLEEP
+Wait_For_200 "${CFG_HOST}" "${CFG_PORT}"
+
 docker-compose up --detach lockss-metadata-pgsql laaws-demo-solr laaws-demo-hdfs laaws-openwayback laaws-edina-indexer
 sleep $SLEEP
+
 java -jar "${JARDIR}/${REPO_ART}-${REPO_VERSION}.jar" ${REPO_CMD} &
 echo "$!" > "${REPO_ART}.pid"
-sleep $SLEEP
 java -jar "${JARDIR}/${MDQ_ART}-${MDQ_VERSION}.jar" ${MDQ_CMD} &
 echo "$!" > "${MDQ_ART}.pid"
+Wait_For_200 "${MDQ_HOST}" "${MDQ_PORT}"
+
 java -jar "${JARDIR}/${MDX_ART}-${MDX_VERSION}.jar" ${MDX_CMD} &
 echo "$!" > "${MDX_ART}.pid"
 java -jar "${JARDIR}/${POL_ART}-${POL_VERSION}.jar" ${POL_CMD} &
