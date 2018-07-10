@@ -30,5 +30,6 @@
 
 VARIANT='docker'
 CFG_HOST='lockss-configuration-service'
+MDQ_HOST='lockss-metadata-service'
 PGSQL_HOST='lockss-metadata-pgsql'
 HDFS_HOST='laaws-demo-hdfs'
