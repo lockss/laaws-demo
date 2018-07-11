@@ -106,6 +106,8 @@ services:
     ports:
       - ${REPO_PORT}:${REPO_PORT}
     command: "${REPO_CMD}"
+    environment:
+      - REPO_MAX_WARC_SIZE
     links:
       - laaws-demo-solr
       - laaws-demo-hdfs
@@ -169,6 +171,7 @@ services:
       - REPO_BASEDIR
       - LOCKSS_SOLR_HDFSMNT
       - LOCKSS_SOLR_WATCHDIR
+      - LOCKSS_SOLR_WATCHDIR_INTERVAL
       - LOCKSS_SOLR_URL
     devices:
       - /dev/fuse

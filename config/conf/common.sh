@@ -90,6 +90,7 @@ REPO_VERSION='1.8.0-SNAPSHOT'
 REPO_PORT='32640'
 REPO_CMD="--spring.config.location=file:./config/lockss-repository-service/demo.properties,file:./config/lockss-repository-service/demo.properties.opt,file:./config/lockss-repository-service/demo.${VARIANT}.properties,file:./config/lockss-repository-service/demo.${VARIANT}.properties.opt"
 REPO_BASEDIR=/lockss # TODO: Propagate this to projects
+REPO_MAX_WARC_SIZE=1048576 # 1 MB
 
 # PostgreSQL database configuration
 PGSQL_VERSION='9.6'
@@ -122,4 +123,5 @@ WAYBACK_WATCHDIR=${WAYBACK_HDFSMNT}/${REPO_BASEDIR}/sealed
 # EDINA indexer settings
 LOCKSS_SOLR_HDFSMNT=/laaws-demo-hdfs
 LOCKSS_SOLR_WATCHDIR=${LOCKSS_SOLR_HDFSMNT}/${REPO_BASEDIR}/sealed
+LOCKSS_SOLR_WATCHDIR_INTERVAL=10 # Seconds
 LOCKSS_SOLR_URL=http://${SOLR_HOST}:${SOLR_PORT}/solr/test-core
