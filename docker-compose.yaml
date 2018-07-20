@@ -112,6 +112,10 @@ services:
     command: "${REPO_CMD}"
     environment:
       - REPO_MAX_WARC_SIZE
+      - SOLR_HOST
+      - SOLR_PORT
+      - HDFS_HOST
+      - HDFS_FSMD
     links:
       - laaws-demo-solr
       - laaws-demo-hdfs
