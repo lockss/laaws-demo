@@ -30,13 +30,16 @@
 
 MVN_GRP='org.lockss.laaws'
 
+# PROPS_HOST set in variant file
+PROPS_PORT='8001'
+
 CFG_GRP="${MVN_GRP}"
 CFG_ART='laaws-configuration-service'
 CFG_VERSION='1.1.0-SNAPSHOT'
 # CFG_HOST set in variant file
 CFG_PORT='54420'
 CFG_UI='54421'
-CFG_CMD="-l config/cluster/cluster.xml
+CFG_CMD="-l http://${PROPS_HOST}/lockss.xml
          -l config/cluster/cluster.txt
          -l config/cluster/cluster.opt
          -l config/cluster/cluster.${VARIANT}.txt

@@ -61,34 +61,20 @@ in this Software without prior written authorization from Stanford University.
 <!ATTLIST list append CDATA #IMPLIED>
 ]>
 
-<!-- LOCKSS & LCAP tuning parameters -->
-<!-- Common config for all test frameworks -->
-<!-- This is included in the list of prop files by all the run_xxx_daemon -->
-<!-- scripts -->
-
 <lockss-config>
 
   <!-- enclosing "org.lockss" so we don't have to repeat it -->
   <property name="org.lockss">
 
-    <!-- Automatically load (list in the UI) plugins named .*Plugin in these
-	 jars -->
-    <property name="plugin.registryJars">
+    <property name="titleDbs">
       <list>
-	<value>lockss-plugins.jar</value>
+        <value>/titledb/titledb.xml</value>
       </list>
     </property>
 
-    <!-- Automatically load (list in the UI) plugins in this list.  Include
-	 only plugins in jars not listed above, or whose id doesn't match
-	 .*Plugin -->
-    <property name="plugin.registry">
+    <property name="plugin.registries">
       <list>
-	<value>edu.cornell.library.epr.EPRPlugin2001</value>
-	<value>edu.cornell.library.epr.EPRPlugin2002On</value>
-	<value>edu.nyu.plugin.heplwebzine.HEPLwebzine</value>
-	<value>org.lockss.plugin.janushead.JanusHeadPluginLegacy</value>
-	<value>org.lockss.plugin.simulated.SimulatedPlugin</value>
+        <value>/plugins/</value>
       </list>
     </property>
 
