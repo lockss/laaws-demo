@@ -40,6 +40,13 @@ services:
       - lockss-repository-service
 #      - laaws-openwayback
 
+  lockss-demo-props:
+    build:
+      context: laaws-demo-props
+    image: lockss/laaws-demo-props
+    ports:
+      - "8001:80"
+
   lockss-configuration-service:
     image: lockss/laaws-configuration-service:${CFG_VERSION}
     ports:
