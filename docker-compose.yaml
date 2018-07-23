@@ -54,6 +54,8 @@ services:
       - "${CFG_PORT}:${CFG_PORT}"
       - "${CFG_UI}:${CFG_UI}"
     command: "${CFG_CMD}"
+    links:
+      - lockss-demo-props
     volumes:
       - ./config/cluster:/opt/lockss/config/cluster
       - ./config/host:/opt/lockss/config/host

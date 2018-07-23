@@ -39,7 +39,7 @@ CFG_VERSION='1.1.0-SNAPSHOT'
 # CFG_HOST set in variant file
 CFG_PORT='54420'
 CFG_UI='54421'
-CFG_CMD="-l http://${PROPS_HOST}/lockss.xml
+CFG_CMD="-l http://${PROPS_HOST}:${PROPS_PORT}/lockss.xml
          -l config/cluster/cluster.txt
          -l config/cluster/cluster.opt
          -l config/cluster/cluster.${VARIANT}.txt
