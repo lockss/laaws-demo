@@ -41,11 +41,12 @@ services:
 #      - laaws-openwayback
 
   lockss-demo-props:
-    build:
-      context: laaws-demo-props
-    image: lockss/laaws-demo-props
+    image: httpd:latest
     ports:
-      - "8001:80"
+      - "8001:8001"
+    volumes:
+      - ./laaws-demo-props/htdocs:/usr/local/apache2/htdocs
+      - ./laaws-demo-props/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf
 
   lockss-configuration-service:
     image: lockss/laaws-configuration-service:${CFG_VERSION}
