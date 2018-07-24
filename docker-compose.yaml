@@ -56,6 +56,7 @@ services:
     command: "${CFG_CMD}"
     links:
       - lockss-demo-props
+      - lockss-repository-service
     volumes:
       - ./config/cluster:/opt/lockss/config/cluster
       - ./config/host:/opt/lockss/config/host
