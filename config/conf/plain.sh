@@ -29,7 +29,6 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 VARIANT='plain'
-PROPS_HOST='localhost'
 CFG_HOST='localhost'
 MDQ_HOST='localhost'
 PGSQL_HOST='localhost'

@@ -29,7 +29,6 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 VARIANT='docker'
-PROPS_HOST='lockss-demo-props'
 CFG_HOST='lockss-configuration-service'
 MDQ_HOST='lockss-metadata-service'
 PGSQL_HOST='lockss-metadata-pgsql'

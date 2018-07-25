@@ -40,14 +40,6 @@ services:
       - lockss-repository-service
 #      - laaws-openwayback
 
-  lockss-demo-props:
-    image: httpd:latest
-    ports:
-      - "8001:8001"
-    volumes:
-      - ./laaws-demo-props/htdocs:/usr/local/apache2/htdocs
-      - ./laaws-demo-props/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf
-
   lockss-configuration-service:
     image: lockss/laaws-configuration-service:${CFG_VERSION}
     ports:
@@ -55,9 +47,10 @@ services:
       - "${CFG_UI}:${CFG_UI}"
     command: "${CFG_CMD}"
     links:
-      - lockss-demo-props
       - lockss-repository-service
     volumes:
+      - ./config/plugins:/opt/lockss/classpath
+      - ./config/tdbxml:/opt/lockss/config/tdbxml
       - ./config/cluster:/opt/lockss/config/cluster
       - ./config/host:/opt/lockss/config/host
       - ./config/lockss-configuration-service:/opt/lockss/config/lockss-configuration-service

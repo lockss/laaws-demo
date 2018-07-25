@@ -30,22 +30,24 @@
 
 MVN_GRP='org.lockss.laaws'
 
-# PROPS_HOST set in variant file
-PROPS_PORT='8001'
-
 CFG_GRP="${MVN_GRP}"
 CFG_ART='laaws-configuration-service'
 CFG_VERSION='1.1.0-SNAPSHOT'
 # CFG_HOST set in variant file
 CFG_PORT='54420'
 CFG_UI='54421'
-CFG_CMD="-b http://${PROPS_HOST}:${PROPS_PORT}/lockss.xml
+CFG_CMD="-b config/cluster/bootstrap.txt
+         -p config/cluster/cluster.txt
+         -p config/cluster/cluster.opt
+         -p config/cluster/cluster.${VARIANT}.txt
+         -p config/cluster/cluster.${VARIANT}.opt
+         -p config/lockss-configuration-service/lockss.txt
+         -p config/lockss-configuration-service/lockss.opt
+         -x config/tdbxml
          -l config/cluster/cluster.txt
          -l config/cluster/cluster.opt
          -l config/cluster/cluster.${VARIANT}.txt
-         -l config/cluster/cluster.${VARIANT}.opt
-         -p config/lockss-configuration-service/lockss.txt
-         -p config/lockss-configuration-service/lockss.opt"
+         -l config/cluster/cluster.${VARIANT}.opt"
 
 MDQ_GRP="${MVN_GRP}"
 MDQ_ART='laaws-metadata-service'
