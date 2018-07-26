@@ -31,7 +31,7 @@ version: '3'
 services:
   lockss-demo-webui:
     build:
-      context: laaws-demo-webui
+      context: docker/laaws-demo-webui
     image: lockss/laaws-demo-webui
     ports:
       - "80:80"
@@ -128,7 +128,7 @@ services:
 
   laaws-demo-solr:
     build:
-      context: laaws-demo-solr
+      context: docker/laaws-demo-solr
     image: lockss/laaws-demo-solr
     ports:
       - "${SOLR_PORT}:${SOLR_PORT}"
