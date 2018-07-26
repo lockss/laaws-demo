@@ -49,7 +49,7 @@ services:
     links:
       - lockss-repository-service
     volumes:
-      - ./config/plugins:/opt/lockss/classpath
+      - ./config/plugins:/opt/lockss/BOOT-INF/lib
       - ./config/tdbxml:/opt/lockss/config/tdbxml
       - ./config/cluster:/opt/lockss/config/cluster
       - ./config/host:/opt/lockss/config/host
