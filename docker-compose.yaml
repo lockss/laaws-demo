@@ -106,7 +106,7 @@ services:
   lockss-poller:
     build:
       context: docker/laaws-demo-poller
-    context: lockss/laaws-demo-poller
+    image: lockss/laaws-demo-poller
     ports:
       - ${POL_PORT}:${POL_PORT}
       - ${POL_UI}:${POL_UI}
