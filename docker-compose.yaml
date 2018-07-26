@@ -43,6 +43,9 @@ services:
   lockss-configuration-service:
     build:
       context: docker/laaws-demo-configuration-service
+      args:
+        CFG_VERSION: ${CFG_VERSION}
+        CFG_PORT: ${CFG_PORT}
     image: lockss/laaws-demo-configuration-service
     ports:
       - "${CFG_PORT}:${CFG_PORT}"
@@ -61,6 +64,9 @@ services:
   lockss-metadata-service:
     build:
       context: docker/laaws-demo-metadata-service
+      args:
+        MDQ_VERSION: ${MDQ_VERSION}
+        MDQ_PORT: ${MDQ_PORT}
     image: lockss/laaws-demo-metadata-service
     ports:
       - "${MDQ_PORT}:${MDQ_PORT}"
@@ -79,6 +85,9 @@ services:
   lockss-metadata-extraction-service:
     build:
       context: docker/laaws-demo-metadata-extraction-service
+      args:
+        MDX_VERSION: ${MDX_VERSION}
+        MDX_PORT: ${MDX_PORT}
     image: lockss/laaws-demo-metadata-extraction-service
     ports:
       - ${MDX_PORT}:${MDX_PORT}
@@ -106,6 +115,9 @@ services:
   lockss-poller:
     build:
       context: docker/laaws-demo-poller
+      args:
+        POL_VERSION: ${POL_VERSION}
+        POL_PORT: ${POL_PORT}
     image: lockss/laaws-demo-poller
     ports:
       - ${POL_PORT}:${POL_PORT}
