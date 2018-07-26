@@ -40,6 +40,14 @@ services:
       - lockss-repository-service
 #      - laaws-openwayback
 
+  lockss-demo-props:
+    image: httpd:latest
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./docker/laaws-demo-props/htdocs:/usr/local/apache2/htdocs
+      - ./docker/laaws-demo-props/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf
+
   lockss-configuration-service:
     build:
       context: docker/laaws-demo-configuration-service
