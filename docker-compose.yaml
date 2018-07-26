@@ -41,7 +41,9 @@ services:
 #      - laaws-openwayback
 
   lockss-configuration-service:
-    image: lockss/laaws-configuration-service:${CFG_VERSION}
+    build:
+      context: docker/laaws-demo-configuration-service
+    image: lockss/laaws-demo-configuration-service
     ports:
       - "${CFG_PORT}:${CFG_PORT}"
       - "${CFG_UI}:${CFG_UI}"
@@ -57,7 +59,9 @@ services:
       - ./storage/lockss-configuration-service:/opt/lockss/storage
 
   lockss-metadata-service:
-    image: lockss/laaws-metadata-service:${MDQ_VERSION}
+    build:
+      context: docker/laaws-demo-metadata-service
+    image: lockss/laaws-demo-metadata-service
     ports:
       - "${MDQ_PORT}:${MDQ_PORT}"
       - "${MDQ_UI}:${MDQ_UI}"
@@ -66,13 +70,16 @@ services:
       - lockss-configuration-service
       - lockss-metadata-pgsql
     volumes:
+      - ./config/plugins:/opt/lockss/BOOT-INF/lib
       - ./config/cluster:/opt/lockss/config/cluster
       - ./config/host:/opt/lockss/config/host
       - ./config/lockss-metadata-service:/opt/lockss/config/lockss-metadata-service
       - ./storage/lockss-metadata-service:/opt/lockss/storage
 
   lockss-metadata-extraction-service:
-    image: lockss/laaws-metadata-extraction-service:${MDX_VERSION}
+    build:
+      context: docker/laaws-demo-metadata-extraction-service
+    image: lockss/laaws-demo-metadata-extraction-service
     ports:
       - ${MDX_PORT}:${MDX_PORT}
       - ${MDX_UI}:${MDX_UI}
@@ -81,6 +88,7 @@ services:
       - lockss-configuration-service
       - lockss-metadata-pgsql
     volumes:
+      - ./config/plugins:/opt/lockss/BOOT-INF/lib
       - ./config/cluster:/opt/lockss/config/cluster
       - ./config/host:/opt/lockss/config/host
       - ./config/lockss-metadata-extraction-service:/opt/lockss/config/lockss-metadata-extraction-service
@@ -96,7 +104,9 @@ services:
       - POSTGRES_DB
 
   lockss-poller:
-    image: lockss/laaws-poller:${POL_VERSION}
+    build:
+      context: docker/laaws-demo-poller
+    context: lockss/laaws-demo-poller
     ports:
       - ${POL_PORT}:${POL_PORT}
       - ${POL_UI}:${POL_UI}
@@ -104,6 +114,7 @@ services:
     links:
       - lockss-configuration-service
     volumes:
+      - ./config/plugins:/opt/lockss/BOOT-INF/lib
       - ./config/cluster:/opt/lockss/config/cluster
       - ./config/host:/opt/lockss/config/host
       - ./config/lockss-poller:/opt/lockss/config/lockss-poller
