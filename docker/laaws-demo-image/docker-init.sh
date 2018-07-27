@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Copyright (c) 2000-2018, Board of Trustees of Leland Stanford Jr. University
 # All rights reserved.
 #
@@ -26,21 +28,17 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-ARG MDQ_VERSION
-FROM lockss/laaws-configuration-service:${MDQ_VERSION}
+# Application JAR to run
+ORIGINAL_JAR='/opt/lockss/spring-app.jar'
+CUSTOM_JAR='/opt/lockss/spring-app-custom.jar'
+APP_JAR="${ORIGINAL_JAR}"
 
-MAINTAINER "LOCKSS Buildmaster" <buildmaster@lockss.org>
+# Inject JARs from provided classpath into a custom Spring Boot app JAR
+if [ -d BOOT-INF/lib ]; then
+  cp "${ORIGINAL_JAR}" "${CUSTOM_JAR}"
+  find BOOT-INF/lib -iname "*.jar" | xargs --no-run-if-empty jar uf "${CUSTOM_JAR}"
+  APP_JAR="${CUSTOM_JAR}"
+fi
 
-ENTRYPOINT ["/docker-init.sh"]
-
-ARG MDQ_PORT
-EXPOSE ${MDQ_PORT}
-
-WORKDIR /opt/lockss
-
-# Install JDK just for jar command
-RUN apt update && apt -y install openjdk-8-jdk-headless
-
-# Add demo-specific entrypoint script
-ADD scripts/docker-init.sh /docker-init.sh
-
+# Run the custom Spring Boot app JAR
+/usr/bin/java -jar ${APP_JAR} "$@"

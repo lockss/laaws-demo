@@ -50,11 +50,12 @@ services:
 
   lockss-configuration-service:
     build:
-      context: docker/laaws-demo-configuration-service
+      context: docker/laaws-demo-image
       args:
-        CFG_VERSION: ${CFG_VERSION}
-        CFG_PORT: ${CFG_PORT}
-    image: lockss/laaws-demo-configuration-service
+        SVC_NAME: ${CFG_ART}
+        SVC_VERSION: ${CFG_VERSION}
+        SVC_PORT: ${CFG_PORT}
+    image: lockss/laaws-demo-configuration-service:${CFG_VERSION}
     ports:
       - "${CFG_PORT}:${CFG_PORT}"
       - "${CFG_UI}:${CFG_UI}"
@@ -71,11 +72,12 @@ services:
 
   lockss-metadata-service:
     build:
-      context: docker/laaws-demo-metadata-service
+      context: docker/laaws-demo-image
       args:
-        MDQ_VERSION: ${MDQ_VERSION}
-        MDQ_PORT: ${MDQ_PORT}
-    image: lockss/laaws-demo-metadata-service
+        SVC_NAME: ${MDQ_ART}
+        SVC_VERSION: ${MDQ_VERSION}
+        SVC_PORT: ${MDQ_PORT}
+    image: lockss/laaws-demo-metadata-service:${MDQ_VERSION}
     ports:
       - "${MDQ_PORT}:${MDQ_PORT}"
       - "${MDQ_UI}:${MDQ_UI}"
@@ -92,11 +94,12 @@ services:
 
   lockss-metadata-extraction-service:
     build:
-      context: docker/laaws-demo-metadata-extraction-service
+      context: docker/laaws-demo-image
       args:
-        MDX_VERSION: ${MDX_VERSION}
-        MDX_PORT: ${MDX_PORT}
-    image: lockss/laaws-demo-metadata-extraction-service
+        SVC_NAME: ${MDX_ART}
+        SVC_VERSION: ${MDX_VERSION}
+        SVC_PORT: ${MDX_PORT}
+    image: lockss/laaws-demo-metadata-extraction-service:${MDX_VERSION}
     ports:
       - ${MDX_PORT}:${MDX_PORT}
       - ${MDX_UI}:${MDX_UI}
@@ -122,11 +125,12 @@ services:
 
   lockss-poller:
     build:
-      context: docker/laaws-demo-poller
+      context: docker/laaws-demo-image
       args:
-        POL_VERSION: ${POL_VERSION}
-        POL_PORT: ${POL_PORT}
-    image: lockss/laaws-demo-poller
+        SVC_NAME: ${POL_ART}
+        SVC_VERSION: ${POL_VERSION}
+        SVC_PORT: ${POL_PORT}
+    image: lockss/laaws-demo-poller:${POL_VERSION}
     ports:
       - ${POL_PORT}:${POL_PORT}
       - ${POL_UI}:${POL_UI}

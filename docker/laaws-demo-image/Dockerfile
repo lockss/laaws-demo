@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # Copyright (c) 2000-2018, Board of Trustees of Leland Stanford Jr. University
 # All rights reserved.
 #
@@ -28,16 +26,18 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Application JAR to run
-APP_JAR=/opt/lockss/spring-app.jar
+ARG SVC_NAME
+ARG SVC_VERSION
+FROM lockss/${SVC_NAME}:${SVC_VERSION}
 
-# Inject JARs from provided classpath into a custom Spring Boot app JAR
-if [ -d BOOT-INF/lib ]; then
-    cp /opt/lockss/spring-app.jar /opt/lockss/spring-app-custom.jar
-    find BOOT-INF/lib -iname "*.jar" | xargs --no-run-if-empty jar uf /opt/lockss/spring-app-custom.jar
-    APP_JAR=/opt/lockss/spring-app-custom.jar
-fi
+MAINTAINER "LOCKSS Buildmaster" <buildmaster@lockss.org>
 
-# Run the custom Spring Boot app JAR
-/usr/bin/java -jar ${APP_JAR} $@
+ENTRYPOINT ["/docker-init.sh"]
 
+ARG SVC_PORT
+EXPOSE ${SVC_PORT}
+
+WORKDIR /opt/lockss
+
+# Add demo-specific entrypoint script
+ADD docker-init.sh /docker-init.sh
