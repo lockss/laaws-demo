@@ -167,7 +167,6 @@ Run_Jar()
 Run_laaws_demo_hdfs()
 {
   Run_Docker 'laaws-demo-hdfs'
-  Wait_For_Port "${HDFS_HOST}" "${HDFS_FSMD}" "${SLEEP}"
 }
 
 ##
@@ -177,7 +176,6 @@ Run_laaws_demo_hdfs()
 Run_laaws_demo_solr()
 {
   Run_Docker 'laaws-demo-solr'
-  Wait_For_Port "${SOLR_HOST}" "${SOLR_PORT}" "${SLEEP}"
 }
 
 ##
@@ -187,6 +185,8 @@ Run_laaws_demo_solr()
 Run_laaws_edina_indexer()
 {
   Run_Dependencies 'laaws_demo_solr' 'laaws_demo_hdfs'
+  Wait_For_Port "${SOLR_HOST}" "${SOLR_PORT}" "${SLEEP}"
+  Wait_For_Port "${HDFS_HOST}" "${HDFS_FSMD}" "${SLEEP}"
   Run_Docker 'laaws-edina-indexer'
 }
 
@@ -197,6 +197,7 @@ Run_laaws_edina_indexer()
 Run_laaws_openwayback()
 {
   Run_Dependencies 'laaws-demo-hdfs'
+  Wait_For_Port "${HDFS_HOST}" "${HDFS_FSMD}" "${SLEEP}"
   Run_Docker 'laaws-openwayback'
 }
 
