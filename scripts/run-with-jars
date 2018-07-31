@@ -266,10 +266,10 @@ Run_lockss_repository_service()
 ## MAIN
 ##
 
-# Source plain.sh and common.sh 
+# Source conf.jars.sh and conf.sh 
 set -a
-source "${CONFIG_DIR}/conf/plain.sh"
-source "${CONFIG_DIR}/conf/common.sh"
+source "${CONFIG_DIR}/conf/conf.jars.sh"
+source "${CONFIG_DIR}/conf/conf.sh"
 set +a
 
 # Option parsing loop

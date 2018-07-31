@@ -28,13 +28,28 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-CONFIGDIR="$(dirname "${0}")/../config"
+##
+## Relative paths
+##
 
-#
-# Source docker-conf.sh and common-conf.sh 
-#
+_0=$(basename "${0}")
+_D0=$(dirname "${0}")
+
+##
+## Definitions
+##
+
+CONFIG_DIR="${_D0}/../config"
+
+##
+## MAIN
+##
+
+# Source conf.docker.sh and conf.sh 
 set -a
-. "${CONFIGDIR}/conf/docker.sh"
-. "${CONFIGDIR}/conf/common.sh"
+. "${CONFIG_DIR}/conf/conf.docker.sh"
+. "${CONFIG_DIR}/conf/conf.sh"
 set +a
+
+# Docker-Compose
 docker-compose up --build "$@"
