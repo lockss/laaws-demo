@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (c) 2000-2018, Board of Trustees of Leland Stanford Jr. University
 # All rights reserved.
@@ -28,9 +28,78 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-VARIANT='plain'
-CFG_HOST='localhost'
-MDQ_HOST='localhost'
-PGSQL_HOST='localhost'
-HDFS_HOST='localhost'
-SOLR_HOST='localhost'
+_0=$(basename "${0}")
+
+##
+## function Check_Docker
+##
+
+Check_Docker()
+{
+  if ! docker info &> /dev/null ; then
+    echo "${_0}: Docker is not running"
+    exit 1
+  fi
+}
+
+##
+## function Check_Installed
+##
+
+Check_Installed()
+{
+  while [ "X${1}" != "X" ]; do
+    if ! which "${1}" &> /dev/null ; then
+      echo "${_0}: ${1} not on the PATH (${PATH})"
+      exit 1
+    fi
+    shift
+  done
+}
+
+##
+## function Get_Value
+##
+
+Get_Value()
+{
+  local PAIR="${1}"
+  echo "${PAIR}" | sed -e 's@^[^=]\+=@@'
+}
+
+##
+## function Wait_For_200
+##
+
+Wait_For_200()
+{
+  local HOST="${1}"
+  local PORT="${2}"
+  local SLEEP="${3}"
+  if [ "X${SLEEP}" = "X" ]; then
+    SLEEP='30'
+  fi
+  local URL="http://${HOST}:${PORT}/status"
+  while true ; do
+    echo -n "Waiting for ${URL} ... " && curl --silent --fail --output /dev/null "${URL}" && echo "succeeded" && break
+    echo "failed; retrying in ${SLEEP} seconds" && sleep "${SLEEP}"
+  done
+}
+
+##
+## function Wait_For_Port
+##
+
+Wait_For_Port()
+{
+  local HOST="${1}"
+  local PORT="${2}"
+  local SLEEP="${3}"
+  if [ "X${SLEEP}" = "X" ]; then
+    SLEEP='30'
+  fi
+  while true ; do
+    echo -n "Waiting for ${HOST}:${PORT} ... " && nc -z "${HOST}" "${PORT}" && echo "succeeded" && break
+    echo "failed; retrying in ${SLEEP} seconds" && sleep "${SLEEP}"
+  done
+}

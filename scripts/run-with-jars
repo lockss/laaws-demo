@@ -1,0 +1,335 @@
+#!/bin/sh
+
+# Copyright (c) 2000-2018, Board of Trustees of Leland Stanford Jr. University
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without modification,
+# are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice, this
+# list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation and/or
+# other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its contributors
+# may be used to endorse or promote products derived from this software without
+# specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+# ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+##
+## Relative paths
+##
+
+_0=$(basename "${0}")
+_D0=$(dirname "${0}")
+
+##
+## Load _util
+##
+
+. "${_D0}/_util"
+
+##
+## Definitions
+##
+
+# Directories
+CONFIG_DIR="${_D0}/../config"
+PID_DIR="${_D0}/../pids"
+LOG_DIR="${_D0}/../logs"
+JAR_DIR="${_D0}/../jars"
+
+# Maven-related
+SNAPSHOTS='https://oss.sonatype.org/content/repositories/snapshots'
+RELEASES='https://repo.maven.apache.org/maven2'
+
+# Other
+SLEEP='30'
+OFFLINE='false'
+TARGETS=''
+
+##
+## function Add_Docker_Targets
+##
+
+Add_Docker_Targets()
+{
+  while [ "X${1}" != "X" ]; do
+    if echo "${DOCKER_TARGETS}" | grep -vq " ${1} " ; then
+      DOCKER_TARGETS="${DOCKER_TARGETS} ${1} "
+    fi
+    shift
+  done
+}
+
+##
+## function Get_Artifact
+##
+
+Get_Artifact()
+{
+  local SVC_GRP="${1}"
+  local SVC_ART="${2}"
+  local SVC_VERSION="${3}"
+  local ARTSTR="${SVC_GRP}:${SVC_ART}:${SVC_VERSION}"
+  local REPO=''
+  case "${SVC_VERSION}" in
+    *-SNAPSHOT) REPO="${SNAPSHOTS}";;
+    *)          REPO="${RELEASES}";;
+  esac
+  local MVN_OFFLINE=''
+  if [ "X${OFFLINE}" = "Xtrue" ]; then
+    MVN_OFFLINE='--offline'
+  else
+    mvn dependency:get "-Dartifact=${ARTSTR}" "-DremoteRepositories=${REPO}" -Dtransitive=false
+  fi
+  mvn $MVN_OFFLINE dependency:copy "-Dartifact=${ARTSTR}" "-DoutputDirectory=${JAR_DIR}" -Dmdep.useBaseVersion=true
+}
+
+##
+## function Print_Usage
+##
+
+Print_Usage()
+{
+  cat <<END_OF_STRING
+Usage: ${_0} [--offline] [--sleep=N] [--help]
+
+    --help, -help, -h          Print this message and exit
+    --offline, -offline, -o    Skip Maven operations that would go online
+    --sleep=N, -sleep N, -s N  Set sleep interval to N seconds (default ${SLEEP})
+END_OF_STRING
+}
+
+##
+## function Run_Dependencies
+##
+
+Run_Dependencies()
+{
+  while [ "X${1}" != "X" ]; do
+    Run_$1
+    shift
+  done
+}
+
+##
+## function Run_Docker
+##
+
+Run_Docker()
+{
+  local DOCKER_COMPOSE_FILE="${_D0}/../docker-compose.yaml"
+  docker-compose "--file=${DOCKER_COMPOSE_FILE}" up --build --detach "$@"
+}
+
+##
+## function Run_Jar
+##
+
+Run_Jar()
+{
+  local SVC_NAME="${1}"
+  local SVC_GRP="${2}"
+  local SVC_ART="${3}"
+  local SVC_VERSION="${4}"
+  local SVC_CMD="${5}"
+  local SVC_JAR="${JAR_DIR}/${SVC_ART}-${SVC_VERSION}.jar"
+  local SVC_PID="${PID_DIR}/${SVC_NAME}.pid"
+  local SVC_OUT="${LOG_DIR}/${SVC_NAME}.out"
+
+  if [ ! -f "${SVC_PID}" ]; then
+    echo "Starting ${SVC_NAME}..."
+    Get_Artifact "${SVC_GRP}" "${SVC_ART}" "${SVC_VERSION}"
+    java -jar "${SVC_JAR}" ${SVC_CMD} &> "${SVC_OUT}" &
+    echo "$!" > "${SVC_PID}"
+  fi
+}
+
+##
+## function Run_laaws_demo_hdfs
+##
+
+Run_laaws_demo_hdfs()
+{
+  Run_Docker 'laaws-demo-hdfs'
+  Wait_For_Port "${HDFS_HOST}" "${HDFS_FSMD}" "${SLEEP}"
+}
+
+##
+## function Run_laaws_demo_solr
+##
+
+Run_laaws_demo_solr()
+{
+  Run_Docker 'laaws-demo-solr'
+  Wait_For_Port "${SOLR_HOST}" "${SOLR_PORT}" "${SLEEP}"
+}
+
+##
+## function Run_laaws_edina_indexer
+##
+
+Run_laaws_edina_indexer()
+{
+  Run_Dependencies 'laaws_demo_solr' 'laaws_demo_hdfs'
+  Run_Docker 'laaws-edina-indexer'
+}
+
+##
+## function Run_laaws_openwayback
+##
+
+Run_laaws_openwayback()
+{
+  Run_Dependencies 'laaws-demo-hdfs'
+  Run_Docker 'laaws-openwayback'
+}
+
+##
+## function Run_lockss_configuration_service
+##
+
+Run_lockss_configuration_service()
+{
+  Run_Dependencies 'lockss_repository_service'
+  Run_Jar 'lockss-configuration-service' "${CFG_GRP}" "${CFG_ART}" "${CFG_VERSION}" "${CFG_CMD}"
+}
+
+##
+## function Run_lockss_metadata_extraction_service
+##
+
+Run_lockss_metadata_extraction_service()
+{
+  Run_Dependencies 'lockss_configuration_service' 'lockss_metadata_pgsql'
+  Run_Jar 'lockss-metadata-extraction-service' "${MDX_GRP}" "${MDX_ART}" "${MDX_VERSION}" "${MDX_CMD}"
+}
+
+##
+## function Run_lockss_metadata_pgsql
+##
+
+Run_lockss_metadata_pgsql()
+{
+  Run_Docker 'lockss-metadata-pgsql'
+}
+
+##
+## function Run_lockss_metadata_service
+##
+
+Run_lockss_metadata_service()
+{
+  Run_Dependencies 'lockss_configuration_service' 'lockss_metadata_pgsql'
+  Run_Jar 'lockss-metadata-service' "${MDQ_GRP}" "${MDQ_ART}" "${MDQ_VERSION}" "${MDQ_CMD}"
+  Wait_For_200 "${MDQ_HOST}" "${MDQ_PORT}" "${SLEEP}"
+}
+
+##
+## function Run_lockss_poller
+##
+
+Run_lockss_poller()
+{
+  Run_Dependencies 'lockss_configuration_service'
+  Run_Jar 'lockss-poller' "${POL_GRP}" "${POL_ART}" "${POL_VERSION}" "${POL_CMD}"
+}
+
+##
+## function Run_lockss_repository_service
+##
+
+Run_lockss_repository_service()
+{
+  Run_Dependencies 'laaws_demo_solr' 'laaws_demo_hdfs'
+  Run_Jar "lockss-repository-service" "${REPO_GRP}" "${REPO_ART}" "${REPO_VERSION}" "${REPO_CMD}"
+}
+
+##
+## MAIN
+##
+
+# Source plain.sh and common.sh 
+set -a
+source "${CONFIG_DIR}/conf/plain.sh"
+source "${CONFIG_DIR}/conf/common.sh"
+set +a
+
+# Option parsing loop
+while true ; do
+  case "${1}" in
+    -h|-help|--help)
+      Print_Usage
+      exit 0
+      ;;
+    -o|-offline|--offline)
+      OFFLINE=true
+      shift ; continue
+      ;;
+    -s|-sleep)
+      SLEEP="${2}"
+      shift ; shift ; continue
+      ;;
+    --sleep=*)
+      SLEEP=$(Get_Value "${1}")
+      shift ; continue
+      ;;
+    -*|--*)
+      echo "${_0}: unknown option: ${1}"
+      exit 1
+      ;;
+  esac
+  break
+done
+
+# Parse requested targets
+if [ "X${1}" = "X" ]; then
+  TARGETS='lockss_metadata_service lockss_metadata_extraction_service lockss_poller laaws_openwayback laaws_edina_indexer'
+else
+  while [ "X${1}" != "X" ]; do
+    case "${1}" in
+      laaws-edina-indexer)                TARGETS="${TARGETS} laaws_edina_indexer";;
+      laaws-openwayback)                  TARGETS="${TARGETS} laaws_openwayback";;
+      lockss-configuration-service)       TARGETS="${TARGETS} lockss_configuration_service";;
+      lockss-metadata-extraction-service) TARGETS="${TARGETS} lockss_metadata_extraction_service";;
+      lockss-metadata-service)            TARGETS="${TARGETS} lockss_metadata_service";;
+      lockss-poller)                      TARGETS="${TARGETS} lockss_poller";;
+      lockss-repository-service)          TARGETS="${TARGETS} lockss_repository_service";;
+      laaws-demo-hdfs|laaws-demo-solr|lockss-metadata-pgsql)
+        echo "${_0}: unavailable target: ${1}"
+        exit 1
+        ;;
+      *)
+        echo "${_0}: unknown target: ${1}"
+        exit 1
+        ;;
+    esac
+    shift
+  done
+fi
+
+# Sanity checks
+Check_Installed 'curl' 'docker' 'docker-compose' 'java' 'mvn' 'nc'
+Check_Docker
+if [ ! -d "${JAR_DIR}" ]; then
+  mkdir "${JAR_DIR}"
+fi
+if [ ! -d "${PID_DIR}" ]; then
+  mkdir "${PID_DIR}"
+fi
+
+# Run targets
+Run_Dependencies $TARGETS

@@ -106,7 +106,7 @@ POSTGRES_PASSWORD=goodPassword
 POSTGRES_DB=postgres
 
 # Solr container configuration
-SOLR_HOST=laaws-demo-solr
+# set SOLR_HOST in variant file
 SOLR_PORT='8983'
 SOLR_CMD='solr-precreate-several.sh demo test-core'
 

@@ -90,33 +90,6 @@ END_OF_STRING
 }
 
 ##
-## function Wait_For_200
-##
-Wait_For_200()
-{
-  local HOST="${1}"
-  local PORT="${2}"
-  local URL="http://${HOST}:${PORT}/status"
-  while true ; do
-    echo -n "Waiting for ${URL} ... " && curl --silent --fail --output /dev/null "${URL}" && echo "succeeded" && break
-    echo "failed; retrying in ${SLEEP} seconds" && sleep $SLEEP
-  done
-}
-
-##
-## function Wait_For_Port
-##
-Wait_For_Port()
-{
-  local HOST="${1}"
-  local PORT="${2}"
-  while true ; do
-    echo -n "Waiting for ${HOST}:${PORT} ... " && nc -z ${HOST} ${PORT} && echo "succeeded" && break
-    echo "failed; retrying in ${SLEEP} seconds" && sleep $SLEEP
-  done
-}
-
-##
 ## Definitions
 ##
 
