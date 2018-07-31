@@ -1,0 +1,3 @@
+# Ignore lockss.xml which is mapped to a volume map in docker-compose.yaml from a variant
+
+lockss.xml
