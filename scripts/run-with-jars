@@ -141,20 +141,22 @@ Run_Docker()
 
 Run_Jar()
 {
-  local SVC_NAME="${1}"
-  local SVC_GRP="${2}"
-  local SVC_ART="${3}"
-  local SVC_VERSION="${4}"
+  local TARGET_NAME="${1}"
+  local MVN_GRP="${2}"
+  local MVN_ART="${3}"
+  local MVN_VERSION="${4}"
   local SVC_CMD="${5}"
   local SVC_JAR="${JAR_DIR}/${SVC_ART}-${SVC_VERSION}.jar"
   local SVC_PID="${PID_DIR}/${SVC_NAME}.pid"
   local SVC_OUT="${LOG_DIR}/${SVC_NAME}.out"
 
   if [ ! -f "${SVC_PID}" ]; then
-    echo "Starting ${SVC_NAME}..."
-    Get_Artifact "${SVC_GRP}" "${SVC_ART}" "${SVC_VERSION}"
+    echo "Starting ${TARGET_NAME}..."
+    Get_Artifact "${MVN_GRP}" "${MVN_ART}" "${MVN_VERSION}"
     java -jar "${SVC_JAR}" ${SVC_CMD} &> "${SVC_OUT}" &
-    echo "$!" > "${SVC_PID}"
+    local PID="$!"
+    echo "${PID}" > "${SVC_PID}"
+    echo "Successfully started ${TARGET_NAME}: ${PID}"
   fi
 }
 
@@ -225,6 +227,7 @@ Run_lockss_metadata_extraction_service()
 Run_lockss_metadata_pgsql()
 {
   Run_Docker 'lockss-metadata-pgsql'
+  Wait_For_Port "${PGSQL_HOST}" "${PGSQL_PORT}" "${SLEEP}"
 }
 
 ##
@@ -301,14 +304,18 @@ if [ "X${1}" = "X" ]; then
 else
   while [ "X${1}" != "X" ]; do
     case "${1}" in
-      laaws-edina-indexer)                TARGETS="${TARGETS} laaws_edina_indexer";;
-      laaws-openwayback)                  TARGETS="${TARGETS} laaws_openwayback";;
-      lockss-configuration-service)       TARGETS="${TARGETS} lockss_configuration_service";;
-      lockss-metadata-extraction-service) TARGETS="${TARGETS} lockss_metadata_extraction_service";;
-      lockss-metadata-service)            TARGETS="${TARGETS} lockss_metadata_service";;
-      lockss-poller)                      TARGETS="${TARGETS} lockss_poller";;
-      lockss-repository-service)          TARGETS="${TARGETS} lockss_repository_service";;
-      laaws-demo-hdfs|laaws-demo-solr|lockss-metadata-pgsql)
+      laaws-edina-indexer|\
+      laaws-openwayback|\
+      lockss-configuration-service|\
+      lockss-metadata-extraction-service|\
+      lockss-metadata-service|\
+      lockss-poller|\
+      lockss-repository-service)
+        TARGETS="${TARGETS} $(echo "${1}" | sed -e 's@-@_@g')"
+        ;;
+      laaws-demo-hdfs|\
+      laaws-demo-solr|\
+      lockss-metadata-pgsql)
         echo "${_0}: unavailable target: ${1}"
         exit 1
         ;;
@@ -324,12 +331,8 @@ fi
 # Sanity checks
 Check_Installed 'curl' 'docker' 'docker-compose' 'java' 'mvn' 'nc'
 Check_Docker
-if [ ! -d "${JAR_DIR}" ]; then
-  mkdir "${JAR_DIR}"
-fi
-if [ ! -d "${PID_DIR}" ]; then
-  mkdir "${PID_DIR}"
-fi
+mkdir -p "${JAR_DIR}"
+mkdir -p "${PID_DIR}"
 
 # Run targets
 Run_Dependencies $TARGETS
