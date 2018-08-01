@@ -34,12 +34,3 @@ MDQ_HOST='lockss-metadata-service'
 PGSQL_HOST='lockss-metadata-pgsql'
 HDFS_HOST='laaws-demo-hdfs'
 SOLR_HOST='laaws-demo-solr'
-
-#
-# Source docker-conf.sh and common-conf.sh 
-#
-set -a
-. "${CONFIGDIR}/conf/docker.sh"
-. "${CONFIGDIR}/conf/common.sh"
-set +a
-docker-compose -f docker-compose.yaml -f docker-compose.props.yaml up --build "$@"

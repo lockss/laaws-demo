@@ -52,4 +52,4 @@ set -a
 set +a
 
 # Docker-Compose
-docker-compose up --build "$@"
+docker-compose -f docker-compose.yaml -f docker-compose.props.yaml up --build "$@"
