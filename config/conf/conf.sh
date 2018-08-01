@@ -43,7 +43,6 @@ CFG_CMD="-b config/cluster/bootstrap.txt
          -p config/cluster/cluster.${VARIANT}.opt
          -p config/lockss-configuration-service/lockss.txt
          -p config/lockss-configuration-service/lockss.opt
-         -x config/tdbxml
          -l config/cluster/cluster.txt
          -l config/cluster/cluster.opt
          -l config/cluster/cluster.${VARIANT}.txt
@@ -56,7 +55,6 @@ MDQ_VERSION='1.0.0-SNAPSHOT'
 MDQ_PORT='49520'
 MDQ_UI='49521'
 MDQ_CMD="-c http://lockss-u:lockss-p@${CFG_HOST}:${CFG_PORT}
-         -x config/tdbxml
          -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster
          -p config/lockss-metadata-service/lockss.txt
          -p config/lockss-metadata-service/lockss.opt
@@ -69,7 +67,6 @@ MDX_VERSION='1.1.0-SNAPSHOT'
 MDX_PORT='28120'
 MDX_UI='28121'
 MDX_CMD="-c http://lockss-u:lockss-p@${CFG_HOST}:${CFG_PORT}
-         -x config/tdbxml
          -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster
          -p config/lockss-metadata-extraction-service/lockss.txt
          -p config/lockss-metadata-extraction-service/lockss.opt
@@ -130,3 +127,7 @@ LOCKSS_SOLR_HDFSMNT=/laaws-demo-hdfs
 LOCKSS_SOLR_WATCHDIR=${LOCKSS_SOLR_HDFSMNT}/${REPO_BASEDIR}/sealed
 LOCKSS_SOLR_WATCHDIR_INTERVAL=10 # Seconds
 LOCKSS_SOLR_URL=http://${SOLR_HOST}:${SOLR_PORT}/solr/test-core
+
+# Demo props server
+# set PROPS_HOST in variant file
+PROPS_PORT=8001

@@ -56,23 +56,10 @@ SNAPSHOTS='https://oss.sonatype.org/content/repositories/snapshots'
 RELEASES='https://repo.maven.apache.org/maven2'
 
 # Other
-SLEEP='30'
 OFFLINE='false'
+PROPS_URL=''
+SLEEP='30'
 TARGETS=''
-
-##
-## function Add_Docker_Targets
-##
-
-Add_Docker_Targets()
-{
-  while [ "X${1}" != "X" ]; do
-    if echo "${DOCKER_TARGETS}" | grep -vq " ${1} " ; then
-      DOCKER_TARGETS="${DOCKER_TARGETS} ${1} "
-    fi
-    shift
-  done
-}
 
 ##
 ## function Get_Artifact
@@ -105,11 +92,13 @@ Get_Artifact()
 Print_Usage()
 {
   cat <<END_OF_STRING
-Usage: ${_0} [--offline] [--sleep=N] [--help]
+Usage: ${_0} [--offline] [--props-url=U] [--sleep=N]
+       ${_0} [--help]
 
-    --help, -help, -h          Print this message and exit
-    --offline, -offline, -o    Skip Maven operations that would go online
-    --sleep=N, -sleep N, -s N  Set sleep interval to N seconds (default ${SLEEP})
+  --help, -help, -h                  Print this message and exit
+  --offline, -offline, -o            Skip Maven operations that would go online
+  --props-url=U, -props-url U, -p U  Use remote props URL U
+  --sleep=N, -sleep N, -s N          Set retry pause to N seconds (default ${SLEEP})
 END_OF_STRING
 }
 
@@ -132,7 +121,8 @@ Run_Dependencies()
 Run_Docker()
 {
   local DOCKER_COMPOSE_FILE="${_D0}/../docker-compose.yaml"
-  docker-compose "--file=${DOCKER_COMPOSE_FILE}" up --build --detach "$@"
+  local DOCKER_COMPOSE_PROPS_FILE="${_D0}/../docker-compose.props.yaml"
+  docker-compose "--file=${DOCKER_COMPOSE_FILE}" "--file=${DOCKER_COMPOSE_PROPS_FILE}" up --build --detach "$@"
 }
 
 ##
@@ -146,9 +136,9 @@ Run_Jar()
   local MVN_ART="${3}"
   local MVN_VERSION="${4}"
   local SVC_CMD="${5}"
-  local SVC_JAR="${JAR_DIR}/${SVC_ART}-${SVC_VERSION}.jar"
-  local SVC_PID="${PID_DIR}/${SVC_NAME}.pid"
-  local SVC_OUT="${LOG_DIR}/${SVC_NAME}.out"
+  local SVC_JAR="${JAR_DIR}/${MVN_ART}-${MVN_VERSION}.jar"
+  local SVC_PID="${PID_DIR}/${TARGET_NAME}.pid"
+  local SVC_OUT="${LOG_DIR}/${TARGET_NAME}.out"
 
   if [ ! -f "${SVC_PID}" ]; then
     echo "Starting ${TARGET_NAME}..."
@@ -207,8 +197,26 @@ Run_laaws_openwayback()
 
 Run_lockss_configuration_service()
 {
-  Run_Dependencies 'lockss_repository_service'
+  Run_Dependencies 'lockss_demo_props' 'lockss_repository_service'
+  local URL=''
+  if [ "X${PROPS_URL}" = "X" ]; then
+    URL="http://${PROPS_HOST}:${PROPS_PORT}/lockss.xml"
+  else
+    URL="${PROPS_URL}"
+  fi
+  CFG_CMD="-p ${URL} -l ${URL} ${CFG_CMD}"
   Run_Jar 'lockss-configuration-service' "${CFG_GRP}" "${CFG_ART}" "${CFG_VERSION}" "${CFG_CMD}"
+}
+
+##
+## function Run_lockss_demo_props
+##
+
+Run_lockss_demo_props()
+{
+  if [ "X${PROPS_URL}" = "X" ]; then
+    Run_Docker 'lockss-demo-props'
+  fi
 }
 
 ##
@@ -277,24 +285,25 @@ while true ; do
   case "${1}" in
     -h|-help|--help)
       Print_Usage
-      exit 0
-      ;;
+      exit 0 ;;
     -o|-offline|--offline)
       OFFLINE=true
-      shift ; continue
-      ;;
+      shift ; continue ;;
+    -p|-props-url)
+      PROPS_URL="${2}"
+      shift ; shift ; continue ;;
+    --props-url=*)
+      PROPS_URL=$(Get_Value "${1}")
+      shift ; continue ;;
     -s|-sleep)
       SLEEP="${2}"
-      shift ; shift ; continue
-      ;;
+      shift ; shift ; continue ;;
     --sleep=*)
       SLEEP=$(Get_Value "${1}")
-      shift ; continue
-      ;;
+      shift ; continue ;;
     -*|--*)
       echo "${_0}: unknown option: ${1}"
-      exit 1
-      ;;
+      exit 1 ;;
   esac
   break
 done
@@ -316,6 +325,7 @@ else
         ;;
       laaws-demo-hdfs|\
       laaws-demo-solr|\
+      lockss-demo-props|\
       lockss-metadata-pgsql)
         echo "${_0}: unavailable target: ${1}"
         exit 1
