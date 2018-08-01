@@ -36,10 +36,39 @@ _0=$(basename "${0}")
 _D0=$(dirname "${0}")
 
 ##
+## Load _util
+##
+
+. "${_D0}/_util"
+
+##
 ## Definitions
 ##
 
+# Directories
 CONFIG_DIR="${_D0}/../config"
+
+# Files
+DOCKER_COMPOSE_FILE="${_D0}/../docker-compose.yaml"
+DOCKER_COMPOSE_PROPS_FILE="${_D0}/../docker-compose.props.yaml"
+
+# Other
+PROPS_URL=''
+
+##
+## function Print_Usage
+##
+
+Print_Usage()
+{
+  cat <<END_OF_STRING
+Usage: ${_0} [--props-url=U]
+       ${_0} [--help]
+
+  --help, -help, -h                  Print this message and exit
+  --props-url=U, -props-url U, -p U  Use remote props URL U
+END_OF_STRING
+}
 
 ##
 ## MAIN
@@ -51,5 +80,39 @@ set -a
 . "${CONFIG_DIR}/conf/conf.sh"
 set +a
 
+# Option parsing loop
+while true ; do
+  case "${1}" in
+    -h|-help|--help)
+      Print_Usage
+      exit 0 ;;
+    -p|-props-url)
+      PROPS_URL="${2}"
+      shift ; shift ; continue ;;
+    --props-url=*)
+      PROPS_URL=$(Get_Value "${1}")
+      shift ; continue ;;
+    -*|--*)
+      echo "${_0}: unknown option: ${1}"
+      exit 1 ;;
+  esac
+  break
+done
+
+# Sanity checks
+Check_Installed 'docker' 'docker-compose'
+Check_Docker
+
+# Props URL
+URL=''
+DOCKER_COMPOSE_FLAGS="--file=${DOCKER_COMPOSE_FILE}"
+if [ "X${PROPS_URL}" = "X" ]; then
+  URL="http://${PROPS_HOST}:${PROPS_PORT}/lockss.xml"
+  DOCKER_COMPOSE_FLAGS="${DOCKER_COMPOSE_FLAGS} --file=${DOCKER_COMPOSE_PROPS_FILE}"  
+else
+  URL="${PROPS_URL}"
+fi
+CFG_CMD="-p ${URL} -l ${URL} ${CFG_CMD}"
+
 # Docker-Compose
-docker-compose -f docker-compose.yaml -f docker-compose.props.yaml up --build "$@"
+docker-compose $DOCKER_COMPOSE_FLAGS up --build "$@"
