@@ -30,6 +30,9 @@
 
 MVN_GRP='org.lockss.laaws'
 
+UI_USER='lockss-u'
+UI_PASS='lockss-p'
+
 CFG_GRP="${MVN_GRP}"
 CFG_ART='laaws-configuration-service'
 CFG_VERSION='1.1.0-SNAPSHOT'
@@ -54,7 +57,7 @@ MDQ_VERSION='1.0.0-SNAPSHOT'
 # MDQ_HOST set in variant file
 MDQ_PORT='49520'
 MDQ_UI='49521'
-MDQ_CMD="-c http://lockss-u:lockss-p@${CFG_HOST}:${CFG_PORT}
+MDQ_CMD="-c http://${UI_USER}:${UI_PASS}@${CFG_HOST}:${CFG_PORT}
          -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster
          -p config/lockss-metadata-service/lockss.txt
          -p config/lockss-metadata-service/lockss.opt
@@ -66,7 +69,7 @@ MDX_ART='laaws-metadata-extraction-service'
 MDX_VERSION='1.1.0-SNAPSHOT'
 MDX_PORT='28120'
 MDX_UI='28121'
-MDX_CMD="-c http://lockss-u:lockss-p@${CFG_HOST}:${CFG_PORT}
+MDX_CMD="-c http://${UI_USER}:${UI_PASS}@${CFG_HOST}:${CFG_PORT}
          -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster
          -p config/lockss-metadata-extraction-service/lockss.txt
          -p config/lockss-metadata-extraction-service/lockss.opt
@@ -78,7 +81,7 @@ POL_ART='laaws-poller'
 POL_VERSION='1.0.0-SNAPSHOT'
 POL_PORT='25250'
 POL_UI='25251'
-POL_CMD="-c http://lockss-u:lockss-p@${CFG_HOST}:${CFG_PORT}
+POL_CMD="-c http://${UI_USER}:${UI_PASS}@${CFG_HOST}:${CFG_PORT}
          -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster
          -p config/lockss-poller/lockss.txt
          -p config/lockss-poller/lockss.opt
