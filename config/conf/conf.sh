@@ -51,6 +51,9 @@ CFG_CMD="-b config/cluster/bootstrap.txt
          -l config/cluster/cluster.${VARIANT}.txt
          -l config/cluster/cluster.${VARIANT}.opt"
 
+JMS_HOST="${CFG_HOST}"
+JMS_PORT='61616'
+
 MDQ_GRP="${MVN_GRP}"
 MDQ_ART='laaws-metadata-service'
 MDQ_VERSION='1.0.0-SNAPSHOT'
@@ -58,7 +61,6 @@ MDQ_VERSION='1.0.0-SNAPSHOT'
 MDQ_PORT='49520'
 MDQ_UI='49521'
 MDQ_CMD="-c http://${UI_USER}:${UI_PASS}@${CFG_HOST}:${CFG_PORT}
-         -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster
          -p config/lockss-metadata-service/lockss.txt
          -p config/lockss-metadata-service/lockss.opt
          -p config/lockss-metadata-service/lockss.${VARIANT}.txt
@@ -70,7 +72,6 @@ MDX_VERSION='1.1.0-SNAPSHOT'
 MDX_PORT='28120'
 MDX_UI='28121'
 MDX_CMD="-c http://${UI_USER}:${UI_PASS}@${CFG_HOST}:${CFG_PORT}
-         -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster
          -p config/lockss-metadata-extraction-service/lockss.txt
          -p config/lockss-metadata-extraction-service/lockss.opt
          -p config/lockss-metadata-extraction-service/lockss.${VARIANT}.txt
@@ -82,7 +83,6 @@ POL_VERSION='1.0.0-SNAPSHOT'
 POL_PORT='25250'
 POL_UI='25251'
 POL_CMD="-c http://${UI_USER}:${UI_PASS}@${CFG_HOST}:${CFG_PORT}
-         -p http://${CFG_HOST}:${CFG_PORT}/config/file/cluster
          -p config/lockss-poller/lockss.txt
          -p config/lockss-poller/lockss.opt
          -p config/lockss-poller/lockss.${VARIANT}.opt
@@ -94,6 +94,7 @@ REPO_ART='laaws-repository-service'
 REPO_VERSION='1.8.0-SNAPSHOT'
 REPO_PORT='32640'
 REPO_CMD="--spring.config.location=file:./config/lockss-repository-service/demo.properties,file:./config/lockss-repository-service/demo.properties.opt,file:./config/lockss-repository-service/demo.${VARIANT}.properties,file:./config/lockss-repository-service/demo.${VARIANT}.properties.opt"
+REPO_JARGS="-Dorg.lockss.jmsUri=tcp://${JMS_HOST}:${JMS_PORT}"
 REPO_BASEDIR=/lockss # TODO: Propagate this to projects
 REPO_MAX_WARC_SIZE=1048576 # 1 MB
 

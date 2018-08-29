@@ -51,6 +51,7 @@ services:
     ports:
       - "${CFG_PORT}:${CFG_PORT}"
       - "${CFG_UI}:${CFG_UI}"
+      - "${JMS_PORT}:${JMS_PORT}"
     command: "${CFG_CMD}"
     links:
       - lockss-repository-service
@@ -61,6 +62,7 @@ services:
       - ./config/host:/opt/lockss/config/host
       - ./config/lockss-configuration-service:/opt/lockss/config/lockss-configuration-service
       - ./storage/lockss-configuration-service:/opt/lockss/storage
+      - ./logs/lockss-configuration-service:/opt/lockss/logs
 
   lockss-metadata-service:
     build:
@@ -142,6 +144,7 @@ services:
       - ${REPO_PORT}:${REPO_PORT}
     command: "${REPO_CMD}"
     environment:
+      - "JVM_ARGS=${REPO_JARGS}"
       - REPO_MAX_WARC_SIZE
       - SOLR_HOST
       - SOLR_PORT
