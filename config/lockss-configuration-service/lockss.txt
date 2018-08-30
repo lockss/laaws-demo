@@ -26,5 +26,4 @@
 
 org.lockss.ui.port=54421
 org.lockss.crawler.enabled=true
-org.lockss.config.jms.enableSend=true
 org.lockss.plugin.jms.enable=true
