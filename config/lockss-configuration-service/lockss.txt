@@ -25,7 +25,6 @@
 # Don't make local changes in this file; put local settings in lockss.opt
 
 org.lockss.ui.port=54421
-org.lockss.jms.broker.start=true
-org.lockss.jms.enable=true
-org.lockss.plugin.jms.enable=true
 org.lockss.crawler.enabled=true
+org.lockss.config.jms.enableSend=true
+org.lockss.plugin.jms.enable=true

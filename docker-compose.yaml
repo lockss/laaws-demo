@@ -85,6 +85,7 @@ services:
       - ./config/host:/opt/lockss/config/host
       - ./config/lockss-metadata-service:/opt/lockss/config/lockss-metadata-service
       - ./storage/lockss-metadata-service:/opt/lockss/storage
+      - ./logs/lockss-metadata-service:/opt/lockss/logs
 
   lockss-metadata-extraction-service:
     build:
@@ -106,7 +107,8 @@ services:
       - ./config/cluster:/opt/lockss/config/cluster
       - ./config/host:/opt/lockss/config/host
       - ./config/lockss-metadata-extraction-service:/opt/lockss/config/lockss-metadata-extraction-service
-      - ./storage/lockss-metadata-service:/opt/lockss/storage
+      - ./storage/lockss-metadata-extraction-service:/opt/lockss/storage
+      - ./logs/lockss-metadata-extraction-service:/opt/lockss/logs
 
   lockss-metadata-pgsql:
     image: postgres:9.6
@@ -137,6 +139,7 @@ services:
       - ./config/host:/opt/lockss/config/host
       - ./config/lockss-poller:/opt/lockss/config/lockss-poller
       - ./storage/lockss-poller:/opt/lockss/storage
+      - ./logs/lockss-poller:/opt/lockss/logs
 
   lockss-repository-service:
     image: lockss/laaws-repository-service:${REPO_VERSION}

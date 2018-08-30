@@ -40,16 +40,13 @@ CFG_VERSION='1.1.0-SNAPSHOT'
 CFG_PORT='54420'
 CFG_UI='54421'
 CFG_CMD="-b config/cluster/bootstrap.txt
-         -p config/cluster/cluster.txt
-         -p config/cluster/cluster.opt
-         -p config/cluster/cluster.${VARIANT}.txt
-         -p config/cluster/cluster.${VARIANT}.opt
-         -p config/lockss-configuration-service/lockss.txt
-         -p config/lockss-configuration-service/lockss.opt
          -l config/cluster/cluster.txt
          -l config/cluster/cluster.opt
          -l config/cluster/cluster.${VARIANT}.txt
-         -l config/cluster/cluster.${VARIANT}.opt"
+         -l config/cluster/cluster.${VARIANT}.opt
+         -p config/lockss-configuration-service/lockss.txt
+         -p config/lockss-configuration-service/lockss.opt"
+CFG_URL="http://${UI_USER}:${UI_PASS}@${CFG_HOST}:${CFG_PORT}"
 
 JMS_HOST="${CFG_HOST}"
 JMS_PORT='61616'
@@ -60,7 +57,9 @@ MDQ_VERSION='1.0.0-SNAPSHOT'
 # MDQ_HOST set in variant file
 MDQ_PORT='49520'
 MDQ_UI='49521'
-MDQ_CMD="-c http://${UI_USER}:${UI_PASS}@${CFG_HOST}:${CFG_PORT}
+MDQ_CMD="-b config/cluster/bootstrap.txt
+         -c ${CFG_URL}
+         -p ${CFG_URL}/config/file/cluster
          -p config/lockss-metadata-service/lockss.txt
          -p config/lockss-metadata-service/lockss.opt
          -p config/lockss-metadata-service/lockss.${VARIANT}.txt
@@ -71,7 +70,9 @@ MDX_ART='laaws-metadata-extraction-service'
 MDX_VERSION='1.1.0-SNAPSHOT'
 MDX_PORT='28120'
 MDX_UI='28121'
-MDX_CMD="-c http://${UI_USER}:${UI_PASS}@${CFG_HOST}:${CFG_PORT}
+MDX_CMD="-b config/cluster/bootstrap.txt
+         -c ${CFG_URL}
+         -p ${CFG_URL}/config/file/cluster
          -p config/lockss-metadata-extraction-service/lockss.txt
          -p config/lockss-metadata-extraction-service/lockss.opt
          -p config/lockss-metadata-extraction-service/lockss.${VARIANT}.txt
@@ -82,11 +83,13 @@ POL_ART='laaws-poller'
 POL_VERSION='1.0.0-SNAPSHOT'
 POL_PORT='25250'
 POL_UI='25251'
-POL_CMD="-c http://${UI_USER}:${UI_PASS}@${CFG_HOST}:${CFG_PORT}
+POL_CMD="-b config/cluster/bootstrap.txt
+         -c ${CFG_URL}
+         -p ${CFG_URL}/config/file/cluster
          -p config/lockss-poller/lockss.txt
          -p config/lockss-poller/lockss.opt
-         -p config/lockss-poller/lockss.${VARIANT}.opt
-         -p config/lockss-poller/lockss.${VARIANT}.txt"
+         -p config/lockss-poller/lockss.${VARIANT}.txt
+         -p config/lockss-poller/lockss.${VARIANT}.opt"
 
 # LAAWS repository service configuration
 REPO_GRP="${MVN_GRP}"
