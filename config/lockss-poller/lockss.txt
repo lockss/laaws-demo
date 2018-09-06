@@ -26,6 +26,9 @@
 # Don't make local changes in this file; put local settings in lockss.opt
 
 org.lockss.ui.port=25251
+org.lockss.plugin.jms.enable=true
+org.lockss.crawler.enabled=true
+org.lockss.crawler.crawlPriorituAuidMap=RegitryPlugin,-10000;.,1
 
 org.lockss.scomm.enabled=true
 org.lockss.scomm.maxMessageSize=33554430

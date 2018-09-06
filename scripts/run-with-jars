@@ -51,6 +51,10 @@ PID_DIR="${_D0}/../pids"
 LOG_DIR="${_D0}/../logs"
 JAR_DIR="${_D0}/../jars"
 
+# Files
+DOCKER_COMPOSE_FILE="${_D0}/../docker-compose.yaml"
+DOCKER_COMPOSE_PROPS_FILE="${_D0}/../docker-compose.props.yaml"
+
 # Maven-related
 SNAPSHOTS='https://oss.sonatype.org/content/repositories/snapshots'
 RELEASES='https://repo.maven.apache.org/maven2'
@@ -82,7 +86,7 @@ Get_Artifact()
   else
     mvn dependency:get "-Dartifact=${ARTSTR}" "-DremoteRepositories=${REPO}" -Dtransitive=false
   fi
-  mvn $MVN_OFFLINE dependency:copy "-Dartifact=${ARTSTR}" "-DoutputDirectory=${JAR_DIR}" -Dmdep.useBaseVersion=true
+  mvn $MVN_OFFLINE dependency:copy "-Dartifact=${ARTSTR}" "-DoutputDirectory=${JAR_DIR}" -Dmdep.overWriteReleases=true -Dmdep.overWriteSnapshots=true -Dmdep.useBaseVersion=true
 }
 
 ##
@@ -122,7 +126,8 @@ Run_Docker()
 {
   local DOCKER_COMPOSE_FILE="${_D0}/../docker-compose.yaml"
   local DOCKER_COMPOSE_PROPS_FILE="${_D0}/../docker-compose.props.yaml"
-  docker-compose "--file=${DOCKER_COMPOSE_FILE}" "--file=${DOCKER_COMPOSE_PROPS_FILE}" up --build --detach "$@"
+  
+  docker-compose "${DOCKER_COMPOSE_FLAGS}" up --build --detach "$@"
 }
 
 ##
@@ -186,7 +191,7 @@ Run_laaws_edina_indexer()
 
 Run_laaws_openwayback()
 {
-  Run_Dependencies 'laaws-demo-hdfs'
+  Run_Dependencies 'laaws_demo_hdfs'
   Wait_For_Port "${HDFS_HOST}" "${HDFS_FSMD}" "${SLEEP}"
   Run_Docker 'laaws-openwayback'
 }
@@ -344,6 +349,17 @@ Check_Installed 'curl' 'docker' 'docker-compose' 'java' 'mvn' 'nc'
 Check_Docker
 mkdir -p "${JAR_DIR}"
 mkdir -p "${PID_DIR}"
+
+# Props URL
+URL=''
+DOCKER_COMPOSE_FLAGS="--file=${DOCKER_COMPOSE_FILE}"
+if [ "X${PROPS_URL}" = "X" ]; then
+  URL="http://${PROPS_HOST}:${PROPS_PORT}/lockss.xml"
+  DOCKER_COMPOSE_FLAGS="${DOCKER_COMPOSE_FLAGS} --file=${DOCKER_COMPOSE_PROPS_FILE}"  
+else
+  URL="${PROPS_URL}"
+fi
+CFG_CMD="-p ${URL} -l ${URL} ${CFG_CMD}"
 
 # Run targets
 Run_Dependencies $TARGETS

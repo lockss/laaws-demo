@@ -35,19 +35,83 @@
 _0=$(basename "${0}")
 _D0=$(dirname "${0}")
 
-PARAM_DOCKER_COMPOSE_FLAGS=''
+##
+## Load _util
+##
+
+. "${_D0}/_util"
+
+##
+## Definitions
+##
+
+# Directories
+CONFIG_DIR="${_D0}/../config"
+
+# Files
+DOCKER_COMPOSE_FILE="${_D0}/../docker-compose.yaml"
+DOCKER_COMPOSE_PROPS_FILE="${_D0}/../docker-compose.props.yaml"
+
+# Other
+PROPS_URL=''
+
+##
+## function Print_Usage
+##
+
+Print_Usage()
+{
+  cat <<END_OF_STRING
+Usage: ${_0} [--props-url=U]
+       ${_0} [--help]
+
+  --help, -help, -h                  Print this message and exit
+  --props-url=U, -props-url U, -p U  Use remote props URL U
+END_OF_STRING
+}
+
+##
+## MAIN
+##
+
+# Source conf.docker.sh and conf.sh 
+set -a
+. "${CONFIG_DIR}/conf/conf.docker.sh"
+. "${CONFIG_DIR}/conf/conf.sh"
+set +a
 
 # Option parsing loop
 while true ; do
   case "${1}" in
-    -h|-help|--help|--props-url=*)
-      PARAM_DOCKER_COMPOSE_FLAGS="${PARAM_DOCKER_COMPOSE_FLAGS} ${1}"
-      shift ; continue ;;
+    -h|-help|--help)
+      Print_Usage
+      exit 0 ;;
     -p|-props-url)
-      PARAM_DOCKER_COMPOSE_FLAGS="${PARAM_DOCKER_COMPOSE_FLAGS} ${1} ${2}"
+      PROPS_URL="${2}"
       shift ; shift ; continue ;;
+    --props-url=*)
+      PROPS_URL=$(Get_Value "${1}")
+      shift ; continue ;;
+    --)
+      shift ;;
   esac
   break
 done
 
-${_D0}/param-docker-compose ${PARAM_DOCKER_COMPOSE_FLAGS} up --build "$@"
+# Sanity checks
+Check_Installed 'docker' 'docker-compose'
+Check_Docker
+
+# Props URL
+URL=''
+DOCKER_COMPOSE_FLAGS="--file=${DOCKER_COMPOSE_FILE}"
+if [ "X${PROPS_URL}" = "X" ]; then
+  URL="http://${PROPS_HOST}:${PROPS_PORT}/lockss.xml"
+  DOCKER_COMPOSE_FLAGS="${DOCKER_COMPOSE_FLAGS} --file=${DOCKER_COMPOSE_PROPS_FILE}"  
+else
+  URL="${PROPS_URL}"
+fi
+CFG_CMD="-l ${URL} ${CFG_CMD}"
+
+# Docker-Compose
+docker-compose $DOCKER_COMPOSE_FLAGS "$@"

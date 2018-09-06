@@ -21,9 +21,10 @@
 # Except as contained in this notice, the name of Stanford University shall not
 # be used in advertising or otherwise to promote the sale, use or other dealings
 # in this Software without prior written authorization from Stanford University.
-#
+
 # Don't make local changes in this file; put local settings in lockss.opt
 
 org.lockss.ui.port=54421
-org.lockss.crawler.enabled=true
 org.lockss.plugin.jms.enable=true
+org.lockss.crawler.enabled=true
+org.lockss.crawler.crawlPriorituAuidMap=RegitryPlugin,1;.,-10000
