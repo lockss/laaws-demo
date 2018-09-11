@@ -185,23 +185,44 @@ services:
     volumes:
       - ./config/laaws-demo-hdfs/etc/hadoop:/hadoop/etc/hadoop.custom
 
+  laaws-openwayback:
+    image: lockss/laaws-openwayback
+    ports:
+    - "${WAYBACK_URL_PORT}:${WAYBACK_URL_PORT}"
+    links:
+    - laaws-demo-hdfs
+    environment:
+    - HDFS_HOST
+    - HDFS_FSMD
+    - REPO_BASEDIR
+    - WAYBACK_URL_PORT
+    - WAYBACK_URL_HOST
+    - WAYBACK_BASEDIR
+    - WAYBACK_HDFSMNT
+    - WAYBACK_WATCHDIR
+    devices:
+    - /dev/fuse
+    cap_add:
+    - SYS_ADMIN
+
   laaws-pywb:
     build:
       context: docker/laaws-demo-pywb
     image: lockss/laaws-demo-pywb
     ports:
-      - "${WAYBACK_URL_PORT}:${WAYBACK_URL_PORT}"
+      - "${PYWB_URL_PORT}:${PYWB_URL_PORT}"
     links:
       - laaws-demo-hdfs
     environment:
       - HDFS_HOST
       - HDFS_FSMD
       - REPO_BASEDIR
-      - WAYBACK_URL_PORT
-      - WAYBACK_URL_HOST
-      - WAYBACK_BASEDIR
-      - WAYBACK_HDFSMNT
-      - WAYBACK_WATCHDIR
+      - PYWB_URL_PORT
+      - PYWB_URL_HOST
+      - PYWB_COLLECTION
+      - PYWB_BASEDIR
+      - PYWB_HDFSMNT
+      - PYWB_WATCHDIR
     devices:
       - /dev/fuse
     cap_add:
