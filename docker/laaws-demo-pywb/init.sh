@@ -28,6 +28,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# Create a demo collection within PyWb
+wb-manager init demo
+
 # Mount a HDFS path if one was provided
 if [ ! -z ${HDFS_HOST} ]; then
   echo "Mounting HDFS path to PyWb archive directory (hdfs://${HDFS_HOST:-localhost}:${HDFS_FSMD:-9000}/ -> ${WAYBACK_HDFSMNT})"
@@ -47,6 +50,10 @@ if [ ! -z ${HDFS_HOST} ]; then
   # Ensure the sealed directory exists under HDFS (-p doesn't work - only used here so that mkdir is quiet if the directory already exists)
   mkdir -p ${WAYBACK_HDFSMNT}/${REPO_BASEDIR}
   mkdir -p ${WAYBACK_HDFSMNT}/${REPO_BASEDIR}/sealed
+
+  # Create a symlink from the sealed directory to the demo collections ./archive directory
+  rmdir /webarchive/collections/demo/archive
+  ln -s ${WAYBACK_WATCHDIR} ${WAYBACK_BASEDIR}/collections/demo/archive
 fi
 
 # Start PyWb

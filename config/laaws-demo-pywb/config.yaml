@@ -1,12 +1,14 @@
 # LAAWS demo pywb config file
 # ========================================
-#
 
 collections:
     all: $all
-    pywb:
-        index_paths: ./sample_archive/cdx/
-        archive_paths: ./sample_archive/warcs/
+
+#collections:
+#    all: $all
+#    pywb:
+#        index_paths: ./sample_archive/cdx/
+#        archive_paths: ./sample_archive/warcs/
 
 #collections:
 #    all: $all
