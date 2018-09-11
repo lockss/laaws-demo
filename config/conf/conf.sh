@@ -122,11 +122,11 @@ HDFS_MD='50020'
 HDFS_STATUI='50070'
 HDFS_DNUI='50075'
 
-# OpenWayback container settings
+# PyWb container settings
 WAYBACK_URL_HOST='localhost'
-WAYBACK_URL_PORT=8000
-WAYBACK_BASEDIR=/srv/openwayback
-WAYBACK_HDFSMNT=/mnt/hdfs
+WAYBACK_URL_PORT=8080
+WAYBACK_BASEDIR=/srv/pywb
+WAYBACK_HDFSMNT=/webarchive/hdfs
 WAYBACK_WATCHDIR=${WAYBACK_HDFSMNT}/${REPO_BASEDIR}/sealed
 
 # EDINA indexer settings

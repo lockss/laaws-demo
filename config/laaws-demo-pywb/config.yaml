@@ -1,0 +1,28 @@
+# LAAWS demo pywb config file
+# ========================================
+#
+
+collections:
+    all: $all
+    pywb:
+        index_paths: ./sample_archive/cdx/
+        archive_paths: ./sample_archive/warcs/
+
+#collections:
+#    all: $all
+#    demo:
+#        index_paths: /webarchive/hdfs/lockss/cdx/
+#        archive_paths: /webarchive/hdfs/lockss/sealed/
+
+# Autoindexing of WARCs
+autoindex: 30
+
+# Settings for each collection
+use_js_obj_proxy: true
+
+# Memento support, enable
+enable_memento: true
+
+# Replay content in an iframe
+framed_replay: true
+

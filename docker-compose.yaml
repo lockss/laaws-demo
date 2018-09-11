@@ -185,8 +185,10 @@ services:
     volumes:
       - ./config/laaws-demo-hdfs/etc/hadoop:/hadoop/etc/hadoop.custom
 
-  laaws-openwayback:
-    image: lockss/laaws-openwayback
+  laaws-pywb:
+    build:
+      context: docker/laaws-demo-pywb
+    image: lockss/laaws-demo-pywb
     ports:
       - "${WAYBACK_URL_PORT}:${WAYBACK_URL_PORT}"
     links:
@@ -204,6 +206,8 @@ services:
       - /dev/fuse
     cap_add:
       - SYS_ADMIN
+    volumes:
+    - ./config/laaws-demo-pywb/config.yaml:/webarchive/config.yaml
 
   laaws-edina-indexer:
     image: lockss/laaws-edina-indexer
