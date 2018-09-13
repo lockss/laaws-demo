@@ -90,7 +90,7 @@ Docker is running with `docker info`.
 
 ## Using the Dev/Demo Environment
 
-### Ports
+### Components and Ports
 
 Whether in Docker mode or in JAR mode, you can connect to various ports on
 `localhost` to interact with components:
@@ -125,6 +125,50 @@ configured to act as a crawler (except for remote plugin registries), so it is
 the component to which you would add archival units (AUs) to be collected as you
 might with a "classic" standalone LOCKSS daemon.
 
+### Suggested Progression
+
+*   Bring up the dev/demo environment using the demo props server.
+*   Add the following archival units (AUs) to the Poler service, by accessing
+    its Web UI, clicking Journal Configuration, then Add AUs, and selecting
+    the appropriate publisher groupings:
+
+    | Publisher                      | AU name                                            | AUID                                                                              | |--------------------------------|----------------------------------------------------|-----------------------------------------------------------------------------------|
+    | Hindawi Publishing Corporation | Advances in Human-Computer Interaction Volume 2017 | `org|lockss|plugin|hindawi|HindawiPublishingCorporationPlugin&base_url~https%3A%2F%2Fwww%2Ehindawi%2Ecom%2F&download_url~http%3A%2F%2Fdownloads%2Ehindawi%2Ecom%2F&journal_id~ahci&volume_name~2017` |
+    | Hindawi Publishing Corporation | HPB Surgery Volume 2017 | `org|lockss|plugin|hindawi|HindawiPublishingCorporationPlugin&base_url~https%3A%2F%2Fwww%2Ehindawi%2Ecom%2F&download_url~http%3A%2F%2Fdownloads%2Ehindawi%2Ecom%2F&journal_id~hpb&volume_name~2017`  |
+
+*   Watch them crawl by clicking Daemon Status, and selecting Crawl Status from
+    the drop-down box, and refreshing periodically to see the crawls progress.
+*   Check what artifacts are in the repository by performing GET operations in
+    its Swagger UI. For instance,
+    `GET /collections/{collectionid}/aus/{auid}/artifacts` with `demo` for the
+    `{collectionid}`, and the appropriate AUID for `{auid}`, will return a JSON
+    list of committed artifacts in that AU.
+*   Request metadata extraction on some AUs, by connecting to the Metadata
+    Extraction Service's Swagger UI, selecting the `POST /mdupdates` operation,
+    and using the following input (with the appropriate AUID for `{auid}`):
+    
+    ```
+    {
+      "auid": "{auid}",
+      "updateType": "full_extraction"
+    }
+    ```
+
+    The result will include a job ID which you can then use in the
+    `GET /mdupdates/{jobid}` operation to monitor the progress of the metadata
+    extraction process. The initial status of a request is `Waiting for launch`
+    and a successful operation ends with status `Success`.
+*   You can then query the metadata database through the Metadata Service's
+    Swagger UI. Substituting the desired AUID for `{auid}`, use the
+    `GET /metadata/aus/{auid}` operation. The result is a JSON list of articles,
+    as well as a section (usually at the end) with paging information. If there
+    are more results, a continuation token is included, which you can input to
+    reiterate the request and get more results, and so on.
+*   Connect to Pywb (`http://localhost:8080` then select `demo`) or OpenWayback
+    (`http://localhost:8000/wayback/`) and enter some URLs (e.g. article URLs
+    returned by the metadata service). _Please note that Pywb is preferred over
+    OpenWayback for its richer rendering capabilities._
+    
 ### Logs
 
 In Docker mode, the logs for the LAAWS components are found at
@@ -144,7 +188,7 @@ file.
 
 The dev/demo environment is configured via the `config/` tree of files. In most
 directories, a given file `foo.ext` might be accompanied by `foo.docker.ext`
-and `foo.jars.ext` is there is variant configuration for Docker mode or JAR
+and `foo.jars.ext` if there is variant configuration for Docker mode or JAR
 mode. Furthermore, in many cases if there is a file `foo.txt`, you can create
 a customization file `foo.opt`, that is ignored by Git. In other words, you
 should not edit the `.txt` files, and instead consider them as a baseline to be
