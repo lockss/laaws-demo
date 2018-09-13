@@ -132,7 +132,8 @@ might with a "classic" standalone LOCKSS daemon.
     its Web UI, clicking Journal Configuration, then Add AUs, and selecting
     the appropriate publisher groupings:
 
-    | Publisher                      | AU name                                            | AUID                                                                              | |--------------------------------|----------------------------------------------------|-----------------------------------------------------------------------------------|
+    | Publisher                      | AU name                                            | AUID                                                                              |
+    |--------------------------------|----------------------------------------------------|-----------------------------------------------------------------------------------|
     | Hindawi Publishing Corporation | Advances in Human-Computer Interaction Volume 2017 | `org|lockss|plugin|hindawi|HindawiPublishingCorporationPlugin&base_url~https%3A%2F%2Fwww%2Ehindawi%2Ecom%2F&download_url~http%3A%2F%2Fdownloads%2Ehindawi%2Ecom%2F&journal_id~ahci&volume_name~2017` |
     | Hindawi Publishing Corporation | HPB Surgery Volume 2017 | `org|lockss|plugin|hindawi|HindawiPublishingCorporationPlugin&base_url~https%3A%2F%2Fwww%2Ehindawi%2Ecom%2F&download_url~http%3A%2F%2Fdownloads%2Ehindawi%2Ecom%2F&journal_id~hpb&volume_name~2017`  |
 
