@@ -252,7 +252,7 @@ Run_lockss_metadata_service()
 {
   Run_Dependencies 'lockss_configuration_service' 'lockss_metadata_pgsql'
   Run_Jar 'lockss-metadata-service' "${MDQ_GRP}" "${MDQ_ART}" "${MDQ_VERSION}" "${MDQ_CMD}"
-  Wait_For_200 "${MDQ_HOST}" "${MDQ_PORT}" "${SLEEP}"
+  Wait_For_200 "${MDQ_HOST}" "${MDQ_REST_PORT}" "${SLEEP}"
 }
 
 ##

@@ -46,11 +46,11 @@ services:
       args:
         SVC_NAME: ${CFG_ART}
         SVC_VERSION: ${CFG_VERSION}
-        SVC_PORT: ${CFG_PORT}
+        SVC_PORT: ${CFG_REST_PORT}
     image: lockss/laaws-demo-configuration-service:${CFG_VERSION}
     ports:
-      - "${CFG_PORT}:${CFG_PORT}"
-      - "${CFG_UI}:${CFG_UI}"
+      - "${CFG_REST_PORT}:${CFG_REST_PORT}"
+      - "${CFG_UI_PORT}:${CFG_UI_PORT}"
       - "${JMS_PORT}:${JMS_PORT}"
     command: "${CFG_CMD}"
     links:
@@ -70,11 +70,11 @@ services:
       args:
         SVC_NAME: ${MDQ_ART}
         SVC_VERSION: ${MDQ_VERSION}
-        SVC_PORT: ${MDQ_PORT}
+        SVC_PORT: ${MDQ_REST_PORT}
     image: lockss/laaws-demo-metadata-service:${MDQ_VERSION}
     ports:
-      - "${MDQ_PORT}:${MDQ_PORT}"
-      - "${MDQ_UI}:${MDQ_UI}"
+      - "${MDQ_REST_PORT}:${MDQ_REST_PORT}"
+      - "${MDQ_UI_PORT}:${MDQ_UI_PORT}"
     command: "${MDQ_CMD}"
     links:
       - lockss-configuration-service
@@ -93,11 +93,11 @@ services:
       args:
         SVC_NAME: ${MDX_ART}
         SVC_VERSION: ${MDX_VERSION}
-        SVC_PORT: ${MDX_PORT}
+        SVC_PORT: ${MDX_REST_PORT}
     image: lockss/laaws-demo-metadata-extraction-service:${MDX_VERSION}
     ports:
-      - ${MDX_PORT}:${MDX_PORT}
-      - ${MDX_UI}:${MDX_UI}
+      - ${MDX_REST_PORT}:${MDX_REST_PORT}
+      - ${MDX_UI_PORT}:${MDX_UI_PORT}
     command: "${MDX_CMD}"
     links:
       - lockss-configuration-service
@@ -125,11 +125,11 @@ services:
       args:
         SVC_NAME: ${POL_ART}
         SVC_VERSION: ${POL_VERSION}
-        SVC_PORT: ${POL_PORT}
+        SVC_PORT: ${POL_REST_PORT}
     image: lockss/laaws-demo-poller:${POL_VERSION}
     ports:
-      - ${POL_PORT}:${POL_PORT}
-      - ${POL_UI}:${POL_UI}
+      - ${POL_REST_PORT}:${POL_REST_PORT}
+      - ${POL_UI_PORT}:${POL_UI_PORT}
     command: "${POL_CMD}"
     links:
       - lockss-configuration-service
@@ -144,7 +144,7 @@ services:
   lockss-repository-service:
     image: lockss/laaws-repository-service:${REPO_VERSION}
     ports:
-      - ${REPO_PORT}:${REPO_PORT}
+      - ${REPO_REST_PORT}:${REPO_REST_PORT}
     command: "${REPO_CMD}"
     environment:
       - "JVM_ARGS=${REPO_JARGS}"

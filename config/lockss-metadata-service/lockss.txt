@@ -24,7 +24,7 @@
 
 # Don't make local changes in this file; put local settings in lockss.opt
 
-org.lockss.ui.port=49521
+org.lockss.ui.port=24651
 
 # The database manager used to store the Archival Unit metadata.
 # Using PostgreSQL.

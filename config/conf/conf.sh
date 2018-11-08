@@ -37,8 +37,8 @@ CFG_GRP="${MVN_GRP}"
 CFG_ART='laaws-configuration-service'
 CFG_VERSION='1.1.0-SNAPSHOT'
 # CFG_HOST set in variant file
-CFG_PORT='54420'
-CFG_UI='54421'
+CFG_REST_PORT='24620'
+CFG_UI_PORT='24621'
 CFG_CMD="-b config/cluster/bootstrap.txt
          -l config/cluster/cluster.txt
          -l config/cluster/cluster.opt
@@ -46,7 +46,7 @@ CFG_CMD="-b config/cluster/bootstrap.txt
          -l config/cluster/cluster.${VARIANT}.opt
          -p config/lockss-configuration-service/lockss.txt
          -p config/lockss-configuration-service/lockss.opt"
-CFG_URL="http://${UI_USER}:${UI_PASS}@${CFG_HOST}:${CFG_PORT}"
+CFG_URL="http://${UI_USER}:${UI_PASS}@${CFG_HOST}:${CFG_REST_PORT}"
 
 JMS_HOST="${CFG_HOST}"
 JMS_PORT='61616'
@@ -55,8 +55,8 @@ MDQ_GRP="${MVN_GRP}"
 MDQ_ART='laaws-metadata-service'
 MDQ_VERSION='1.0.0-SNAPSHOT'
 # MDQ_HOST set in variant file
-MDQ_PORT='49520'
-MDQ_UI='49521'
+MDQ_REST_PORT='24650'
+MDQ_UI_PORT='24651'
 MDQ_CMD="-b config/cluster/bootstrap.txt
          -c ${CFG_URL}
          -p ${CFG_URL}/config/file/cluster
@@ -68,8 +68,8 @@ MDQ_CMD="-b config/cluster/bootstrap.txt
 MDX_GRP="${MVN_GRP}"
 MDX_ART='laaws-metadata-extraction-service'
 MDX_VERSION='1.1.0-SNAPSHOT'
-MDX_PORT='28120'
-MDX_UI='28121'
+MDX_REST_PORT='24640'
+MDX_UI_PORT='24641'
 MDX_CMD="-b config/cluster/bootstrap.txt
          -c ${CFG_URL}
          -p ${CFG_URL}/config/file/cluster
@@ -81,8 +81,8 @@ MDX_CMD="-b config/cluster/bootstrap.txt
 POL_GRP="${MVN_GRP}"
 POL_ART='laaws-poller'
 POL_VERSION='1.0.0-SNAPSHOT'
-POL_PORT='25250'
-POL_UI='25251'
+POL_REST_PORT='24630'
+POL_UI_PORT='24631'
 POL_CMD="-b config/cluster/bootstrap.txt
          -c ${CFG_URL}
          -p ${CFG_URL}/config/file/cluster
@@ -95,7 +95,7 @@ POL_CMD="-b config/cluster/bootstrap.txt
 REPO_GRP="${MVN_GRP}"
 REPO_ART='laaws-repository-service'
 REPO_VERSION='1.8.0-SNAPSHOT'
-REPO_PORT='32640'
+REPO_REST_PORT='24610'
 REPO_CMD="--spring.config.location=file:./config/lockss-repository-service/demo.properties,file:./config/lockss-repository-service/demo.properties.opt,file:./config/lockss-repository-service/demo.${VARIANT}.properties,file:./config/lockss-repository-service/demo.${VARIANT}.properties.opt"
 REPO_JARGS="-Dorg.lockss.jmsUri=tcp://${JMS_HOST}:${JMS_PORT}"
 REPO_BASEDIR=/lockss # TODO: Propagate this to projects

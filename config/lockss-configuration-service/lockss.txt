@@ -24,7 +24,7 @@
 
 # Don't make local changes in this file; put local settings in lockss.opt
 
-org.lockss.ui.port=54421
+org.lockss.ui.port=24621
 org.lockss.plugin.jms.enable=true
 org.lockss.crawler.enabled=true
 org.lockss.crawler.crawlPriorituAuidMap=RegitryPlugin,1;.,-10000

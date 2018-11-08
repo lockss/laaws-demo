@@ -97,16 +97,16 @@ Whether in Docker mode or in JAR mode, you can connect to various ports on
 
 | Component                   | Name                               | REST port | Web UI port |
 |-----------------------------|------------------------------------|-----------|-------------|
-| Repository service          | lockss-repository-service          | 32640     | n/a         |
-| Configuration service       | lockss-configuration-service       | 54420     | 54421       |
-| Metadata Extraction service | lockss-metadata-extraction-service | 28120     | 28121       |
-| Metadata service            | lockss-metadata-service            | 49520     | 49521       | 
-| Poller service              | lockss-poller                      | 25250     | 25251       | 
+| Repository service          | lockss-repository-service          | 24610     | n/a         |
+| Configuration service       | lockss-configuration-service       | 24620     | 24621       |
+| Poller service              | lockss-poller                      | 24630     | 24631       | 
+| Metadata Extraction service | lockss-metadata-extraction-service | 24640     | 24641       |
+| Metadata service            | lockss-metadata-service            | 24650     | 24651       | 
 | Pywb Replay                 | laaws-pywb                         | n/a       | 8080        |
 | OpenWayback Replay          | laaws-openwayback                  | n/a       | 8000        |
 
 For those components that have a REST port, a Swagger UI is also running under
-the path `/swagger-ui.html`, e.g. `http://localhost:32640/swagger-ui.html` for
+the path `/swagger-ui.html`, e.g. `http://localhost:24621/swagger-ui.html` for
 the Repository service.
 
 The LAAWS components are running a "classic" LOCKSS Web UI at the indicated
@@ -135,7 +135,7 @@ might with a "classic" standalone LOCKSS daemon.
     | Publisher                      | AU name                                            | AUID                                                                                                     |
     |--------------------------------|----------------------------------------------------|----------------------------------------------------------------------------------------------------------|
     | Hindawi Publishing Corporation | Advances in Human-Computer Interaction Volume 2017 | `org\|lockss\|plugin\|hindawi\|HindawiPublishingCorporationPlugin&base_url~https%3A%2F%2Fwww%2Ehindawi%2Ecom%2F&download_url~http%3A%2F%2Fdownloads%2Ehindawi%2Ecom%2F&journal_id~ahci&volume_name~2017` |
-    | Hindawi Publishing Corporation | HPB Surgery Volume 2017 | `org\|lockss\|plugin\|hindawi\|HindawiPublishingCorporationPlugin&base_url~https%3A%2F%2Fwww%2Ehindawi%2Ecom%2F&download_url~http%3A%2F%2Fdownloads%2Ehindawi%2Ecom%2F&journal_id~hpb&volume_name~2017`  |
+    | Hindawi Publishing Corporation | HPB Surgery Volume 2017                            | `org\|lockss\|plugin\|hindawi\|HindawiPublishingCorporationPlugin&base_url~https%3A%2F%2Fwww%2Ehindawi%2Ecom%2F&download_url~http%3A%2F%2Fdownloads%2Ehindawi%2Ecom%2F&journal_id~hpb&volume_name~2017`  |
 
 *   Watch them crawl by clicking Daemon Status, and selecting Crawl Status from
     the drop-down box, and refreshing periodically to see the crawls progress.
