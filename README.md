@@ -1,3 +1,9 @@
+# THIS PROJECT IS ARCHIVED
+
+**You are viewing an archived project that is available on GitHub for reference purposes only.**
+
+**This project is an ancestor of the [LOCKSS Installer](https://github.com/lockss/lockss-installer). Please use the LOCKSS Installer instead.**
+
 # LAAWS Dev/Demo Environment
 
 ## Introduction
